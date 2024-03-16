@@ -1,0 +1,83 @@
+[gd_scene load_steps=7 format=3 uid="uid://cvegbuu7wxika"]
+
+[ext_resource type="Script" path="res://world.gd" id="1_rxlvp"]
+[ext_resource type="PackedScene" uid="uid://dpp36leb612fw" path="res://arena.tscn" id="1_sm485"]
+[ext_resource type="Script" path="res://MultiplayerMenu.gd" id="3_asb1u"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uc3qh"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_m6tua"]
+sky_material = SubResource("ProceduralSkyMaterial_uc3qh")
+
+[sub_resource type="Environment" id="Environment_khruk"]
+background_mode = 2
+sky = SubResource("Sky_m6tua")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_rxlvp")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_khruk")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="arena" parent="." instance=ExtResource("1_sm485")]
+
+[node name="MultiplayerMenu" type="CanvasLayer" parent="."]
+script = ExtResource("3_asb1u")
+
+[node name="MainMenu" type="PanelContainer" parent="MultiplayerMenu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 434.0
+offset_top = 220.0
+offset_right = -434.0
+offset_bottom = -220.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MultiplayerMenu/MainMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MultiplayerMenu/MainMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Main Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Host" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="Join" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="AddressEntry" type="LineEdit" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Enter Address to Join"
+alignment = 1
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://player.tscn")
+spawn_path = NodePath("..")
+
+[connection signal="add_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_add_player"]
+[connection signal="remove_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_remove_player"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer/Host" to="MultiplayerMenu" method="_on_host_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer/Join" to="MultiplayerMenu" method="_on_join_pressed"]
