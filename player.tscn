@@ -1,17 +1,21 @@
-[gd_scene load_steps=9 format=3 uid="uid://c01cfmt48npc0"]
+[gd_scene load_steps=11 format=3 uid="uid://c01cfmt48npc0"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_yahtk"]
+[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://player.tres" id="2_d00v5"]
+[ext_resource type="PackedScene" uid="uid://cmlx8217nhub" path="res://pistol.tscn" id="2_fn8ko"]
 [ext_resource type="Script" path="res://health.gd" id="7_y81fr"]
 [ext_resource type="Script" path="res://hurtbox.gd" id="8_i8qa3"]
 [ext_resource type="Script" path="res://shoot.gd" id="9_6b75t"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6mkjh"]
-albedo_color = Color(0.556863, 0, 0.054902, 1)
-
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_5lii6"]
-material = SubResource("StandardMaterial3D_6mkjh")
+material = ExtResource("2_d00v5")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tgsde"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_f0c8f"]
+material = ExtResource("2_d00v5")
+radius = 0.1
+height = 0.6
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_frqxj"]
 properties/0/path = NodePath(".:position")
@@ -48,6 +52,12 @@ target_position = Vector3(0, 0, -50)
 collision_mask = 9
 collide_with_areas = true
 
+[node name="Pistol" parent="Camera3D" instance=ExtResource("2_fn8ko")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D"]
+transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, 0.416986, -0.562944, -0.193773)
+mesh = SubResource("CapsuleMesh_f0c8f")
+
 [node name="HealthComponent" type="Node3D" parent="."]
 script = ExtResource("7_y81fr")
 current_health = 100
@@ -69,7 +79,7 @@ script = ExtResource("9_6b75t")
 replication_config = SubResource("SceneReplicationConfig_frqxj")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://pistol.tscn", "res://pistol_2.tscn", "res://pistol_freeze.tscn")
+_spawnable_scenes = PackedStringArray("res://pistol.tscn", "res://pistol_2.tscn", "res://pistol_freeze.tscn", "res://speed_gun.tscn")
 spawn_path = NodePath("../Camera3D")
 
 [connection signal="body_entered" from="HurtboxComponent" to="HurtboxComponent" method="_on_body_entered"]

@@ -5,8 +5,10 @@ extends CharacterBody3D
 @onready var camera = $Camera3D
 @onready var spawner = $MultiplayerSpawner
 
-var speed = 7.5
-var jump_velocity = 5.5
+var default_speed = 7.5
+var current_speed = default_speed
+var default_jump_velocity = 5.5
+var current_jump_velocity = default_jump_velocity
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -42,16 +44,16 @@ func _physics_process(delta):
 		velocity.y -= gravity * delta
 	
 	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = jump_velocity
+		velocity.y = current_jump_velocity
 	
 	input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
+		velocity.x = direction.x * current_speed
+		velocity.z = direction.z * current_speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, speed)
-		velocity.z = move_toward(velocity.z, 0, speed)
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.z = move_toward(velocity.z, 0, current_speed)
 	
 	move_and_slide()
 
@@ -60,8 +62,12 @@ func change_hud_health(health_value):
 	$HUD/Healthbar.value = health_value
 
 
-@rpc ("any_peer")
-func change_speed_and_jump(speed_effect, jump_height):
-	speed = speed_effect
-	jump_velocity = jump_height
+@rpc ("any_peer", "call_local")
+func change_speed_and_jump(speed_effect = default_speed, jump_height = default_jump_velocity):
+	current_speed = speed_effect
+	current_jump_velocity = jump_height
 
+
+@rpc ("call_local")
+func increase_speed(speed_effect):
+	current_speed += speed_effect

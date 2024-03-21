@@ -8,7 +8,7 @@ func handle_damage_collision(damage):
 	health_component.receive_damage.rpc_id(player.get_multiplayer_authority(), damage)
 
 
-func handle_speed_collision(speed_effect, jump_height):
+func handle_speed_collision(speed_effect = player.default_speed, jump_height = player.default_jump_velocity):
 	player.change_speed_and_jump.rpc_id(player.get_multiplayer_authority(), speed_effect, jump_height)
 
 

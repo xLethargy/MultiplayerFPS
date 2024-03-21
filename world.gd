@@ -6,6 +6,7 @@ var player_class
 var pistol_one = preload("res://pistol.tscn")
 var pistol_two = preload("res://pistol_2.tscn")
 var freeze_gun = preload("res://pistol_freeze.tscn")
+var speed_gun = preload("res://speed_gun.tscn")
 @onready var hud = $MultiplayerMenu/HUD
 
 @onready var timer = get_tree().create_timer(2.0)
@@ -30,6 +31,9 @@ func _on_multiplayer_menu_add_player():
 			_add_weapon_class(player)
 		elif Global.players[i].Class == "FreezeGun":
 			player_class = freeze_gun.instantiate()
+			_add_weapon_class(player)
+		elif Global.players[i].Class == "SpeedGun":
+			player_class = speed_gun.instantiate()
 			_add_weapon_class(player)
 		
 		if player.is_multiplayer_authority():
@@ -68,6 +72,8 @@ func _on_multiplayer_spawner_spawned(node):
 				player_class = pistol_two.instantiate()
 			elif Global.players[id].Class == "FreezeGun":
 				player_class = freeze_gun.instantiate()
+			elif Global.players[id].Class == "SpeedGun":
+				player_class = speed_gun.instantiate()
 			
 			_add_weapon_class(node)
 

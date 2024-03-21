@@ -15,6 +15,7 @@ func receive_damage(damage):
 		
 		current_health = max_health
 		player.position = Vector3.ZERO
+		player.change_speed_and_jump.rpc()
 	
 	change_health.emit(current_health)
 	

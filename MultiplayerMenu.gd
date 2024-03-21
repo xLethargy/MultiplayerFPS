@@ -139,3 +139,11 @@ func _on_freeze_gun_pressed():
 		update_class.rpc(multiplayer.get_unique_id(), "FreezeGun")
 		$MainMenu/MarginContainer/ChooseClass.hide()
 		$MainMenu/MarginContainer/VBoxContainer.show()
+
+
+func _on_speed_gun_pressed():
+	var id = multiplayer.get_unique_id()
+	if Global.players.has(id):
+		update_class.rpc(multiplayer.get_unique_id(), "SpeedGun")
+		$MainMenu/MarginContainer/ChooseClass.hide()
+		$MainMenu/MarginContainer/VBoxContainer.show()
