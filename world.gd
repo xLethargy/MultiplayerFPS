@@ -1,21 +1,39 @@
 extends Node3D
 
 var player_scene = preload("res://player.tscn")
-
 var player
+var player_class
+var pistol_one = preload("res://pistol.tscn")
+var pistol_two = preload("res://pistol_2.tscn")
+var freeze_gun = preload("res://pistol_freeze.tscn")
+@onready var hud = $MultiplayerMenu/HUD
 
-func _unhandled_input(event):
+@onready var timer = get_tree().create_timer(2.0)
+
+func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
 		get_tree().quit()
 
 
-func _on_multiplayer_menu_add_player(peer_id):
-	player = player_scene.instantiate()
-	player.name = str(peer_id)
-	add_child(player)
-
-	if player.is_multiplayer_authority():
-		player.change_health.connect(update_health_bar)
+func _on_multiplayer_menu_add_player():
+	#var index = 0 THIS IS FOR SPAWNING PLAYERS INA 
+	for i in Global.players:
+		player = player_scene.instantiate()
+		player.name = str(Global.players[i].ID)
+		add_child(player, true)
+		
+		if Global.players[i].Class == "PistolOne":
+			player_class = pistol_one.instantiate()
+			_add_weapon_class(player)
+		elif Global.players[i].Class == "PistolTwo":
+			player_class = pistol_two.instantiate()
+			_add_weapon_class(player)
+		elif Global.players[i].Class == "FreezeGun":
+			player_class = freeze_gun.instantiate()
+			_add_weapon_class(player)
+		
+		if player.is_multiplayer_authority():
+			player.health_component.connect("change_health", update_health_bar)
 
 
 func _on_multiplayer_menu_remove_player(peer_id):
@@ -25,7 +43,8 @@ func _on_multiplayer_menu_remove_player(peer_id):
 
 
 func update_health_bar(health_value):
-	player.hud._on_player_change_health(health_value)
+	var healthbar = hud.healthbar
+	healthbar.value = health_value
 
 
 func spawn_bullet(bullet_scene, bullet_spawn_location, parent_shooter):
@@ -35,3 +54,23 @@ func spawn_bullet(bullet_scene, bullet_spawn_location, parent_shooter):
 		bullet.rotation = bullet_spawn_location.global_rotation
 		bullet.parent_shooter = parent_shooter
 		add_child(bullet)
+
+
+func _on_multiplayer_spawner_spawned(node):
+	if node.is_multiplayer_authority():
+		node.health_component.connect("change_health", update_health_bar)
+		
+		if Global.players.has((str(node.name).to_int())):
+			var id = str(node.name).to_int()
+			if Global.players[id].Class == "PistolOne":
+				player_class = pistol_one.instantiate()
+			elif Global.players[id].Class == "PistolTwo":
+				player_class = pistol_two.instantiate()
+			elif Global.players[id].Class == "FreezeGun":
+				player_class = freeze_gun.instantiate()
+			
+			_add_weapon_class(node)
+
+
+func _add_weapon_class(player_node):
+	player_node.camera.add_child(player_class, true)

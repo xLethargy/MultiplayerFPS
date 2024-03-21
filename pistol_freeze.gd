@@ -15,7 +15,18 @@ extends Node3D
 @onready var level_scene = get_tree().current_scene
 @onready var player = get_parent().get_parent()
 
-var damage = 30
+var damage = 10
+var freeze_damage = 40
+
+var hit_player = {}
+var hits = 0
+
+var slow_speed = 2.5
+var jump_height = 1.5
+
+var player_died = false
+
+var current_health
 
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():
@@ -30,7 +41,41 @@ func _unhandled_input(_event):
 				play_local_shoot_effects()
 				audio_player.play()
 				collider.handle_damage_collision(damage)
+				current_health = collider.owner.health_component.current_health - damage
+				
+				if !hit_player.has(collider):
+					hit_player[collider] = {
+						"ID": collider.multiplayer.get_unique_id(),
+						"HitsTaken": 0
+					}
+				
+				print ("normal: ", current_health)
+				if current_health > 0:
+					store_freeze_information(collider)
+				else:
+					hit_player[collider].HitsTaken = 0
+				
 
+
+@rpc ("any_peer")
+func store_freeze_information(collider):
+	hit_player[collider].HitsTaken += 1
+	
+	print (hit_player[collider].HitsTaken)
+	
+	if hit_player[collider].HitsTaken == 3:
+		hit_player[collider].HitsTaken = 0
+		
+		collider.handle_damage_collision(freeze_damage)
+		collider.handle_speed_collision(slow_speed, jump_height)
+		current_health = collider.owner.health_component.current_health - freeze_damage
+		
+		print ("freeze: ", current_health)
+		$SlowTimer.start()
+		await $SlowTimer.timeout
+		collider.handle_speed_collision(7.5, 5.5)
+	
+	
 
 func _physics_process(_delta):
 	if !player.is_multiplayer_authority():

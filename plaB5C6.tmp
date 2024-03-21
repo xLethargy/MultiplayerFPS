@@ -1,0 +1,126 @@
+[gd_scene load_steps=16 format=3 uid="uid://c01cfmt48npc0"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_yahtk"]
+[ext_resource type="Script" path="res://HUD.gd" id="2_dtqao"]
+[ext_resource type="PackedScene" uid="uid://cmlx8217nhub" path="res://pistol.tscn" id="2_u4qgr"]
+[ext_resource type="Texture2D" uid="uid://2kro8kfi4lou" path="res://dean.jpg" id="2_unalx"]
+[ext_resource type="Texture2D" uid="uid://belxpkhe22pnq" path="res://addons/kenney_particle_pack/circle_05.png" id="4_umurr"]
+[ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://hitmarker.wav" id="6_6b7ik"]
+[ext_resource type="Script" path="res://health.gd" id="7_y81fr"]
+[ext_resource type="Script" path="res://hurtbox.gd" id="8_i8qa3"]
+[ext_resource type="Script" path="res://shoot.gd" id="9_6b75t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v43xn"]
+bg_color = Color(0.639216, 0.117647, 0.172549, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q6urs"]
+bg_color = Color(0.223529, 0.709804, 0.27451, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f53jq"]
+albedo_texture = ExtResource("2_unalx")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_cqf4y"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tgsde"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_frqxj"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Camera3D:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[node name="Player" type="CharacterBody3D" groups=["Player"]]
+collision_layer = 2
+script = ExtResource("1_yahtk")
+
+[node name="HUD" type="Control" parent="." node_paths=PackedStringArray("health_component")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_dtqao")
+health_component = NodePath("../HealthComponent")
+
+[node name="Crosshair" type="TextureRect" parent="HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.03, 0.03)
+pivot_offset = Vector2(576, 324)
+texture = ExtResource("4_umurr")
+stretch_mode = 5
+
+[node name="Healthbar" type="ProgressBar" parent="HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 406.0
+offset_top = 23.0
+offset_right = -406.0
+offset_bottom = -598.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_v43xn")
+theme_override_styles/fill = SubResource("StyleBoxFlat_q6urs")
+value = 100.0
+show_percentage = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1, 0)
+material_override = SubResource("StandardMaterial3D_f53jq")
+mesh = SubResource("CapsuleMesh_cqf4y")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_tgsde")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55459, 0)
+fov = 90.0
+
+[node name="Pistol" parent="Camera3D" instance=ExtResource("2_u4qgr")]
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera3D"]
+target_position = Vector3(0, 0, -50)
+collision_mask = 9
+collide_with_areas = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_6b7ik")
+volume_db = -5.0
+
+[node name="HealthComponent" type="Node3D" parent="." node_paths=PackedStringArray("hud")]
+script = ExtResource("7_y81fr")
+hud = NodePath("../HUD")
+
+[node name="HurtboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("health_component") groups=["Hurtbox"]]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("8_i8qa3")
+health_component = NodePath("../HealthComponent")
+
+[node name="HurtboxCollision" type="CollisionShape3D" parent="HurtboxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_tgsde")
+
+[node name="ShootComponent" type="Node3D" parent="." node_paths=PackedStringArray("weapon", "audio_player")]
+script = ExtResource("9_6b75t")
+weapon = NodePath("../Camera3D/Pistol")
+audio_player = NodePath("../AudioStreamPlayer")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_frqxj")
+
+[connection signal="body_entered" from="HurtboxComponent" to="HurtboxComponent" method="_on_body_entered"]

@@ -1,0 +1,134 @@
+[gd_scene load_steps=6 format=3 uid="uid://d0384sm116yij"]
+
+[ext_resource type="Script" path="res://MultiplayerMenu.gd" id="1_mdhyd"]
+[ext_resource type="Script" path="res://HUD.gd" id="2_ci0q2"]
+[ext_resource type="Texture2D" uid="uid://belxpkhe22pnq" path="res://addons/kenney_particle_pack/circle_05.png" id="3_xvwxv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f6uqw"]
+bg_color = Color(0.639216, 0.117647, 0.172549, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cuny2"]
+bg_color = Color(0.223529, 0.709804, 0.27451, 1)
+
+[node name="MultiplayerMenu" type="CanvasLayer"]
+script = ExtResource("1_mdhyd")
+
+[node name="MainMenu" type="PanelContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 434.0
+offset_top = 220.0
+offset_right = -434.0
+offset_bottom = -220.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Main Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Host" type="Button" parent="MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="Join" type="Button" parent="MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="Start" type="Button" parent="MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start
+"
+
+[node name="NameEntry" type="LineEdit" parent="MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Enter Name"
+alignment = 1
+
+[node name="AddressEntry" type="LineEdit" parent="MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Enter Address to Join"
+alignment = 1
+
+[node name="ChooseClass" type="VBoxContainer" parent="MainMenu/MarginContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Choose Class" type="Label" parent="MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+text = "Main Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Pistol One" type="Button" parent="MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+text = "Pistol One"
+
+[node name="Pistol Two" type="Button" parent="MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+text = "Pistol Two"
+
+[node name="Freeze Gun" type="Button" parent="MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+text = "Freeze Gun"
+
+[node name="HUD" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_ci0q2")
+
+[node name="Crosshair" type="TextureRect" parent="HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.03, 0.03)
+pivot_offset = Vector2(576, 324)
+texture = ExtResource("3_xvwxv")
+stretch_mode = 5
+
+[node name="Healthbar" type="ProgressBar" parent="HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 406.0
+offset_top = 23.0
+offset_right = -406.0
+offset_bottom = -598.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_f6uqw")
+theme_override_styles/fill = SubResource("StyleBoxFlat_cuny2")
+value = 100.0
+show_percentage = false
+
+[connection signal="pressed" from="MainMenu/MarginContainer/VBoxContainer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="MainMenu/MarginContainer/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="MainMenu/MarginContainer/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="MainMenu/MarginContainer/ChooseClass/Pistol One" to="." method="_on_pistol_one_pressed"]
+[connection signal="pressed" from="MainMenu/MarginContainer/ChooseClass/Pistol Two" to="." method="_on_pistol_two_pressed"]
+[connection signal="pressed" from="MainMenu/MarginContainer/ChooseClass/Freeze Gun" to="." method="_on_freeze_gun_pressed"]

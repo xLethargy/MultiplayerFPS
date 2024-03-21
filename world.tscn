@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=11 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_rxlvp"]
 [ext_resource type="PackedScene" uid="uid://dpp36leb612fw" path="res://arena.tscn" id="1_sm485"]
 [ext_resource type="Script" path="res://MultiplayerMenu.gd" id="3_asb1u"]
+[ext_resource type="Script" path="res://HUD.gd" id="4_3loky"]
+[ext_resource type="Texture2D" uid="uid://belxpkhe22pnq" path="res://addons/kenney_particle_pack/circle_05.png" id="5_osqmr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uc3qh"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -16,6 +18,12 @@ background_mode = 2
 sky = SubResource("Sky_m6tua")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f6uqw"]
+bg_color = Color(0.639216, 0.117647, 0.172549, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cuny2"]
+bg_color = Color(0.223529, 0.709804, 0.27451, 1)
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_rxlvp")
@@ -68,10 +76,82 @@ text = "Host"
 layout_mode = 2
 text = "Join"
 
+[node name="Start" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start
+"
+
+[node name="NameEntry" type="LineEdit" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Enter Name"
+alignment = 1
+
 [node name="AddressEntry" type="LineEdit" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 placeholder_text = "Enter Address to Join"
 alignment = 1
+
+[node name="ChooseClass" type="VBoxContainer" parent="MultiplayerMenu/MainMenu/MarginContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Choose Class" type="Label" parent="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+text = "Main Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Pistol One" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+text = "Pistol One"
+
+[node name="Pistol Two" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+text = "Pistol Two"
+
+[node name="Freeze Gun" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+text = "Freeze Gun"
+
+[node name="HUD" type="Control" parent="MultiplayerMenu"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_3loky")
+
+[node name="Crosshair" type="TextureRect" parent="MultiplayerMenu/HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.03, 0.03)
+pivot_offset = Vector2(576, 324)
+texture = ExtResource("5_osqmr")
+stretch_mode = 5
+
+[node name="Healthbar" type="ProgressBar" parent="MultiplayerMenu/HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 406.0
+offset_top = 23.0
+offset_right = -406.0
+offset_bottom = -598.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_f6uqw")
+theme_override_styles/fill = SubResource("StyleBoxFlat_cuny2")
+value = 100.0
+show_percentage = false
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
@@ -81,3 +161,8 @@ spawn_path = NodePath("..")
 [connection signal="remove_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_remove_player"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer/Host" to="MultiplayerMenu" method="_on_host_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer/Join" to="MultiplayerMenu" method="_on_join_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer/Start" to="MultiplayerMenu" method="_on_start_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass/Pistol One" to="MultiplayerMenu" method="_on_pistol_one_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass/Pistol Two" to="MultiplayerMenu" method="_on_pistol_two_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass/Freeze Gun" to="MultiplayerMenu" method="_on_freeze_gun_pressed"]
+[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

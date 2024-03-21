@@ -7,7 +7,7 @@ var damage : float = 50
 
 var parent_shooter
 
-func _process(delta):
+func _process(_delta):
 	linear_velocity = direction_facing * speed
 
 
