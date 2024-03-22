@@ -15,7 +15,7 @@ extends Node3D
 @onready var level_scene = get_tree().current_scene
 @onready var player = get_parent().get_parent()
 
-var damage = 15
+var damage = 10
 
 var can_shoot = true
 
@@ -39,8 +39,8 @@ func _physics_process(_delta):
 
 			var distance_check = origin.distance_to(raycast.get_collision_point())
 			distance_check = int(distance_check)
-			if distance_check >= 15:
-				distance_check = 14
+			if distance_check >= damage:
+				distance_check = damage - 1
 			var falloff_damage = damage - distance_check
 			print (falloff_damage)
 			if collider.is_in_group("Hurtbox"):

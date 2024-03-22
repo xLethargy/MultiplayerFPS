@@ -16,7 +16,7 @@ extends Node3D
 @onready var player = get_parent().get_parent()
 
 var damage = 10
-var freeze_damage = 40
+var freeze_damage = 19
 
 var hit_player = {}
 var hits = 0
@@ -49,7 +49,6 @@ func _unhandled_input(_event):
 						"HitsTaken": 0
 					}
 				
-				print ("normal: ", current_health)
 				if current_health > 0:
 					store_freeze_information(collider)
 				else:
@@ -61,8 +60,6 @@ func _unhandled_input(_event):
 func store_freeze_information(collider):
 	hit_player[collider].HitsTaken += 1
 	
-	print (hit_player[collider].HitsTaken)
-	
 	if hit_player[collider].HitsTaken == 3:
 		hit_player[collider].HitsTaken = 0
 		
@@ -70,7 +67,6 @@ func store_freeze_information(collider):
 		collider.handle_speed_collision(slow_speed, jump_height)
 		current_health = collider.owner.health_component.current_health - freeze_damage
 		
-		print ("freeze: ", current_health)
 		$SlowTimer.start()
 		await $SlowTimer.timeout
 		collider.handle_speed_collision()

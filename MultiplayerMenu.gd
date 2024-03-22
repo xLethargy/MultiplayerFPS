@@ -100,15 +100,15 @@ func upnp_setup():
 
 
 func _on_start_pressed():
-	start_game.rpc()
-	add_player.emit()
+	if multiplayer.is_server():
+		start_game.rpc()
+		add_player.emit()
 
 
-@rpc("any_peer", "call_local")
+@rpc("call_local", "any_peer")
 func start_game():
 	main_menu.hide()
 	hud.show()
-	
 
 
 func _on_pistol_one_pressed():

@@ -148,7 +148,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
-length = 0.4
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -156,7 +156,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(-0.01, 0.4),
+"times": PackedFloat32Array(-0.01, 0.2),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0.434804, -0.391105, -0.356393), Vector3(0.434804, -0.454762, -0.356393)]
@@ -168,10 +168,10 @@ tracks/1/path = NodePath(".:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector3(0.610865, 0, 0), Vector3(0, 0, 0)]
+"values": [Vector3(0.261799, 0, 0), Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cthlp"]
@@ -221,7 +221,7 @@ texture = ExtResource("3_st0ml")
 stretch_mode = 5
 
 [node name="Hitmarkerlength" type="Timer" parent="."]
-wait_time = 0.15
+wait_time = 0.21
 one_shot = true
 
 [node name="BulletSpawnLocation" type="Marker3D" parent="."]
@@ -232,7 +232,7 @@ stream = ExtResource("4_6fnrq")
 volume_db = -5.0
 
 [node name="FiringRate" type="Timer" parent="."]
-wait_time = 0.15
+wait_time = 0.2
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="Hitmarkerlength" to="." method="_on_hitmarkerlength_timeout"]
