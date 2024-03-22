@@ -34,9 +34,8 @@ func _physics_process(_delta):
 			var collider = raycast.get_collider()
 			var origin = raycast.global_transform.origin
 
-			var distance_check = origin.distance_to(raycast.get_collision_point())
-			print (damage - distance_check)
-			distance_check = int(distance_check) / 3
+			var distance_check = (origin.distance_to(raycast.get_collision_point())) / 2
+			distance_check = int(distance_check) 
 			if distance_check >= damage:
 				distance_check = damage - 1
 			var falloff_damage = damage - distance_check

@@ -40,7 +40,18 @@ shadow_enabled = true
 [node name="MultiplayerMenu" type="CanvasLayer" parent="."]
 script = ExtResource("3_asb1u")
 
-[node name="ColorRect" type="ColorRect" parent="MultiplayerMenu"]
+[node name="MainMenuScreen" type="Control" parent="MultiplayerMenu"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect" type="ColorRect" parent="MultiplayerMenu/MainMenuScreen"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -48,81 +59,82 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.607843, 0.376471, 0.301961, 1)
 
-[node name="MainMenu" type="PanelContainer" parent="MultiplayerMenu"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 434.0
-offset_top = 220.0
-offset_right = -434.0
-offset_bottom = -220.0
+[node name="MainMenu" type="PanelContainer" parent="MultiplayerMenu/MainMenuScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -217.5
+offset_top = -141.5
+offset_right = 217.5
+offset_bottom = 141.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MultiplayerMenu/MainMenu"]
+[node name="MarginContainer" type="MarginContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MultiplayerMenu/MainMenu/MarginContainer"]
+[node name="ServerJoiner" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="Label" type="Label" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
 layout_mode = 2
 text = "Main Menu"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Host" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
+[node name="Host" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
 layout_mode = 2
 text = "Host"
 
-[node name="Join" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
+[node name="Join" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
 layout_mode = 2
 text = "Join"
 
-[node name="Start" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Start
-"
-
-[node name="NameEntry" type="LineEdit" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
+[node name="NameEntry" type="LineEdit" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
 layout_mode = 2
 placeholder_text = "Enter Name"
 alignment = 1
 
-[node name="AddressEntry" type="LineEdit" parent="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer"]
+[node name="AddressEntry" type="LineEdit" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
 layout_mode = 2
 placeholder_text = "Enter Address to Join"
 alignment = 1
 
-[node name="ChooseClass" type="VBoxContainer" parent="MultiplayerMenu/MainMenu/MarginContainer"]
+[node name="ChooseClass" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="Choose Class" type="Label" parent="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass"]
+[node name="Choose Class" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
 layout_mode = 2
-text = "Main Menu"
+text = "Choose a Class"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Pistol One" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass"]
+[node name="Pistol One" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
 layout_mode = 2
 text = "Pistol One"
 
-[node name="Pistol Two" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass"]
+[node name="Pistol Two" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
 layout_mode = 2
 text = "Pistol Two"
 
-[node name="Freeze Gun" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass"]
+[node name="Freeze Gun" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
 layout_mode = 2
 text = "Freeze Gun"
 
-[node name="Speed Gun" type="Button" parent="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass"]
+[node name="Speed Gun" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
 layout_mode = 2
 text = "Speed Gun"
 
@@ -171,11 +183,10 @@ spawn_path = NodePath("..")
 
 [connection signal="add_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_add_player"]
 [connection signal="remove_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_remove_player"]
-[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer/Host" to="MultiplayerMenu" method="_on_host_pressed"]
-[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer/Join" to="MultiplayerMenu" method="_on_join_pressed"]
-[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/VBoxContainer/Start" to="MultiplayerMenu" method="_on_start_pressed"]
-[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass/Pistol One" to="MultiplayerMenu" method="_on_pistol_one_pressed"]
-[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass/Pistol Two" to="MultiplayerMenu" method="_on_pistol_two_pressed"]
-[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass/Freeze Gun" to="MultiplayerMenu" method="_on_freeze_gun_pressed"]
-[connection signal="pressed" from="MultiplayerMenu/MainMenu/MarginContainer/ChooseClass/Speed Gun" to="MultiplayerMenu" method="_on_speed_gun_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Host" to="MultiplayerMenu" method="_on_host_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Join" to="MultiplayerMenu" method="_on_join_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Pistol One" to="MultiplayerMenu" method="_on_pistol_one_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Pistol Two" to="MultiplayerMenu" method="_on_pistol_two_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Freeze Gun" to="MultiplayerMenu" method="_on_freeze_gun_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Speed Gun" to="MultiplayerMenu" method="_on_speed_gun_pressed"]
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

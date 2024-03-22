@@ -1,81 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://dc347rbgdujlm"]
 
+[ext_resource type="Script" path="res://speed_gun.gd" id="1_sou6r"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_l7vj3"]
-
-[sub_resource type="GDScript" id="GDScript_obc2u"]
-script/source = "extends Node3D
-
-@onready var audio_player : AudioStreamPlayer = $AudioStreamPlayer
-
-@onready var animation_player = $AnimationPlayer
-@onready var muzzle_flash = $MuzzleFlash
-@onready var hitmarker = $Hitmarker
-@onready var hitmarker_timer = $Hitmarkerlength
-
-@onready var raycast = $\"../RayCast3D\"
-
-@onready var level_scene = get_tree().current_scene
-@onready var player = get_parent().get_parent()
-
-var damage = 15
-
-func _ready():
-	player.default_speed = 5
-	player.change_speed_and_jump.rpc(5, 5.5)
-
-func _unhandled_input(_event):
-	if !player.is_multiplayer_authority():
-		return
-	
-	if Input.is_action_just_pressed(\"shoot\") and animation_player.current_animation != \"shoot\":
-		play_shoot_effects.rpc()
-		
-		if raycast.is_colliding():
-			var collider = raycast.get_collider()
-			if collider.is_in_group(\"Hurtbox\"):
-				play_local_shoot_effects()
-				audio_player.play()
-				collider.handle_damage_collision(damage)
-				player.increase_speed.rpc(0.5)
-			else:
-				player.change_speed_and_jump.rpc()
-		else:
-			player.change_speed_and_jump.rpc()
-
-
-func _physics_process(_delta):
-	if !player.is_multiplayer_authority():
-		return
-	
-	if !animation_player.current_animation == \"shoot\":
-		if player.input_dir != Vector2.ZERO and player.is_on_floor():
-			_play_animation.rpc(\"move\")
-		else:
-			_play_animation.rpc(\"idle\")
-
-
-@rpc (\"call_local\", \"any_peer\")
-func play_shoot_effects():
-	animation_player.stop()
-	animation_player.play(\"shoot\")
-	muzzle_flash.restart()
-	muzzle_flash.emitting = true
-	
-	#level_scene.spawn_bullet(bullet_scene, bullet_spawn_location, owner)
-
-@rpc (\"call_local\", \"any_peer\")
-func _play_animation(animation_string):
-	animation_player.play(animation_string)
-
-
-func play_local_shoot_effects():
-	hitmarker.show()
-	hitmarker_timer.start()
-
-
-func _on_hitmarkerlength_timeout():
-	hitmarker.hide()
-"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_agkfy"]
 resource_name = "Material"
@@ -263,7 +189,7 @@ _data = {
 
 [node name="SpeedGun" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.434804, -0.454762, -0.356393)
-script = SubResource("GDScript_obc2u")
+script = ExtResource("1_sou6r")
 
 [node name="Cube" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
@@ -306,6 +232,7 @@ libraries = {
 }
 autoplay = "idle"
 playback_default_blend_time = 0.05
+speed_scale = 0.5
 
 [connection signal="timeout" from="Hitmarkerlength" to="." method="_on_hitmarkerlength_timeout"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

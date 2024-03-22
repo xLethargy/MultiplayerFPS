@@ -10,6 +10,9 @@ var max_health = 100
 signal change_health(health_value)
 signal death
 
+func _ready():
+	if multiplayer.is_server():
+		receive_damage.rpc(0)
 
 func _process(delta):
 	if !current_health == max_health and can_heal:
@@ -27,6 +30,7 @@ func receive_damage(damage):
 		player.position = Vector3.ZERO
 		player.change_speed_and_jump.rpc()
 		heal_timer.stop()
+		death.emit()
 	else:
 		heal_timer.stop()
 		heal_timer.start()

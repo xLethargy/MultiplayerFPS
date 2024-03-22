@@ -64,8 +64,9 @@ func change_hud_health(health_value):
 
 @rpc ("any_peer", "call_local")
 func change_speed_and_jump(speed_effect = default_speed, jump_height = default_jump_velocity):
-	current_speed = speed_effect
-	current_jump_velocity = jump_height
+	if is_multiplayer_authority():
+		current_speed = speed_effect
+		current_jump_velocity = jump_height
 
 
 @rpc ("call_local")

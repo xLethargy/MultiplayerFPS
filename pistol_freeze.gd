@@ -60,13 +60,18 @@ func store_freeze_information(collider):
 	if hit_player[collider].HitsTaken == 3:
 		hit_player[collider].HitsTaken = 0
 		
+		var old_collider_speed = collider.player.current_speed
+		
 		collider.handle_damage_collision(freeze_damage)
 		collider.handle_speed_collision(slow_speed, jump_height)
 		current_health = collider.owner.health_component.current_health - freeze_damage
 		
+		
+		
 		$SlowTimer.start()
 		await $SlowTimer.timeout
-		collider.handle_speed_collision()
+		if !collider == null:
+			collider.handle_speed_collision(old_collider_speed)
 	
 	
 

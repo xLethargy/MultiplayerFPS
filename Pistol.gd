@@ -9,9 +9,6 @@ extends Node3D
 
 @onready var raycast = $"../RayCast3D"
 
-@onready var bullet_spawn_location = $BulletSpawnLocation
-@onready var bullet_scene = preload("res://pistol_bullet.tscn")
-
 @onready var level_scene = get_tree().current_scene
 @onready var player = get_parent().get_parent()
 
@@ -49,8 +46,6 @@ func play_shoot_effects():
 	animation_player.play("shoot")
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
-	
-	#level_scene.spawn_bullet(bullet_scene, bullet_spawn_location, owner)
 
 @rpc ("call_local", "any_peer")
 func _play_animation(animation_string):
