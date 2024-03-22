@@ -220,16 +220,13 @@ pivot_offset = Vector2(576, 324)
 texture = ExtResource("3_5uiqe")
 stretch_mode = 5
 
-[node name="Hitmarkerlength" type="Timer" parent="."]
-wait_time = 0.15
-one_shot = true
-
-[node name="BulletSpawnLocation" type="Marker3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.249901, -0.373774)
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_in4s8")
 volume_db = -5.0
+
+[node name="Hitmarkerlength" type="Timer" parent="."]
+wait_time = 0.15
+one_shot = true
 
 [node name="SlowTimer" type="Timer" parent="."]
 wait_time = 2.5

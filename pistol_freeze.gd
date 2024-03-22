@@ -9,9 +9,6 @@ extends Node3D
 
 @onready var raycast = $"../RayCast3D"
 
-@onready var bullet_spawn_location = $BulletSpawnLocation
-@onready var bullet_scene = preload("res://pistol_bullet.tscn")
-
 @onready var level_scene = get_tree().current_scene
 @onready var player = get_parent().get_parent()
 

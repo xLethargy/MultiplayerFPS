@@ -17,9 +17,6 @@ script/source = "extends Node3D
 
 @onready var raycast = $\"../RayCast3D\"
 
-@onready var bullet_spawn_location = $BulletSpawnLocation
-@onready var bullet_scene = preload(\"res://pistol_bullet.tscn\")
-
 @onready var level_scene = get_tree().current_scene
 @onready var player = get_parent().get_parent()
 
@@ -57,8 +54,6 @@ func play_shoot_effects():
 	animation_player.play(\"shoot\")
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
-	
-	#level_scene.spawn_bullet(bullet_scene, bullet_spawn_location, owner)
 
 @rpc (\"call_local\", \"any_peer\")
 func _play_animation(animation_string):
@@ -290,9 +285,6 @@ stretch_mode = 5
 [node name="Hitmarkerlength" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
-
-[node name="BulletSpawnLocation" type="Marker3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.249901, -0.373774)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_3q4ty")

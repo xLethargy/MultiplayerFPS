@@ -182,7 +182,7 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[node name="PistolTwo" type="Node3D"]
+[node name="SMG" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.434804, -0.454762, -0.356393)
 script = ExtResource("1_24sbh")
 
@@ -223,9 +223,6 @@ stretch_mode = 5
 [node name="Hitmarkerlength" type="Timer" parent="."]
 wait_time = 0.21
 one_shot = true
-
-[node name="BulletSpawnLocation" type="Marker3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.249901, -0.373774)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_6fnrq")

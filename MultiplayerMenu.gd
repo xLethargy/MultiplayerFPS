@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 @onready var main_menu = $MainMenu
+@onready var colour_background = $ColorRect
 @onready var address_entry = $MainMenu/MarginContainer/VBoxContainer/AddressEntry
 @onready var name_entry = $MainMenu/MarginContainer/VBoxContainer/NameEntry
 
@@ -17,6 +18,7 @@ func _ready():
 	multiplayer.peer_connected.connect(peer_connected, multiplayer.get_unique_id())
 	multiplayer.peer_disconnected.connect(peer_disconnected, multiplayer.get_unique_id())
 	multiplayer.connected_to_server.connect(connected_to_server)
+	multiplayer.connection_failed.connect(connection_failed)
 
 
 func _on_host_pressed():
@@ -34,18 +36,15 @@ func _on_host_pressed():
 	
 	multiplayer.set_multiplayer_peer(enet_peer)
 	
-	#add_player.emit(multiplayer.get_unique_id())
-	
 	upnp_setup()
 	
 	send_player_information(name_entry.text, multiplayer.get_unique_id())
 
 
 func _on_join_pressed():
+	enet_peer = ENetMultiplayerPeer.new()
 	$MainMenu/MarginContainer/VBoxContainer.hide()
 	$MainMenu/MarginContainer/ChooseClass.show()
-	
-	enet_peer = ENetMultiplayerPeer.new()
 	
 	enet_peer.create_client(address_entry.text, PORT)
 	
@@ -66,6 +65,9 @@ func connected_to_server():
 	print("connected to server")
 	send_player_information.rpc_id(1, name_entry.text, multiplayer.get_unique_id())
 
+
+func connection_failed():
+	print ("connection failed")
 
 @rpc("any_peer")
 func send_player_information(given_name, id, weapon_class = ""):
@@ -101,30 +103,35 @@ func upnp_setup():
 
 func _on_start_pressed():
 	if multiplayer.is_server():
+		for i in Global.players:
+			print (i)
 		start_game.rpc()
 		add_player.emit()
 
+
+@rpc ("any_peer", "call_local")
+func _server_add_player():
+	add_player.emit()
 
 @rpc("call_local", "any_peer")
 func start_game():
 	main_menu.hide()
 	hud.show()
+	
 
 
 func _on_pistol_one_pressed():
 	var id = multiplayer.get_unique_id()
 	if Global.players.has(id):
 		update_class.rpc(multiplayer.get_unique_id(), "PistolOne")
-		$MainMenu/MarginContainer/ChooseClass.hide()
-		$MainMenu/MarginContainer/VBoxContainer.show()
+		_class_selected()
 
 
 func _on_pistol_two_pressed():
 	var id = multiplayer.get_unique_id()
 	if Global.players.has(id):
-		update_class.rpc(multiplayer.get_unique_id(), "PistolTwo")
-		$MainMenu/MarginContainer/ChooseClass.hide()
-		$MainMenu/MarginContainer/VBoxContainer.show()
+		update_class.rpc(multiplayer.get_unique_id(), "SMG")
+		_class_selected()
 
 
 @rpc ("any_peer", "call_local")
@@ -137,13 +144,20 @@ func _on_freeze_gun_pressed():
 	var id = multiplayer.get_unique_id()
 	if Global.players.has(id):
 		update_class.rpc(multiplayer.get_unique_id(), "FreezeGun")
-		$MainMenu/MarginContainer/ChooseClass.hide()
-		$MainMenu/MarginContainer/VBoxContainer.show()
+		_class_selected()
 
 
 func _on_speed_gun_pressed():
 	var id = multiplayer.get_unique_id()
 	if Global.players.has(id):
 		update_class.rpc(multiplayer.get_unique_id(), "SpeedGun")
-		$MainMenu/MarginContainer/ChooseClass.hide()
-		$MainMenu/MarginContainer/VBoxContainer.show()
+		_class_selected()
+
+
+func _class_selected():
+	if !Global.game_in_progress:
+		Global.game_in_progress = true
+	main_menu.hide()
+	hud.show()
+	colour_background.hide()
+	_server_add_player.rpc_id(1)

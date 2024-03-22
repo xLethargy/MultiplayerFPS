@@ -9,13 +9,10 @@ extends Node3D
 
 @onready var raycast = $"../RayCast3D"
 
-@onready var bullet_spawn_location = $BulletSpawnLocation
-@onready var bullet_scene = preload("res://pistol_bullet.tscn")
-
 @onready var level_scene = get_tree().current_scene
 @onready var player = get_parent().get_parent()
 
-var damage = 10
+var damage = 15
 
 var can_shoot = true
 
@@ -38,7 +35,8 @@ func _physics_process(_delta):
 			var origin = raycast.global_transform.origin
 
 			var distance_check = origin.distance_to(raycast.get_collision_point())
-			distance_check = int(distance_check)
+			print (damage - distance_check)
+			distance_check = int(distance_check) / 3
 			if distance_check >= damage:
 				distance_check = damage - 1
 			var falloff_damage = damage - distance_check
