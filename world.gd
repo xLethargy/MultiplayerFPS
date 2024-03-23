@@ -15,11 +15,22 @@ var speed_gun = preload("res://speed_gun.tscn")
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
 		if !main_menu.visible:
-			#_on_multiplayer_menu_remove_player.rpc(multiplayer.get_unique_id())
 			_open_choose_class(multiplayer.get_unique_id())
 		else:
-			get_tree().quit()
+			if multiplayer.is_server():
+				send_to_main_menu.rpc()
+				get_tree().quit()
+			else:
+				_on_multiplayer_menu_remove_player(multiplayer.get_unique_id())
+				get_tree().quit()
 
+
+@rpc("any_peer", "reliable")
+func send_to_main_menu():
+	_on_multiplayer_menu_remove_player(multiplayer.get_unique_id())
+	get_tree().reload_current_scene()
+	
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _on_multiplayer_menu_add_player():
 	#var index = 0 THIS IS FOR SPAWNING PLAYERS INA 
@@ -49,8 +60,8 @@ func _on_multiplayer_menu_add_player():
 				update_health_bar(player.health_component.current_health)
 
 
-@rpc("any_peer", "call_remote")
 func _on_multiplayer_menu_remove_player(peer_id):
+	Global.players.erase(peer_id)
 	player = get_node_or_null(str(peer_id))
 	if player:
 		player.queue_free()
