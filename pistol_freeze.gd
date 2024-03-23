@@ -26,6 +26,10 @@ var player_died = false
 
 var current_health
 
+func _ready():
+	player.default_speed = 6.5
+	player.change_speed_and_jump()
+
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():
 		return
@@ -68,13 +72,16 @@ func store_freeze_information(collider):
 			old_collider_speed = collider.default_speed
 		
 		collider.handle_damage_collision(freeze_damage)
-		collider.handle_speed_collision(slow_speed, jump_height)
 		current_health = collider.owner.health_component.current_health - freeze_damage
 		
-		$SlowTimer.start()
-		await $SlowTimer.timeout
-		if !collider == null:
-			collider.handle_speed_collision(old_collider_speed)
+		if current_health - damage > 0:
+			collider.handle_speed_collision(slow_speed, jump_height)
+			$SlowTimer.start()
+			await $SlowTimer.timeout
+			if !collider == null:
+				collider.handle_speed_collision(old_collider_speed)
+		else:
+			$SlowTimer.stop()
 	
 	
 

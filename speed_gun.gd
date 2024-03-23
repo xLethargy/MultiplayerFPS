@@ -7,6 +7,8 @@ extends Node3D
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
 @onready var arm = $Pivot/Arm
+@onready var revolver_audio = $RevolverAudio
+@onready var local_revolver_audio = $LocalRevolverAudio
 
 @onready var raycast = $"../Camera3D/RayCast3D"
 
@@ -21,7 +23,7 @@ var player_speed_increase = 0.5
 
 func _ready():
 	player.default_speed = 5
-	player.change_speed_and_jump.rpc_id(multiplayer.get_unique_id())
+	player.change_speed_and_jump()
 	player.health_component.connect("death", reset_speed_gun)
 
 func _unhandled_input(_event):
@@ -29,12 +31,13 @@ func _unhandled_input(_event):
 		return
 	
 	if Input.is_action_just_pressed("shoot") and animation_player.current_animation != "shoot":
-		play_shoot_effects.rpc()
+		play_shoot_effects()
+		play_spatial_audio.rpc()
 		
 		if raycast.is_colliding():
 			var collider = raycast.get_collider()
 			if collider.is_in_group("Hurtbox"):
-				play_local_shoot_effects()
+				hitmarker_effect()
 				audio_player.play()
 				collider.handle_damage_collision(damage)
 				
@@ -56,19 +59,29 @@ func _physics_process(_delta):
 			_play_animation.rpc("idle")
 
 
-@rpc ("call_local", "any_peer")
 func play_shoot_effects():
+	local_revolver_audio.play()
 	animation_player.stop()
 	animation_player.play("shoot")
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
+
+
+@rpc ("any_peer")
+func play_spatial_audio():
+	revolver_audio.play()
+	animation_player.stop()
+	animation_player.play("shoot")
+	muzzle_flash.restart()
+	muzzle_flash.emitting = true
+
 
 @rpc ("call_local", "any_peer")
 func _play_animation(animation_string):
 	animation_player.play(animation_string)
 
 
-func play_local_shoot_effects():
+func hitmarker_effect():
 	hitmarker.show()
 	hitmarker_timer.start()
 
@@ -96,6 +109,6 @@ func handle_speed_gun_variables():
 
 @rpc ("any_peer", "call_local")
 func reset_speed_gun(animation_speed = 0.5):
-	player.change_speed_and_jump.rpc_id(multiplayer.get_unique_id())
+	player.change_speed_and_jump()
 	animation_player.speed_scale = animation_speed
 	damage = 15

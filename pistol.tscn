@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://cmlx8217nhub"]
+[gd_scene load_steps=21 format=3 uid="uid://cmlx8217nhub"]
 
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="1_4flk3"]
 [ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://hitmarker.png" id="3_7vlyy"]
 [ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://hitmarker.wav" id="4_3q4ty"]
 [ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://materials/red.tres" id="4_jvk7i"]
+[ext_resource type="AudioStream" uid="uid://4x7mg7hb3117" path="res://sounds/deagle1.wav" id="5_rq315"]
 
 [sub_resource type="GDScript" id="GDScript_fcati"]
 script/source = "extends Node3D
@@ -15,6 +16,8 @@ script/source = "extends Node3D
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
 @onready var arm = $Arm
+@onready var deagle_audio = $DeagleAudio
+@onready var local_deagle_audio = $LocalDeagleAudio
 
 @onready var raycast = $\"../Camera3D/RayCast3D\"
 
@@ -24,31 +27,21 @@ script/source = "extends Node3D
 var damage = 20
 
 func _ready():
-	#change_arm_material.rpc()
-	pass
-
-
-@rpc (\"call_local\")
-func change_arm_material():
-	for i in Global.players:
-		if Global.players[i].Team == 1:
-			var blue = preload(\"res://materials/blue.tres\")
-			arm.set_surface_override_material(0, blue)
-		else:
-			var red = preload(\"res://materials/red.tres\")
-			arm.set_surface_override_material(0, red)
+	player.default_speed = 7.5
+	player.change_speed_and_jump()
 
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():
 		return
 	
 	if Input.is_action_just_pressed(\"shoot\") and animation_player.current_animation != \"shoot\":
-		play_shoot_effects.rpc()
+		play_shoot_effects()
+		play_spatial_audio.rpc()
 		
 		if raycast.is_colliding():
 			var collider = raycast.get_collider()
 			if collider.is_in_group(\"Hurtbox\"):
-				play_local_shoot_effects()
+				hitmarker_effect()
 				audio_player.play()
 				collider.handle_damage_collision(damage)
 
@@ -64,8 +57,9 @@ func _physics_process(_delta):
 			_play_animation.rpc(\"idle\")
 
 
-@rpc (\"call_local\", \"any_peer\")
+
 func play_shoot_effects():
+	local_deagle_audio.play()
 	animation_player.stop()
 	animation_player.play(\"shoot\")
 	muzzle_flash.restart()
@@ -76,7 +70,15 @@ func _play_animation(animation_string):
 	animation_player.play(animation_string)
 
 
-func play_local_shoot_effects():
+@rpc (\"any_peer\")
+func play_spatial_audio():
+	deagle_audio.play()
+	animation_player.stop()
+	animation_player.play(\"shoot\")
+	muzzle_flash.restart()
+	muzzle_flash.emitting = true
+
+func hitmarker_effect():
 	hitmarker.show()
 	hitmarker_timer.start()
 
@@ -288,9 +290,15 @@ draw_pass_1 = SubResource("PlaneMesh_qr5g0")
 
 [node name="Hitmarker" type="TextureRect" parent="."]
 visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -560.0
+offset_top = -321.0
+offset_right = -48.0001
+offset_bottom = 191.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.05, 0.05)
@@ -304,7 +312,7 @@ one_shot = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_3q4ty")
-volume_db = -5.0
+volume_db = -10.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -316,6 +324,17 @@ playback_default_blend_time = 0.05
 [node name="Arm" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, -0.136921, 0.139884)
 mesh = SubResource("CapsuleMesh_33bxf")
+
+[node name="DeagleAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_rq315")
+volume_db = -30.0
+unit_size = 25.0
+max_db = -20.0
+
+[node name="LocalDeagleAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_rq315")
+volume_db = -15.0
+pitch_scale = 0.75
 
 [connection signal="timeout" from="Hitmarkerlength" to="." method="_on_hitmarkerlength_timeout"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

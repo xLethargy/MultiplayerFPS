@@ -17,6 +17,10 @@ var damage = 15
 
 var can_shoot = true
 
+func _ready():
+	player.default_speed = 6
+	player.change_speed_and_jump()
+
 func _physics_process(_delta):
 	if !player.is_multiplayer_authority():
 		return

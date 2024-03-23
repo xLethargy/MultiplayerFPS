@@ -78,11 +78,12 @@ func _on_multiplayer_menu_remove_player(peer_id):
 		player.queue_free()
 
 
-func _open_choose_class(peer_id):
-	player = get_node_or_null(str(peer_id))
-	if player:
-		player.global_position = Vector3(0, -100, 0)
-		player.frozen = true
+func _open_choose_class(_peer_id):
+	#player = get_node_or_null(str(peer_id))
+	#if player:
+		#player.global_position = Vector3(0, -100, 0)
+		#player.change_speed_and_jump()
+		#player.frozen = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	hud.hide()
 	main_menu.show()

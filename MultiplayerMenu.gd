@@ -20,9 +20,14 @@ var player_sensitivity = 11
 var team_setter = 0
 var teams = 2
 
+var death_connected = false
+
 const PORT = 9999
 
 var enet_peer
+
+var check_for_player
+var weapon_class_node
 
 signal add_player
 signal remove_player
@@ -122,22 +127,26 @@ func _server_add_player():
 
 
 func _on_pistol_one_pressed():
-	_class_selected("PistolOne", pistol_one)
+	_class_selected("PistolOne")
+	weapon_class_node = pistol_one
 
 
 func _on_pistol_two_pressed():
-	_class_selected("SMG", smg_gun)
+	_class_selected("SMG")
+	weapon_class_node = smg_gun
 
 
 func _on_freeze_gun_pressed():
-	_class_selected("FreezeGun", freeze_gun)
+	_class_selected("FreezeGun")
+	weapon_class_node = freeze_gun
 
 
 func _on_speed_gun_pressed():
-	_class_selected("SpeedGun", speed_gun)
+	_class_selected("SpeedGun")
+	weapon_class_node = speed_gun
 
 
-func _class_selected(weapon_class, weapon_class_node, peer_id = multiplayer.get_unique_id()):
+func _class_selected(weapon_class, peer_id = multiplayer.get_unique_id()):
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if Global.players.has(peer_id):
 		if !Global.game_in_progress:
@@ -146,18 +155,26 @@ func _class_selected(weapon_class, weapon_class_node, peer_id = multiplayer.get_
 		update_class.rpc(multiplayer.get_unique_id(), weapon_class)
 		main_menu.hide()
 		hud.show()
-		var check_for_player = get_tree().current_scene.get_node_or_null(str(multiplayer.get_unique_id()))
+		check_for_player = get_tree().current_scene.get_node_or_null(str(multiplayer.get_unique_id()))
 		if !check_for_player:
 			_server_add_player.rpc_id(1)
 			check_for_player = get_tree().current_scene.get_node_or_null(str(multiplayer.get_unique_id()))
 		
-		if check_for_player:
-			var player_class = weapon_class_node.instantiate()
-			check_for_player.global_position = Vector3(0, 0, 0)
-			check_for_player.update_current_class(player_class)
-			check_for_player.weapon = player_class
-			check_for_player.frozen = false
+		if check_for_player and !death_connected:
+			check_for_player.health_component.connect("death", player_died)
+			death_connected = true
 
+
+func player_died():
+	var player_class = weapon_class_node.instantiate()
+	check_for_player.global_position = Vector3(0, 0, 0)
+	check_for_player.update_current_class(player_class)
+	check_for_player.weapon = player_class
+	check_for_player.change_speed_and_jump()
+
+
+func save_class(saved_class):
+	weapon_class_node = saved_class
 
 @rpc ("any_peer", "call_local")
 func update_class(id, weapon_class):

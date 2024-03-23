@@ -42,7 +42,6 @@ func _unhandled_input(event):
 	if !is_multiplayer_authority():
 		return
 	
-	print (sensitivity)
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * sensitivity / 10000)
 		view.rotate_x(-event.relative.y * sensitivity / 10000)
@@ -78,9 +77,10 @@ func change_hud_health(health_value):
 
 @rpc ("any_peer", "call_local")
 func change_speed_and_jump(speed_effect = default_speed, jump_height = default_jump_velocity):
-	if is_multiplayer_authority():
-		current_speed = speed_effect
-		current_jump_velocity = jump_height
+	print ("default: ", default_speed)
+	print ("speed effect: ", speed_effect)
+	current_speed = speed_effect
+	current_jump_velocity = jump_height
 
 
 @rpc ("call_local")

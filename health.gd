@@ -24,7 +24,7 @@ func receive_damage(damage):
 	if current_health <= 0:
 		current_health = max_health
 		player.position = Vector3.ZERO
-		player.change_speed_and_jump.rpc()
+		player.change_speed_and_jump()
 		heal_timer.stop()
 		death.emit()
 	else:
