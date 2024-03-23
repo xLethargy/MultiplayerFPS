@@ -6,6 +6,7 @@ extends Node3D
 @onready var muzzle_flash = $MuzzleFlash
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
+@onready var arm = $Arm
 
 @onready var raycast = $"../Camera3D/RayCast3D"
 
@@ -38,7 +39,6 @@ func _physics_process(_delta):
 			if distance_check >= damage:
 				distance_check = damage - 1
 			var falloff_damage = damage - distance_check
-			print (falloff_damage)
 			if collider.is_in_group("Hurtbox"):
 				play_local_shoot_effects()
 				audio_player.play()

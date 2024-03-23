@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://speed_gun.gd" id="1_sou6r"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_l7vj3"]
-[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://player.tres" id="3_lgllv"]
+[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://materials/red.tres" id="3_8b2b7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_agkfy"]
 resource_name = "Material"
@@ -72,11 +72,6 @@ material = SubResource("StandardMaterial3D_5yqdu")
 size = Vector2(0.5, 0.5)
 orientation = 2
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_vfuuw"]
-material = ExtResource("3_lgllv")
-radius = 0.1
-height = 0.6
-
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0s8od"]
 load_path = "res://.godot/imported/hitmarker.png-1ac4e5da177c43b6bb9088dc9f77c00d.ctex"
 
@@ -138,22 +133,10 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("ArmNode:rotation")
+tracks/4/path = NodePath("Pivot:rotation")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("ArmNode:position")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -218,7 +201,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector3(0, 0.03, 0), Vector3(0, 0, 0)]
+"values": [Vector3(0, 0.127152, 0.115371), Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -235,14 +218,14 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("ArmNode:rotation")
+tracks/2/path = NodePath("Pivot:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector3(1.0472, 0, 0), Vector3(0, 0, 0)]
+"values": [Vector3(0.349066, 0, 0), Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cthlp"]
@@ -252,6 +235,11 @@ _data = {
 "move": SubResource("Animation_yijs0"),
 "shoot": SubResource("Animation_lwtdn")
 }
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_5hto8"]
+material = ExtResource("3_8b2b7")
+radius = 0.1
+height = 0.6
 
 [node name="SpeedGun" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
@@ -273,13 +261,6 @@ one_shot = true
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_hngsa")
 draw_pass_1 = SubResource("PlaneMesh_bruoh")
-
-[node name="ArmNode" type="Node3D" parent="."]
-
-[node name="Arm" type="MeshInstance3D" parent="ArmNode"]
-transform = Transform3D(0.996195, -0.0871558, 8.46542e-08, -0.0488629, -0.558506, -0.82806, 0.0721703, 0.824909, -0.560639, -0.0206605, -0.116542, 0.17225)
-mesh = SubResource("CapsuleMesh_vfuuw")
-skeleton = NodePath("../..")
 
 [node name="Hitmarker" type="TextureRect" parent="."]
 visible = false
@@ -308,6 +289,14 @@ libraries = {
 autoplay = "idle"
 playback_default_blend_time = 0.05
 speed_scale = 0.5
+
+[node name="Pivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.257657, 0.307066)
+
+[node name="Arm" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, 0.120736, -0.167182)
+mesh = SubResource("CapsuleMesh_5hto8")
+skeleton = NodePath("../..")
 
 [connection signal="timeout" from="Hitmarkerlength" to="." method="_on_hitmarkerlength_timeout"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

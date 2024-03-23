@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="1_4flk3"]
 [ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://hitmarker.png" id="3_7vlyy"]
 [ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://hitmarker.wav" id="4_3q4ty"]
-[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://player.tres" id="5_gpb0l"]
+[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://materials/red.tres" id="4_jvk7i"]
 
 [sub_resource type="GDScript" id="GDScript_fcati"]
 script/source = "extends Node3D
@@ -14,6 +14,7 @@ script/source = "extends Node3D
 @onready var muzzle_flash = $MuzzleFlash
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
+@onready var arm = $Arm
 
 @onready var raycast = $\"../Camera3D/RayCast3D\"
 
@@ -21,6 +22,21 @@ script/source = "extends Node3D
 @onready var player = get_parent().get_parent()
 
 var damage = 20
+
+func _ready():
+	#change_arm_material.rpc()
+	pass
+
+
+@rpc (\"call_local\")
+func change_arm_material():
+	for i in Global.players:
+		if Global.players[i].Team == 1:
+			var blue = preload(\"res://materials/blue.tres\")
+			arm.set_surface_override_material(0, blue)
+		else:
+			var red = preload(\"res://materials/red.tres\")
+			arm.set_surface_override_material(0, red)
 
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():
@@ -138,11 +154,6 @@ material = SubResource("StandardMaterial3D_i0chb")
 size = Vector2(0.5, 0.5)
 orientation = 2
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_6eacs"]
-material = ExtResource("5_gpb0l")
-radius = 0.1
-height = 0.6
-
 [sub_resource type="Animation" id="Animation_anl2s"]
 length = 0.001
 tracks/0/type = "value"
@@ -251,6 +262,11 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_33bxf"]
+material = ExtResource("4_jvk7i")
+radius = 0.1
+height = 0.6
+
 [node name="Pistol" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = SubResource("GDScript_fcati")
@@ -290,16 +306,16 @@ one_shot = true
 stream = ExtResource("4_3q4ty")
 volume_db = -5.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0206605, -0.116542, 0.17225)
-mesh = SubResource("CapsuleMesh_6eacs")
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_cthlp")
 }
 autoplay = "idle"
 playback_default_blend_time = 0.05
+
+[node name="Arm" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, -0.136921, 0.139884)
+mesh = SubResource("CapsuleMesh_33bxf")
 
 [connection signal="timeout" from="Hitmarkerlength" to="." method="_on_hitmarkerlength_timeout"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

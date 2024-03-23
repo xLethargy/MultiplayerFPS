@@ -1,13 +1,13 @@
 [gd_scene load_steps=9 format=3 uid="uid://c01cfmt48npc0"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_yahtk"]
-[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://player.tres" id="2_d00v5"]
+[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://materials/red.tres" id="2_pbo3q"]
 [ext_resource type="Script" path="res://health.gd" id="7_y81fr"]
 [ext_resource type="Script" path="res://hurtbox.gd" id="8_i8qa3"]
 [ext_resource type="Script" path="res://shoot.gd" id="9_6b75t"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_5lii6"]
-material = ExtResource("2_d00v5")
+material = ExtResource("2_pbo3q")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tgsde"]
 
@@ -29,7 +29,7 @@ properties/4/spawn = true
 properties/4/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
-collision_layer = 2
+collision_layer = 0
 script = ExtResource("1_yahtk")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

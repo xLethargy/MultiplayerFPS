@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_8g6ke"]
 [ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://hitmarker.png" id="3_5uiqe"]
 [ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://hitmarker.wav" id="4_in4s8"]
-[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://player.tres" id="5_garqu"]
+[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://materials/red.tres" id="5_pscie"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vpns1"]
 resource_name = "Material"
@@ -183,8 +183,8 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_qtju0"]
-material = ExtResource("5_garqu")
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gs4yj"]
+material = ExtResource("5_pscie")
 radius = 0.1
 height = 0.6
 
@@ -238,9 +238,9 @@ one_shot = true
 wait_time = 2.5
 one_shot = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0206605, -0.116542, 0.17225)
-mesh = SubResource("CapsuleMesh_qtju0")
+[node name="Arm" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, -0.136921, 0.139884)
+mesh = SubResource("CapsuleMesh_gs4yj")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="Hitmarkerlength" to="." method="_on_hitmarkerlength_timeout"]

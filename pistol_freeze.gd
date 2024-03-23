@@ -6,6 +6,7 @@ extends Node3D
 @onready var muzzle_flash = $MuzzleFlash
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
+@onready var arm = $Arm
 
 @onready var raycast = $"../Camera3D/RayCast3D"
 

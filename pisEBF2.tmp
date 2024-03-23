@@ -1,18 +1,96 @@
-[gd_scene load_steps=20 format=3 uid="uid://dt1pjkebmyuvs"]
+[gd_scene load_steps=20 format=3 uid="uid://cmlx8217nhub"]
 
-[ext_resource type="Script" path="res://pistol_2.gd" id="1_24sbh"]
-[ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_q35a7"]
-[ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://hitmarker.png" id="3_st0ml"]
-[ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://hitmarker.wav" id="4_6fnrq"]
-[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://materials/red.tres" id="5_rd5hq"]
+[ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="1_4flk3"]
+[ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://hitmarker.png" id="3_7vlyy"]
+[ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://hitmarker.wav" id="4_3q4ty"]
+[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://materials/red.tres" id="4_jvk7i"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0lqtv"]
+[sub_resource type="GDScript" id="GDScript_fcati"]
+script/source = "extends Node3D
+
+@onready var audio_player : AudioStreamPlayer = $AudioStreamPlayer
+
+@onready var animation_player = $AnimationPlayer
+@onready var muzzle_flash = $MuzzleFlash
+@onready var hitmarker = $Hitmarker
+@onready var hitmarker_timer = $Hitmarkerlength
+@onready var arm = $Arm
+
+@onready var raycast = $\"../Camera3D/RayCast3D\"
+
+@onready var level_scene = get_tree().current_scene
+@onready var player = get_parent().get_parent()
+
+var damage = 20
+
+func _ready():
+	change_arm_material.rpc()
+
+
+@rpc (\"call_local\")
+func change_arm_material():
+	for i in Global.players:
+		if Global.players[i].Team == 1:
+			var blue = preload(\"res://materials/blue.tres\")
+			arm.set_surface_override_material(0, blue)
+		else:
+			var red = preload(\"res://materials/red.tres\")
+			arm.set_surface_override_material(0, red)
+
+func _unhandled_input(_event):
+	if !player.is_multiplayer_authority():
+		return
+	
+	if Input.is_action_just_pressed(\"shoot\") and animation_player.current_animation != \"shoot\":
+		play_shoot_effects.rpc()
+		
+		if raycast.is_colliding():
+			var collider = raycast.get_collider()
+			if collider.is_in_group(\"Hurtbox\"):
+				play_local_shoot_effects()
+				audio_player.play()
+				collider.handle_damage_collision(damage)
+
+
+func _physics_process(_delta):
+	if !player.is_multiplayer_authority():
+		return
+	
+	if !animation_player.current_animation == \"shoot\":
+		if player.input_dir != Vector2.ZERO and player.is_on_floor():
+			_play_animation.rpc(\"move\")
+		else:
+			_play_animation.rpc(\"idle\")
+
+
+@rpc (\"call_local\", \"any_peer\")
+func play_shoot_effects():
+	animation_player.stop()
+	animation_player.play(\"shoot\")
+	muzzle_flash.restart()
+	muzzle_flash.emitting = true
+
+@rpc (\"call_local\", \"any_peer\")
+func _play_animation(animation_string):
+	animation_player.play(animation_string)
+
+
+func play_local_shoot_effects():
+	hitmarker.show()
+	hitmarker_timer.start()
+
+
+func _on_hitmarkerlength_timeout():
+	hitmarker.hide()
+"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y7230"]
 resource_name = "Material"
 cull_mode = 2
-albedo_color = Color(0.866667, 0.0784314, 0.227451, 1)
+albedo_color = Color(0.176471, 0.176471, 0.176471, 1)
 roughness = 0.4
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_161c4"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_vghpt"]
 _surfaces = [{
 "aabb": AABB(-1, -1, -8.01695, 2.00001, 7, 9.01695),
 "format": 34896613377,
@@ -27,7 +105,7 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_w5h6n"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_6a3ml"]
 resource_name = "amazinggun_Cube"
 _surfaces = [{
 "aabb": AABB(-1, -1, -8.01695, 2.00001, 7, 9.01695),
@@ -36,7 +114,7 @@ _surfaces = [{
 "index_count": 153,
 "index_data": PackedByteArray(36, 0, 74, 0, 25, 0, 74, 0, 83, 0, 66, 0, 83, 0, 36, 0, 7, 0, 74, 0, 36, 0, 83, 0, 22, 0, 6, 0, 9, 0, 77, 0, 22, 0, 19, 0, 6, 0, 22, 0, 77, 0, 20, 0, 11, 0, 18, 0, 20, 0, 14, 0, 11, 0, 15, 0, 8, 0, 3, 0, 15, 0, 21, 0, 8, 0, 5, 0, 7, 0, 2, 0, 5, 0, 10, 0, 7, 0, 16, 0, 1, 0, 13, 0, 16, 0, 4, 0, 1, 0, 37, 0, 17, 0, 11, 0, 17, 0, 31, 0, 78, 0, 31, 0, 28, 0, 67, 0, 28, 0, 17, 0, 37, 0, 17, 0, 28, 0, 31, 0, 0, 0, 38, 0, 12, 0, 0, 0, 34, 0, 38, 0, 35, 0, 26, 0, 23, 0, 26, 0, 39, 0, 29, 0, 26, 0, 35, 0, 39, 0, 76, 0, 30, 0, 27, 0, 76, 0, 69, 0, 30, 0, 58, 0, 46, 0, 43, 0, 58, 0, 40, 0, 46, 0, 60, 0, 52, 0, 62, 0, 60, 0, 44, 0, 52, 0, 55, 0, 41, 0, 49, 0, 55, 0, 47, 0, 41, 0, 51, 0, 54, 0, 57, 0, 51, 0, 63, 0, 54, 0, 56, 0, 45, 0, 48, 0, 56, 0, 53, 0, 45, 0, 42, 0, 61, 0, 50, 0, 42, 0, 59, 0, 61, 0, 71, 0, 68, 0, 75, 0, 71, 0, 33, 0, 68, 0, 65, 0, 75, 0, 72, 0, 65, 0, 71, 0, 75, 0, 73, 0, 27, 0, 24, 0, 73, 0, 76, 0, 27, 0, 70, 0, 80, 0, 32, 0, 80, 0, 64, 0, 82, 0, 80, 0, 70, 0, 64, 0, 79, 0, 77, 0, 19, 0, 77, 0, 81, 0, 6, 0, 77, 0, 79, 0, 81, 0),
 "lods": [0.912145, PackedByteArray(36, 0, 74, 0, 25, 0, 74, 0, 36, 0, 7, 0, 5, 0, 10, 0, 7, 0, 5, 0, 7, 0, 2, 0, 22, 0, 84, 0, 9, 0, 85, 0, 92, 0, 84, 0, 22, 0, 87, 0, 93, 0, 32, 0, 22, 0, 19, 0, 20, 0, 11, 0, 18, 0, 20, 0, 14, 0, 11, 0, 37, 0, 17, 0, 11, 0, 28, 0, 17, 0, 37, 0, 17, 0, 28, 0, 31, 0, 15, 0, 8, 0, 3, 0, 15, 0, 21, 0, 8, 0, 16, 0, 1, 0, 13, 0, 16, 0, 4, 0, 1, 0, 0, 0, 38, 0, 12, 0, 0, 0, 34, 0, 38, 0, 35, 0, 26, 0, 23, 0, 26, 0, 35, 0, 39, 0, 26, 0, 39, 0, 29, 0, 86, 0, 30, 0, 27, 0, 72, 0, 86, 0, 27, 0, 72, 0, 27, 0, 24, 0, 43, 0, 40, 0, 46, 0, 55, 0, 41, 0, 49, 0, 55, 0, 47, 0, 41, 0, 51, 0, 54, 0, 57, 0, 56, 0, 89, 0, 48, 0, 56, 0, 91, 0, 89, 0, 88, 0, 89, 0, 91, 0, 88, 0, 91, 0, 90, 0)],
-"material": SubResource("StandardMaterial3D_0lqtv"),
+"material": SubResource("StandardMaterial3D_y7230"),
 "name": "Material",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -44,34 +122,34 @@ _surfaces = [{
 "vertex_data": PackedByteArray(254, 255, 218, 182, 55, 199, 35, 220, 254, 255, 218, 182, 55, 199, 255, 255, 254, 255, 218, 182, 55, 199, 84, 213, 254, 255, 0, 0, 55, 199, 255, 191, 254, 255, 0, 0, 55, 199, 255, 255, 254, 255, 0, 0, 55, 199, 84, 213, 254, 255, 218, 182, 255, 255, 255, 191, 254, 255, 218, 182, 255, 255, 84, 213, 254, 255, 0, 0, 255, 255, 255, 191, 254, 255, 0, 0, 255, 255, 255, 191, 254, 255, 0, 0, 255, 255, 84, 213, 0, 0, 218, 182, 55, 199, 255, 255, 0, 0, 218, 182, 55, 199, 35, 220, 0, 0, 218, 182, 55, 199, 255, 255, 0, 0, 0, 0, 55, 199, 84, 213, 0, 0, 0, 0, 55, 199, 255, 191, 0, 0, 0, 0, 55, 199, 255, 255, 0, 0, 218, 182, 255, 255, 179, 255, 0, 0, 218, 182, 255, 255, 84, 213, 0, 0, 218, 182, 255, 255, 4, 118, 0, 0, 0, 0, 255, 255, 84, 213, 0, 0, 0, 0, 255, 255, 255, 191, 0, 0, 0, 0, 255, 255, 255, 191, 254, 255, 255, 255, 0, 0, 254, 127, 254, 255, 255, 255, 0, 0, 255, 191, 254, 255, 255, 255, 0, 0, 255, 191, 255, 127, 255, 255, 0, 0, 129, 238, 255, 127, 255, 255, 0, 0, 255, 191, 0, 0, 255, 255, 0, 0, 179, 245, 0, 0, 255, 255, 0, 0, 255, 223, 0, 0, 255, 255, 0, 0, 255, 191, 0, 0, 218, 246, 180, 234, 168, 253, 0, 0, 218, 246, 180, 234, 255, 95, 0, 0, 218, 246, 180, 234, 10, 72, 254, 255, 218, 182, 0, 0, 255, 191, 254, 255, 218, 182, 0, 0, 255, 255, 254, 255, 218, 182, 0, 0, 255, 191, 0, 0, 218, 182, 0, 0, 2, 244, 0, 0, 218, 182, 0, 0, 35, 220, 0, 0, 218, 182, 0, 0, 216, 246, 69, 37, 232, 121, 55, 199, 255, 191, 69, 37, 232, 121, 55, 199, 141, 10, 69, 37, 232, 121, 55, 199, 254, 127, 69, 37, 218, 182, 246, 161, 146, 26, 69, 37, 218, 182, 246, 161, 255, 255, 69, 37, 218, 182, 246, 161, 255, 255, 69, 37, 218, 182, 230, 151, 146, 26, 69, 37, 218, 182, 230, 151, 0, 0, 69, 37, 218, 182, 230, 151, 255, 255, 185, 218, 232, 121, 55, 199, 112, 15, 185, 218, 232, 121, 55, 199, 254, 127, 185, 218, 232, 121, 55, 199, 208, 199, 185, 218, 218, 182, 246, 161, 205, 232, 185, 218, 218, 182, 246, 161, 255, 255, 185, 218, 218, 182, 246, 161, 208, 199, 185, 218, 218, 182, 230, 151, 74, 5, 185, 218, 218, 182, 230, 151, 255, 255, 185, 218, 218, 182, 230, 151, 208, 199, 69, 37, 222, 134, 55, 199, 146, 26, 69, 37, 222, 134, 55, 199, 254, 127, 69, 37, 222, 134, 55, 199, 85, 220, 185, 218, 222, 134, 55, 199, 254, 127, 185, 218, 222, 134, 55, 199, 252, 197, 185, 218, 222, 134, 55, 199, 255, 191, 254, 255, 218, 246, 180, 234, 65, 95, 254, 255, 218, 246, 180, 234, 10, 72, 254, 255, 218, 246, 180, 234, 255, 191, 0, 0, 255, 255, 55, 199, 255, 191, 0, 0, 255, 255, 55, 199, 10, 72, 0, 0, 255, 255, 55, 199, 255, 191, 255, 127, 218, 246, 180, 234, 255, 95, 255, 127, 218, 246, 180, 234, 10, 72, 254, 255, 255, 255, 55, 199, 10, 72, 254, 255, 255, 255, 55, 199, 255, 191, 254, 255, 255, 255, 55, 199, 255, 191, 255, 127, 255, 255, 55, 199, 10, 72, 255, 127, 255, 255, 55, 199, 255, 191, 255, 127, 218, 182, 255, 255, 139, 118, 0, 0, 108, 219, 255, 255, 255, 191, 0, 0, 108, 219, 255, 255, 139, 123, 0, 0, 108, 219, 255, 255, 65, 95, 254, 255, 108, 219, 255, 255, 27, 109, 254, 255, 108, 219, 255, 255, 65, 95, 254, 255, 108, 219, 255, 255, 255, 191, 254, 255, 218, 182, 255, 255, 89, 192, 0, 0, 0, 0, 255, 255, 180, 204, 0, 0, 218, 246, 180, 234, 182, 64, 0, 0, 218, 246, 180, 234, 68, 121, 69, 37, 232, 121, 55, 199, 255, 95, 69, 37, 218, 182, 246, 161, 255, 255, 185, 218, 232, 121, 55, 199, 255, 95, 185, 218, 218, 182, 246, 161, 110, 234, 254, 255, 255, 255, 55, 199, 154, 89, 254, 255, 255, 255, 55, 199, 145, 120, 237, 92, 136, 81, 255, 191, 255, 191, 170, 42, 170, 42, 0, 0, 255, 127, 255, 191, 255, 191, 170, 42, 170, 42, 255, 255, 255, 255, 170, 42, 170, 42, 0, 0, 255, 127, 255, 255, 255, 255, 170, 42, 170, 42, 255, 63, 255, 127, 237, 92, 136, 81, 255, 191, 255, 191, 84, 213, 84, 213, 0, 0, 255, 127, 255, 191, 255, 191, 41, 64, 83, 128, 84, 213, 84, 213, 255, 127, 255, 127, 84, 213, 84, 213, 0, 0, 255, 127, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 127, 255, 127, 0, 0, 255, 127, 255, 127, 255, 255, 255, 127, 80, 69, 160, 138, 255, 127, 255, 127, 255, 255, 255, 127, 115, 253, 69, 193, 255, 255, 255, 127, 255, 255, 255, 127, 0, 0, 255, 127, 255, 127, 255, 127, 255, 127, 0, 0, 32, 70, 65, 140, 237, 92, 136, 81, 255, 127, 255, 127, 255, 127, 255, 255, 28, 102, 203, 55, 255, 127, 255, 255, 16, 230, 246, 204, 255, 127, 124, 165, 255, 127, 255, 191, 16, 230, 246, 204, 124, 165, 255, 255, 255, 127, 255, 191, 111, 91, 87, 63, 255, 127, 255, 255, 242, 64, 134, 31, 181, 221, 240, 10, 255, 127, 255, 191, 242, 64, 134, 31, 28, 114, 78, 47, 255, 127, 255, 191, 242, 64, 134, 31, 16, 230, 246, 204, 255, 127, 255, 255, 110, 223, 208, 16, 255, 127, 255, 255, 255, 226, 255, 28, 255, 127, 0, 0, 91, 247, 128, 98, 255, 255, 255, 127, 255, 127, 0, 0, 255, 127, 255, 255, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 127, 0, 0, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 91, 247, 128, 98, 255, 255, 255, 255, 91, 247, 128, 98, 255, 127, 0, 0, 247, 245, 154, 245, 135, 219, 68, 219, 255, 255, 255, 127, 98, 250, 99, 122, 255, 255, 255, 127, 255, 127, 198, 183, 255, 255, 255, 127, 229, 221, 162, 12, 243, 166, 11, 217, 7, 194, 8, 66)
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_161c4")
+shadow_mesh = SubResource("ArrayMesh_vghpt")
 
 [sub_resource type="Gradient" id="Gradient_0x0qt"]
 offsets = PackedFloat32Array(0, 0.272727, 1)
 colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_87ryy"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_r2sgq"]
 gradient = SubResource("Gradient_0x0qt")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0uxsu"]
 angle_min = 45.0
 angle_max = 45.0
 gravity = Vector3(0, 0, 0)
-color_ramp = SubResource("GradientTexture1D_87ryy")
+color_ramp = SubResource("GradientTexture1D_r2sgq")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5yqdu"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i0chb"]
 transparency = 1
 shading_mode = 0
 vertex_color_use_as_albedo = true
 albedo_color = Color(0.945098, 0.968627, 0.6, 1)
-albedo_texture = ExtResource("2_q35a7")
+albedo_texture = ExtResource("1_4flk3")
 billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_qr5g0"]
-material = SubResource("StandardMaterial3D_5yqdu")
+material = SubResource("StandardMaterial3D_i0chb")
 size = Vector2(0.5, 0.5)
 orientation = 2
 
@@ -141,7 +219,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.5, 0.8),
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
 "transitions": PackedFloat32Array(0.5, 2, 0.5, 2),
 "update": 0,
 "values": [Vector3(0.435, 0.148, -0.356), Vector3(0.373, 0.108, -0.356), Vector3(0.435, 0.148, -0.356), Vector3(0.525, 0.108, -0.356)]
@@ -149,7 +227,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
-length = 0.2
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -157,7 +235,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(-0.01, 0.2),
+"times": PackedFloat32Array(-0.01, 0.4),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0.435, 0.178, -0.356), Vector3(0.435, 0.148, -0.356)]
@@ -169,10 +247,10 @@ tracks/1/path = NodePath(".:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector3(0.261799, 0, 0), Vector3(0, 0, 0)]
+"values": [Vector3(1.0472, 0, 0), Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cthlp"]
@@ -183,18 +261,18 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_hqlm2"]
-material = ExtResource("5_rd5hq")
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_33bxf"]
+material = ExtResource("4_jvk7i")
 radius = 0.1
 height = 0.6
 
-[node name="SMG" type="Node3D"]
+[node name="Pistol" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
-script = ExtResource("1_24sbh")
+script = SubResource("GDScript_fcati")
 
 [node name="Cube" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
-mesh = SubResource("ArrayMesh_w5h6n")
+mesh = SubResource("ArrayMesh_6a3ml")
 skeleton = NodePath("")
 
 [node name="MuzzleFlash" type="GPUParticles3D" parent="."]
@@ -207,13 +285,6 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_0uxsu")
 draw_pass_1 = SubResource("PlaneMesh_qr5g0")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_cthlp")
-}
-autoplay = "idle"
-playback_default_blend_time = 0.05
-
 [node name="Hitmarker" type="TextureRect" parent="."]
 visible = false
 anchors_preset = 15
@@ -223,24 +294,27 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.05, 0.05)
 pivot_offset = Vector2(576, 324)
-texture = ExtResource("3_st0ml")
+texture = ExtResource("3_7vlyy")
 stretch_mode = 5
 
 [node name="Hitmarkerlength" type="Timer" parent="."]
-wait_time = 0.21
+wait_time = 0.1
 one_shot = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_6fnrq")
+stream = ExtResource("4_3q4ty")
 volume_db = -5.0
 
-[node name="FiringRate" type="Timer" parent="."]
-wait_time = 0.2
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_cthlp")
+}
+autoplay = "idle"
+playback_default_blend_time = 0.05
 
 [node name="Arm" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, -0.136921, 0.139884)
-mesh = SubResource("CapsuleMesh_hqlm2")
+mesh = SubResource("CapsuleMesh_33bxf")
 
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="Hitmarkerlength" to="." method="_on_hitmarkerlength_timeout"]
-[connection signal="timeout" from="FiringRate" to="." method="_on_firing_rate_timeout"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

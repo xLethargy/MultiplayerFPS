@@ -6,6 +6,7 @@ extends Node3D
 @onready var muzzle_flash = $MuzzleFlash
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
+@onready var arm = $Arm
 
 @onready var raycast = $"../Camera3D/RayCast3D"
 
@@ -13,6 +14,11 @@ extends Node3D
 @onready var player = get_parent().get_parent()
 
 var damage = 20
+
+
+func _ready():
+	print (player.mesh.get_surface_material_override(0))
+	pass
 
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():

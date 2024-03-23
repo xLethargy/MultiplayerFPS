@@ -6,6 +6,7 @@ extends Node3D
 @onready var muzzle_flash = $Gun/MuzzleFlash
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
+@onready var arm = $Pivot/Arm
 
 @onready var raycast = $"../Camera3D/RayCast3D"
 
@@ -19,7 +20,6 @@ var damage_increase = 0.5
 var player_speed_increase = 0.5
 
 func _ready():
-	print (player)
 	player.default_speed = 5
 	player.change_speed_and_jump.rpc_id(multiplayer.get_unique_id())
 	player.health_component.connect("death", reset_speed_gun)

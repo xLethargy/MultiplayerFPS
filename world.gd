@@ -33,7 +33,7 @@ func send_to_main_menu():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _on_multiplayer_menu_add_player():
-	#var index = 0 THIS IS FOR SPAWNING PLAYERS INA 
+	#var index = 0 THIS IS FOR SPAWNING PLAYERS IN
 	
 	if multiplayer.is_server():
 		for i in Global.players:
@@ -41,7 +41,14 @@ func _on_multiplayer_menu_add_player():
 			if !player and Global.players[i].Class != "":
 				player = player_scene.instantiate()
 				player.name = str(Global.players[i].ID)
+				
 				add_child(player, true)
+				
+				match Global.players[i].Team:
+					1:
+						player.change_material.rpc("Blue")
+					2:
+						player.change_material.rpc("Red")
 				
 				match Global.players[i].Class:
 					"PistolOne":
@@ -54,11 +61,15 @@ func _on_multiplayer_menu_add_player():
 						player_class = speed_gun.instantiate()
 				
 				if player.is_multiplayer_authority():
+					match Global.players[i].Team:
+						1:
+							player.change_material("Blue")
+						2:
+							player.change_material("Red")
+					
 					player.health_component.connect("change_health", update_health_bar)
 					_add_weapon_class(player)
-					#print ("HOST: ", player)
 				update_health_bar(player.health_component.current_health)
-
 
 func _on_multiplayer_menu_remove_player(peer_id):
 	Global.players.erase(peer_id)
@@ -87,8 +98,8 @@ func _on_multiplayer_spawner_spawned(node):
 		node.health_component.connect("change_health", update_health_bar)
 		update_health_bar(node.health_component.current_health)
 		
-		if Global.players.has((str(node.name).to_int())):
-			var id = str(node.name).to_int()
+		var id = str(node.name).to_int()
+		if Global.players.has(id):
 			if Global.players[id].Class == "PistolOne":
 				player_class = pistol_one.instantiate()
 			elif Global.players[id].Class == "SMG":
@@ -98,12 +109,22 @@ func _on_multiplayer_spawner_spawned(node):
 			elif Global.players[id].Class == "SpeedGun":
 				player_class = speed_gun.instantiate()
 			
+			print (Global.players)
+			
 			if node.is_multiplayer_authority():
 				_add_weapon_class(node)
+		
+		for i in Global.players:
+			player = get_node_or_null(str(Global.players[i].ID))
+			if player != null:
+				match Global.players[i].Team:
+					1:
+						player.change_material.rpc("Blue")
+					2:
+						player.change_material.rpc("Red")
 
 
 func _add_weapon_class(player_node):
-	print(player_node)
 	player_class.name = "item" + str(randf_range(0, 10))
 	player_node.view.add_child(player_class, true)
 	player_node.weapon = player_class

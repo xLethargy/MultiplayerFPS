@@ -13,6 +13,8 @@ var smg_gun = preload("res://pistol_2.tscn")
 var freeze_gun = preload("res://pistol_freeze.tscn")
 var speed_gun = preload("res://speed_gun.tscn")
 
+var team_setter = 0
+var teams = 2
 
 const PORT = 9999
 
@@ -78,11 +80,13 @@ func connection_failed():
 
 @rpc("any_peer")
 func send_player_information(given_name, id, weapon_class = ""):
+	team_setter = (team_setter % teams) + 1
 	if !Global.players.has(id):
 		Global.players[id] = {
 			"Name": given_name,
 			"ID": id,
-			"Class": weapon_class
+			"Class": weapon_class,
+			"Team": team_setter
 		}
 	
 	if multiplayer.is_server():
