@@ -61,15 +61,15 @@ color = Color(0.607843, 0.376471, 0.301961, 1)
 
 [node name="MainMenu" type="PanelContainer" parent="MultiplayerMenu/MainMenuScreen"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -217.5
-offset_top = -141.5
-offset_right = 217.5
-offset_bottom = 141.5
+anchors_preset = -1
+anchor_left = 0.311
+anchor_top = 0.282
+anchor_right = 0.689
+anchor_bottom = 0.718
+offset_left = 0.227966
+offset_top = -0.236008
+offset_right = -0.228027
+offset_bottom = 0.235962
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -138,6 +138,21 @@ text = "Freeze Gun"
 layout_mode = 2
 text = "Speed Gun"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="Sensitivity" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "11"
+vertical_alignment = 1
+
+[node name="SensSlider" type="HSlider" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer"]
+custom_minimum_size = Vector2(260, 30)
+layout_mode = 2
+value = 11.0
+
 [node name="HUD" type="Control" parent="MultiplayerMenu"]
 visible = false
 layout_mode = 3
@@ -151,27 +166,36 @@ script = ExtResource("4_3loky")
 
 [node name="Crosshair" type="TextureRect" parent="MultiplayerMenu/HUD"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -7.99994
+offset_top = -7.99997
+offset_right = 504.0
+offset_bottom = 504.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.03, 0.03)
-pivot_offset = Vector2(576, 324)
+mouse_filter = 2
 texture = ExtResource("5_osqmr")
 stretch_mode = 5
 
 [node name="Healthbar" type="ProgressBar" parent="MultiplayerMenu/HUD"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 406.0
-offset_top = 23.0
-offset_right = -406.0
-offset_bottom = -598.0
+anchors_preset = -1
+anchor_left = 0.352
+anchor_top = 0.035
+anchor_right = 0.648
+anchor_bottom = 0.077
+offset_left = 0.495972
+offset_top = 0.32
+offset_right = -0.495972
+offset_bottom = 0.103996
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_f6uqw")
 theme_override_styles/fill = SubResource("StyleBoxFlat_cuny2")
 value = 100.0
@@ -189,4 +213,6 @@ spawn_path = NodePath("..")
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Pistol Two" to="MultiplayerMenu" method="_on_pistol_two_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Freeze Gun" to="MultiplayerMenu" method="_on_freeze_gun_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Speed Gun" to="MultiplayerMenu" method="_on_speed_gun_pressed"]
+[connection signal="changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_h_slider_changed"]
+[connection signal="value_changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_sens_slider_value_changed"]
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

@@ -21,12 +21,17 @@ var frozen = false
 
 var current_colour = "Red"
 
+var sensitivity = 11
+
 func _ready():
 	if !is_multiplayer_authority():
 		return
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
+	var id = multiplayer.get_unique_id()
+	if Global.players.has(id):
+		sensitivity = Global.players[id].Sensitivity
 
 
 func _enter_tree():
@@ -37,9 +42,10 @@ func _unhandled_input(event):
 	if !is_multiplayer_authority():
 		return
 	
+	print (sensitivity)
 	if event is InputEventMouseMotion:
-		rotate_y(-event.relative.x * .005)
-		view.rotate_x(-event.relative.y * .005)
+		rotate_y(-event.relative.x * sensitivity / 10000)
+		view.rotate_x(-event.relative.y * sensitivity / 10000)
 		view.rotation.x = clamp(view.rotation.x, -PI/2, PI/2)
 
 
@@ -85,6 +91,7 @@ func increase_speed(speed_effect):
 func update_current_class(new_weapon):
 	if is_multiplayer_authority():
 		var id = multiplayer.get_unique_id()
+		sensitivity = Global.players[id].Sensitivity
 		if Global.players.has(id):
 			if Global.players[id].Class != "" and weapon != null:
 				view.remove_child(weapon)

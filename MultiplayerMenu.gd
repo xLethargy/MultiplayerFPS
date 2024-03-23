@@ -5,6 +5,8 @@ extends CanvasLayer
 @onready var choose_class = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass
 @onready var address_entry = $MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/AddressEntry
 @onready var name_entry = $MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/NameEntry
+@onready var sensitivity = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/Sensitivity
+@onready var sensitivity_slider = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/SensSlider
 
 @onready var hud = $HUD
 
@@ -12,6 +14,8 @@ var pistol_one = preload("res://pistol.tscn")
 var smg_gun = preload("res://pistol_2.tscn")
 var freeze_gun = preload("res://pistol_freeze.tscn")
 var speed_gun = preload("res://speed_gun.tscn")
+
+var player_sensitivity = 11
 
 var team_setter = 0
 var teams = 2
@@ -86,7 +90,8 @@ func send_player_information(given_name, id, weapon_class = ""):
 			"Name": given_name,
 			"ID": id,
 			"Class": weapon_class,
-			"Team": team_setter
+			"Team": team_setter,
+			"Sensitivity": player_sensitivity
 		}
 	
 	if multiplayer.is_server():
@@ -158,3 +163,11 @@ func _class_selected(weapon_class, weapon_class_node, peer_id = multiplayer.get_
 func update_class(id, weapon_class):
 	if Global.players.has(id):
 		Global.players[id].Class = weapon_class
+
+
+func _on_sens_slider_value_changed(value):
+	var id = multiplayer.get_unique_id()
+	sensitivity.text = str(value)
+	player_sensitivity = value
+	if Global.players.has(id):
+		Global.players[id].Sensitivity = player_sensitivity
