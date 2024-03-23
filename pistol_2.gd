@@ -7,7 +7,7 @@ extends Node3D
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
 
-@onready var raycast = $"../RayCast3D"
+@onready var raycast = $"../Camera3D/RayCast3D"
 
 @onready var level_scene = get_tree().current_scene
 @onready var player = get_parent().get_parent()
@@ -15,7 +15,6 @@ extends Node3D
 var damage = 15
 
 var can_shoot = true
-
 
 func _physics_process(_delta):
 	if !player.is_multiplayer_authority():

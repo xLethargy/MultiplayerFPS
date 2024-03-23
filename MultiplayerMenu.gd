@@ -8,6 +8,12 @@ extends CanvasLayer
 
 @onready var hud = $HUD
 
+var pistol_one = preload("res://pistol.tscn")
+var smg_gun = preload("res://pistol_2.tscn")
+var freeze_gun = preload("res://pistol_freeze.tscn")
+var speed_gun = preload("res://speed_gun.tscn")
+
+
 const PORT = 9999
 
 var enet_peer
@@ -107,22 +113,23 @@ func _server_add_player():
 
 
 func _on_pistol_one_pressed():
-	_class_selected("PistolOne")
+	_class_selected("PistolOne", pistol_one)
 
 
 func _on_pistol_two_pressed():
-	_class_selected("SMG")
+	_class_selected("SMG", smg_gun)
 
 
 func _on_freeze_gun_pressed():
-	_class_selected("FreezeGun")
+	_class_selected("FreezeGun", freeze_gun)
 
 
 func _on_speed_gun_pressed():
-	_class_selected("SpeedGun")
+	_class_selected("SpeedGun", speed_gun)
 
 
-func _class_selected(weapon_class, peer_id = multiplayer.get_unique_id()):
+func _class_selected(weapon_class, weapon_class_node, peer_id = multiplayer.get_unique_id()):
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if Global.players.has(peer_id):
 		if !Global.game_in_progress:
 			Global.game_in_progress = true
@@ -130,7 +137,17 @@ func _class_selected(weapon_class, peer_id = multiplayer.get_unique_id()):
 		update_class.rpc(multiplayer.get_unique_id(), weapon_class)
 		main_menu.hide()
 		hud.show()
-		_server_add_player.rpc_id(1)
+		var check_for_player = get_tree().current_scene.get_node_or_null(str(multiplayer.get_unique_id()))
+		if !check_for_player:
+			_server_add_player.rpc_id(1)
+			check_for_player = get_tree().current_scene.get_node_or_null(str(multiplayer.get_unique_id()))
+		
+		if check_for_player:
+			var player_class = weapon_class_node.instantiate()
+			check_for_player.global_position = Vector3(0, 0, 0)
+			check_for_player.update_current_class(player_class)
+			check_for_player.weapon = player_class
+			check_for_player.frozen = false
 
 
 @rpc ("any_peer", "call_local")

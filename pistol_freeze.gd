@@ -7,13 +7,13 @@ extends Node3D
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
 
-@onready var raycast = $"../RayCast3D"
+@onready var raycast = $"../Camera3D/RayCast3D"
 
 @onready var level_scene = get_tree().current_scene
 @onready var player = get_parent().get_parent()
 
 var damage = 10
-var freeze_damage = 19
+var freeze_damage = 20
 
 var hit_player = {}
 var hits = 0
@@ -60,13 +60,15 @@ func store_freeze_information(collider):
 	if hit_player[collider].HitsTaken == 3:
 		hit_player[collider].HitsTaken = 0
 		
-		var old_collider_speed = collider.player.current_speed
+		var old_collider_speed
+		if old_collider_speed != slow_speed:
+			old_collider_speed = collider.player.current_speed
+		else:
+			old_collider_speed = collider.default_speed
 		
 		collider.handle_damage_collision(freeze_damage)
 		collider.handle_speed_collision(slow_speed, jump_height)
 		current_health = collider.owner.health_component.current_health - freeze_damage
-		
-		
 		
 		$SlowTimer.start()
 		await $SlowTimer.timeout

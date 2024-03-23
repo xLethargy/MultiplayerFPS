@@ -1,7 +1,8 @@
-[gd_scene load_steps=18 format=3 uid="uid://dc347rbgdujlm"]
+[gd_scene load_steps=20 format=3 uid="uid://dc347rbgdujlm"]
 
 [ext_resource type="Script" path="res://speed_gun.gd" id="1_sou6r"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_l7vj3"]
+[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://player.tres" id="3_lgllv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_agkfy"]
 resource_name = "Material"
@@ -71,6 +72,11 @@ material = SubResource("StandardMaterial3D_5yqdu")
 size = Vector2(0.5, 0.5)
 orientation = 2
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_vfuuw"]
+material = ExtResource("3_lgllv")
+radius = 0.1
+height = 0.6
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0s8od"]
 load_path = "res://.godot/imported/hitmarker.png-1ac4e5da177c43b6bb9088dc9f77c00d.ctex"
 
@@ -91,7 +97,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.434804, -0.454762, -0.356393)]
+"values": [Vector3(0.435, 0.148, -0.356)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -100,6 +106,54 @@ tracks/1/path = NodePath(".:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Gun:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Gun:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ArmNode:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ArmNode:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -120,7 +174,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 1.5),
 "transitions": PackedFloat32Array(-2, -2),
 "update": 0,
-"values": [Vector3(0.434804, -0.454762, -0.356393), Vector3(0.434804, -0.48245, -0.356393)]
+"values": [Vector3(0.435, 0.148, -0.356), Vector3(0.435, 0.108, -0.356)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -148,7 +202,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
 "transitions": PackedFloat32Array(0.5, 2, 0.5, 2),
 "update": 0,
-"values": [Vector3(0.434804, -0.454762, -0.356393), Vector3(0.372629, -0.427465, -0.356393), Vector3(0.435, -0.455, -0.356), Vector3(0.525302, -0.418155, -0.356)]
+"values": [Vector3(0.435, 0.148, -0.356), Vector3(0.373, 0.108, -0.356), Vector3(0.435, 0.148, -0.356), Vector3(0.525, 0.108, -0.356)]
 }
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
@@ -157,19 +211,19 @@ length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath("Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(-0.01, 0.8),
+"times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector3(0.434804, -0.391105, -0.356393), Vector3(0.434804, -0.454762, -0.356393)]
+"values": [Vector3(0, 0.03, 0), Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
+tracks/1/path = NodePath("Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -177,6 +231,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(-6.28319, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmNode:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(1.0472, 0, 0), Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cthlp"]
@@ -188,15 +254,17 @@ _data = {
 }
 
 [node name="SpeedGun" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.434804, -0.454762, -0.356393)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_sou6r")
 
-[node name="Cube" type="MeshInstance3D" parent="."]
+[node name="Gun" type="Node3D" parent="."]
+
+[node name="Cube" type="MeshInstance3D" parent="Gun"]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
 mesh = SubResource("ArrayMesh_71ypd")
 skeleton = NodePath("")
 
-[node name="MuzzleFlash" type="GPUParticles3D" parent="."]
+[node name="MuzzleFlash" type="GPUParticles3D" parent="Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.238783, -0.447912)
 emitting = false
 amount = 1
@@ -205,6 +273,13 @@ one_shot = true
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_hngsa")
 draw_pass_1 = SubResource("PlaneMesh_bruoh")
+
+[node name="ArmNode" type="Node3D" parent="."]
+
+[node name="Arm" type="MeshInstance3D" parent="ArmNode"]
+transform = Transform3D(0.996195, -0.0871558, 8.46542e-08, -0.0488629, -0.558506, -0.82806, 0.0721703, 0.824909, -0.560639, -0.0206605, -0.116542, 0.17225)
+mesh = SubResource("CapsuleMesh_vfuuw")
+skeleton = NodePath("../..")
 
 [node name="Hitmarker" type="TextureRect" parent="."]
 visible = false

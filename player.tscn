@@ -18,12 +18,15 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
-properties/2/path = NodePath("Camera3D:rotation")
+properties/2/path = NodePath("HealthComponent:current_health")
 properties/2/spawn = true
 properties/2/replication_mode = 1
-properties/3/path = NodePath("HealthComponent:current_health")
+properties/3/path = NodePath("View:position")
 properties/3/spawn = true
 properties/3/replication_mode = 1
+properties/4/path = NodePath("View:rotation")
+properties/4/spawn = true
+properties/4/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 collision_layer = 2
@@ -37,18 +40,20 @@ mesh = SubResource("CapsuleMesh_5lii6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_tgsde")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55459, 0)
+[node name="View" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Camera3D" type="Camera3D" parent="View"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55459, 0)
 fov = 90.0
 
-[node name="RayCast3D" type="RayCast3D" parent="Camera3D"]
+[node name="RayCast3D" type="RayCast3D" parent="View/Camera3D"]
 target_position = Vector3(0, 0, -50)
 collision_mask = 9
 collide_with_areas = true
 
 [node name="HealthComponent" type="Node3D" parent="."]
 script = ExtResource("7_y81fr")
-current_health = 100
 
 [node name="HealTimer" type="Timer" parent="HealthComponent"]
 wait_time = 5.0
@@ -72,7 +77,7 @@ replication_config = SubResource("SceneReplicationConfig_frqxj")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://pistol.tscn", "res://pistol_2.tscn", "res://pistol_freeze.tscn", "res://speed_gun.tscn")
-spawn_path = NodePath("../Camera3D")
+spawn_path = NodePath("../View")
 
 [connection signal="timeout" from="HealthComponent/HealTimer" to="HealthComponent" method="_on_heal_timer_timeout"]
 [connection signal="body_entered" from="HurtboxComponent" to="HurtboxComponent" method="_on_body_entered"]

@@ -10,10 +10,6 @@ var max_health = 100
 signal change_health(health_value)
 signal death
 
-func _ready():
-	if multiplayer.is_server():
-		receive_damage.rpc(0)
-
 func _process(delta):
 	if !current_health == max_health and can_heal:
 		current_health += 10 * delta

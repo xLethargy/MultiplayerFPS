@@ -2,8 +2,8 @@ extends CharacterBody3D
 
 @onready var health_component = $HealthComponent
 @onready var shoot_component = $ShootComponent
-@onready var camera = $Camera3D
-@onready var spawner = $MultiplayerSpawner
+@onready var camera = $View/Camera3D
+@onready var view = $View
 
 var default_speed = 7.5
 var current_speed = default_speed
@@ -13,6 +13,10 @@ var current_jump_velocity = default_jump_velocity
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var input_dir
+
+var weapon
+
+var frozen = false
 
 func _ready():
 	if !is_multiplayer_authority():
@@ -32,8 +36,8 @@ func _unhandled_input(event):
 	
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * .005)
-		camera.rotate_x(-event.relative.y * .005)
-		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
+		view.rotate_x(-event.relative.y * .005)
+		view.rotation.x = clamp(view.rotation.x, -PI/2, PI/2)
 
 
 func _physics_process(delta):
@@ -55,7 +59,8 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, current_speed)
 		velocity.z = move_toward(velocity.z, 0, current_speed)
 	
-	move_and_slide()
+	if !frozen:
+		move_and_slide()
 
 
 func change_hud_health(health_value):
@@ -72,3 +77,16 @@ func change_speed_and_jump(speed_effect = default_speed, jump_height = default_j
 @rpc ("call_local")
 func increase_speed(speed_effect):
 	current_speed += speed_effect
+
+
+func update_current_class(new_weapon):
+	if is_multiplayer_authority():
+		var id = multiplayer.get_unique_id()
+		if Global.players.has(id):
+			print (Global.players[id].Class)
+			if Global.players[id].Class != "" and weapon != null:
+				view.remove_child(weapon)
+			
+			weapon = new_weapon
+			view.add_child(new_weapon)
+	

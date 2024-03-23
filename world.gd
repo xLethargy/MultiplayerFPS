@@ -15,8 +15,8 @@ var speed_gun = preload("res://speed_gun.tscn")
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
 		if !main_menu.visible:
-			_on_multiplayer_menu_remove_player.rpc(multiplayer.get_unique_id())
-			_open_choose_class()
+			#_on_multiplayer_menu_remove_player.rpc(multiplayer.get_unique_id())
+			_open_choose_class(multiplayer.get_unique_id())
 		else:
 			get_tree().quit()
 
@@ -35,33 +35,32 @@ func _on_multiplayer_menu_add_player():
 				match Global.players[i].Class:
 					"PistolOne":
 						player_class = pistol_one.instantiate()
-						_add_weapon_class(player)
 					"SMG":
 						player_class = smg_gun.instantiate()
-						_add_weapon_class(player)
 					"FreezeGun":
 						player_class = freeze_gun.instantiate()
-						_add_weapon_class(player)
 					"SpeedGun":
 						player_class = speed_gun.instantiate()
-						_add_weapon_class(player)
-				
-				
-				
 				
 				if player.is_multiplayer_authority():
 					player.health_component.connect("change_health", update_health_bar)
+					_add_weapon_class(player)
 					#print ("HOST: ", player)
+				update_health_bar(player.health_component.current_health)
 
 
-@rpc ("any_peer", "call_local")
+@rpc("any_peer", "call_remote")
 func _on_multiplayer_menu_remove_player(peer_id):
 	player = get_node_or_null(str(peer_id))
 	if player:
 		player.queue_free()
 
 
-func _open_choose_class():
+func _open_choose_class(peer_id):
+	player = get_node_or_null(str(peer_id))
+	if player:
+		player.global_position = Vector3(0, -100, 0)
+		player.frozen = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	hud.hide()
 	main_menu.show()
@@ -70,15 +69,6 @@ func _open_choose_class():
 func update_health_bar(health_value):
 	var healthbar = hud.healthbar
 	healthbar.value = health_value
-
-
-func spawn_bullet(bullet_scene, bullet_spawn_location, parent_shooter):
-	if is_multiplayer_authority():
-		var bullet = bullet_scene.instantiate()
-		bullet.position = bullet_spawn_location.global_position
-		bullet.rotation = bullet_spawn_location.global_rotation
-		bullet.parent_shooter = parent_shooter
-		add_child(bullet)
 
 
 func _on_multiplayer_spawner_spawned(node):
@@ -97,8 +87,12 @@ func _on_multiplayer_spawner_spawned(node):
 			elif Global.players[id].Class == "SpeedGun":
 				player_class = speed_gun.instantiate()
 			
-			_add_weapon_class(node)
+			if node.is_multiplayer_authority():
+				_add_weapon_class(node)
 
 
 func _add_weapon_class(player_node):
-	player_node.camera.add_child(player_class, true)
+	print(player_node)
+	player_class.name = "item" + str(randf_range(0, 10))
+	player_node.view.add_child(player_class, true)
+	player_node.weapon = player_class

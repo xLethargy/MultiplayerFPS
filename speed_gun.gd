@@ -3,26 +3,26 @@ extends Node3D
 @onready var audio_player : AudioStreamPlayer = $AudioStreamPlayer
 
 @onready var animation_player = $AnimationPlayer
-@onready var muzzle_flash = $MuzzleFlash
+@onready var muzzle_flash = $Gun/MuzzleFlash
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
 
-@onready var raycast = $"../RayCast3D"
+@onready var raycast = $"../Camera3D/RayCast3D"
 
 @onready var level_scene = get_tree().current_scene
 @onready var player = get_parent().get_parent()
 
 var damage = 10
 
-var animation_increase = 0.05
-var damage_increase = 0.25
-var player_speed_increase = 0.25
+var animation_increase = 0.1
+var damage_increase = 0.5
+var player_speed_increase = 0.5
 
 func _ready():
-	if player.is_multiplayer_authority():
-		player.default_speed = 5
-		player.change_speed_and_jump.rpc_id(multiplayer.get_unique_id())
-		player.health_component.connect("death", reset_speed_gun)
+	print (player)
+	player.default_speed = 5
+	player.change_speed_and_jump.rpc_id(multiplayer.get_unique_id())
+	player.health_component.connect("death", reset_speed_gun)
 
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():
