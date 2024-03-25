@@ -13,8 +13,11 @@ extends Node3D
 
 @onready var raycast = $"../Camera3D/RayCast3D"
 
+@export var weapon_sway_node : Node3D
+
 @onready var level_scene = get_tree().current_scene
 @onready var player = get_parent().get_parent()
+@onready var view = get_parent()
 
 @onready var ammo_counter = get_tree().current_scene.get_node("MultiplayerMenu/HUD/Ammo")
 @onready var ammo_bar = get_tree().current_scene.get_node("MultiplayerMenu/HUD/AmmoBar")
@@ -33,12 +36,21 @@ extends Node3D
 var queued_reload = false
 
 @export var mag_type : String
+@export var weapon_rotation_amount = 0.5
+
+@onready var crosshair = level_scene.get_node("MultiplayerMenu/HUD/Crosshair")
+@onready var hud = level_scene.get_node("MultiplayerMenu/HUD")
+
+var recoil = false
+@export var recoil_amount : float = 1
 
 func _ready():
+	await get_tree().create_timer(0.1).timeout
 	if player.is_multiplayer_authority():
 		player.default_speed = default_player_speed
 		player.change_speed_and_jump()
 		current_ammo = max_ammo
+		player.weapon_rotation_amount = weapon_rotation_amount
 		
 		hitmarker_timer.connect("timeout", _on_hitmarkerlength_timeout)
 		animation_player.connect("animation_finished", _on_animation_player_animation_finished)
@@ -54,22 +66,29 @@ func _ready():
 			ammo_bar.hide()
 			ammo_counter.hide()
 		
+		if is_in_group("NoCrosshair"):
+			crosshair.hide()
+		else:
+			crosshair.show()
+		
 		player.health_component.connect("death", reset_stat_gun)
 
-func _unhandled_input(_event):
-	if !player.is_multiplayer_authority():
-		return
 
-
-func _physics_process(_delta):
+func _physics_process(delta):
 	if !player.is_multiplayer_authority():
 		return
 	
 	if !animation_player.current_animation == "shoot" and !animation_player.current_animation == "reload":
 		if player.input_dir != Vector2.ZERO and player.is_on_floor():
 			_play_animation.rpc("move")
-		else:
+		elif player.input_dir == Vector2.ZERO:
 			_play_animation.rpc("idle")
+	
+	if recoil:
+		var recoil_adjustment = view.rotation.x + recoil_amount * delta
+		if recoil_adjustment > deg_to_rad(90):
+			recoil_adjustment = deg_to_rad(90)
+		view.rotation.x = recoil_adjustment
 
 
 @rpc ("call_local", "any_peer")
@@ -98,9 +117,6 @@ func play_shoot_effects():
 
 @rpc ("call_local", "any_peer", "reliable")
 func _play_animation(animation_string):
-	if animation_string == "idle" or animation_string == "move":
-		return
-	
 	animation_player.play(animation_string)
 
 

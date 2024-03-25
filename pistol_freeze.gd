@@ -47,6 +47,10 @@ func _unhandled_input(_event):
 					store_freeze_information(collider)
 				else:
 					hit_player[collider].HitsTaken = 0
+		
+		recoil = true
+		await get_tree().create_timer(0.1).timeout
+		recoil = false
 
 
 func _process(delta):

@@ -107,7 +107,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Gun:position")
+tracks/2/path = NodePath("WeaponSway/Gun:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -119,7 +119,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Gun:rotation")
+tracks/3/path = NodePath("WeaponSway/Gun:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -136,19 +136,19 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath("WeaponSway/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 1.5),
 "transitions": PackedFloat32Array(-2, -2),
 "update": 0,
-"values": [Vector3(0.435, 0.148, -0.356), Vector3(0.435, 0.108, -0.356)]
+"values": [Vector3(0, 0, 0), Vector3(0, -0.04, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
+tracks/1/path = NodePath("WeaponSway/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -160,6 +160,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_yijs0"]
 resource_name = "move"
+length = 1.6
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -168,7 +169,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.5, 0.8),
+"times": PackedFloat32Array(0, 0.4, 0.8, 1.2),
 "transitions": PackedFloat32Array(0.5, 2, 0.5, 2),
 "update": 0,
 "values": [Vector3(0.435, 0.148, -0.356), Vector3(0.373, 0.108, -0.356), Vector3(0.435, 0.148, -0.356), Vector3(0.525, 0.108, -0.356)]
@@ -180,24 +181,24 @@ length = 3.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Gun:position")
+tracks/0/path = NodePath("WeaponSway/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.8, 1.1, 1.5, 2.5, 3),
-"transitions": PackedFloat32Array(0.25, 1, 0.25, 0.5, 1, 1),
+"times": PackedFloat32Array(0, 0.8, 1.1, 1.5, 2.9, 3),
+"transitions": PackedFloat32Array(0.25, 1, 0.25, 0.5, 0.1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(-0.115524, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Gun:rotation")
+tracks/1/path = NodePath("WeaponSway/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.8, 1.1, 1.5, 2.5, 3),
-"transitions": PackedFloat32Array(0.25, 1, 0.25, 0.5, 1, 1),
+"times": PackedFloat32Array(0, 0.8, 1.1, 1.5, 2.9, 3),
+"transitions": PackedFloat32Array(0.25, 1, 0.25, 0.5, 0.1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, 0.872665), Vector3(0, 0, -0.349066), Vector3(0, 0, 0), Vector3(0.261799, 0, 0), Vector3(0, 0, 0)]
 }
@@ -228,27 +229,15 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
-length = 0.2
+length = 0.15
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath("WeaponSway/Gun:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(-0.01, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector3(0.435, 0.178, -0.356), Vector3(0.435, 0.148, -0.356)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 0.15),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0.261799, 0, 0), Vector3(0, 0, 0)]
@@ -263,23 +252,28 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[node name="SMG" type="Node3D" node_paths=PackedStringArray("muzzle_flash") groups=["AmmoCounter", "Ranged"]]
+[node name="SMG" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "weapon_sway_node") groups=["AmmoCounter", "Ranged"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_24sbh")
-muzzle_flash = NodePath("Gun/MuzzleFlash")
+muzzle_flash = NodePath("WeaponSway/Gun/MuzzleFlash")
+weapon_sway_node = NodePath("WeaponSway")
 max_ammo = 16
 default_player_speed = 5.0
 current_ammo = 16
 mag_type = "Single"
+weapon_rotation_amount = 0.25
+recoil_amount = 1.5
 
-[node name="Gun" type="Node3D" parent="."]
+[node name="WeaponSway" type="Node3D" parent="."]
 
-[node name="Cube" type="MeshInstance3D" parent="Gun"]
+[node name="Gun" type="Node3D" parent="WeaponSway"]
+
+[node name="Cube" type="MeshInstance3D" parent="WeaponSway/Gun"]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
 mesh = SubResource("ArrayMesh_w5h6n")
 skeleton = NodePath("")
 
-[node name="MuzzleFlash" type="GPUParticles3D" parent="Gun"]
+[node name="MuzzleFlash" type="GPUParticles3D" parent="WeaponSway/Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.238783, -0.447912)
 emitting = false
 amount = 1
@@ -289,11 +283,11 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_0uxsu")
 draw_pass_1 = SubResource("PlaneMesh_qr5g0")
 
-[node name="Arm" type="MeshInstance3D" parent="Gun"]
+[node name="Arm" type="MeshInstance3D" parent="WeaponSway/Gun"]
 unique_name_in_owner = true
 transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, -0.136921, 0.139884)
 mesh = SubResource("CapsuleMesh_hqlm2")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -325,7 +319,7 @@ wait_time = 0.21
 one_shot = true
 
 [node name="FiringRate" type="Timer" parent="."]
-wait_time = 0.2
+wait_time = 0.15
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_6fnrq")

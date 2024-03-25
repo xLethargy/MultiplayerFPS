@@ -105,6 +105,10 @@ material = SubResource("StandardMaterial3D_5yqdu")
 size = Vector2(0.5, 0.5)
 orientation = 2
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_5hto8"]
+radius = 0.1
+height = 0.6
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0s8od"]
 load_path = "res://.godot/imported/hitmarker.png-1ac4e5da177c43b6bb9088dc9f77c00d.ctex"
 
@@ -130,7 +134,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
+tracks/1/path = NodePath("WeaponSway/Gun:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -142,7 +146,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Gun:position")
+tracks/2/path = NodePath("WeaponSway/Gun:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -154,22 +158,10 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Gun:rotation")
+tracks/3/path = NodePath("WeaponSway/Pivot:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Pivot:rotation")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -183,19 +175,19 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath("WeaponSway:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 1.5),
 "transitions": PackedFloat32Array(-2, -2),
 "update": 0,
-"values": [Vector3(0.435, 0.148, -0.356), Vector3(0.435, 0.108, -0.356)]
+"values": [Vector3(0, 0, 0), Vector3(0, -0.04, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
+tracks/1/path = NodePath("WeaponSway:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -221,53 +213,13 @@ tracks/0/keys = {
 "values": [Vector3(0.435, 0.148, -0.356), Vector3(0.373, 0.108, -0.356), Vector3(0.435, 0.148, -0.356), Vector3(0.525, 0.108, -0.356)]
 }
 
-[sub_resource type="Animation" id="Animation_lwtdn"]
-resource_name = "shoot"
-length = 0.8
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Gun:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector3(0, 0.127152, 0.115371), Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Gun:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector3(-6.28319, 0, 0), Vector3(0, 0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Pivot:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector3(0.349066, 0, 0), Vector3(0, 0, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_xu2h4"]
 resource_name = "reload_two"
 length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Gun:position")
+tracks/0/path = NodePath("WeaponSway/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -279,7 +231,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Gun:rotation")
+tracks/1/path = NodePath("WeaponSway/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -287,6 +239,46 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(-0.261799, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_lwtdn"]
+resource_name = "shoot"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponSway/Gun:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0, 0.127152, 0.115371), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSway/Gun:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(-6.28319, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WeaponSway/Pivot:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0.349066, 0, 0), Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cthlp"]
@@ -298,30 +290,31 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_5hto8"]
-radius = 0.1
-height = 0.6
-
-[node name="SpeedGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio") groups=["AmmoCounter", "DeathReset", "Ranged"]]
+[node name="SpeedGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoCounter", "DeathReset", "Ranged"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_sou6r")
-muzzle_flash = NodePath("Gun/MuzzleFlash")
+muzzle_flash = NodePath("WeaponSway/Gun/MuzzleFlash")
 gun_audio = NodePath("RevolverAudio")
 local_gun_audio = NodePath("LocalRevolverAudio")
+weapon_sway_node = NodePath("WeaponSway")
 default_damage = 15
 max_ammo = 8
 default_player_speed = 4.0
 current_ammo = 8
 mag_type = "Revolver"
+weapon_rotation_amount = 0.3
+recoil_amount = 0.6
 
-[node name="Gun" type="Node3D" parent="."]
+[node name="WeaponSway" type="Node3D" parent="."]
 
-[node name="Cube" type="MeshInstance3D" parent="Gun"]
+[node name="Gun" type="Node3D" parent="WeaponSway"]
+
+[node name="Cube" type="MeshInstance3D" parent="WeaponSway/Gun"]
 transform = Transform3D(-1.31134e-08, 0, -0.132, 0, 0.132, 0, 0.3, 0, -5.7699e-09, 0, 0.08, -0.27)
 mesh = SubResource("ArrayMesh_5rsq2")
 skeleton = NodePath("")
 
-[node name="MuzzleFlash" type="GPUParticles3D" parent="Gun"]
+[node name="MuzzleFlash" type="GPUParticles3D" parent="WeaponSway/Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.193751, -0.587213)
 emitting = false
 amount = 1
@@ -330,6 +323,15 @@ one_shot = true
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_hngsa")
 draw_pass_1 = SubResource("PlaneMesh_bruoh")
+
+[node name="Pivot" type="Node3D" parent="WeaponSway"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.267588, 0.30705)
+
+[node name="Arm" type="MeshInstance3D" parent="WeaponSway/Pivot"]
+unique_name_in_owner = true
+transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, 0.120736, -0.167182)
+mesh = SubResource("CapsuleMesh_5hto8")
+skeleton = NodePath("../../..")
 
 [node name="Hitmarker" type="TextureRect" parent="."]
 visible = false
@@ -364,15 +366,6 @@ libraries = {
 autoplay = "idle"
 playback_default_blend_time = 0.05
 speed_scale = 0.5
-
-[node name="Pivot" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.257657, 0.307066)
-
-[node name="Arm" type="MeshInstance3D" parent="Pivot"]
-unique_name_in_owner = true
-transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, 0.120736, -0.167182)
-mesh = SubResource("CapsuleMesh_5hto8")
-skeleton = NodePath("../..")
 
 [node name="RevolverAudio" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("4_1246g")

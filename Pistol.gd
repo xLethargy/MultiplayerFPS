@@ -14,6 +14,10 @@ func _unhandled_input(_event):
 			if collider.is_in_group("Hurtbox"):
 				on_hit_effect()
 				collider.handle_damage_collision(current_damage)
+		
+		recoil = true
+		await get_tree().create_timer(0.1).timeout
+		recoil = false
 	
 	if Input.is_action_just_pressed("reload") and animation_player.current_animation != "reload" and current_ammo != max_ammo:
 		reload_weapon.rpc()

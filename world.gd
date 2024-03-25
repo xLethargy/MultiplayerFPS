@@ -3,11 +3,14 @@ extends Node3D
 var player_scene = preload("res://player.tscn")
 var player
 var player_class
+
 var pistol_one = preload("res://pistol.tscn")
 var smg_gun = preload("res://pistol_2.tscn")
 var freeze_gun = preload("res://pistol_freeze.tscn")
 var speed_gun = preload("res://speed_gun.tscn")
 var stake = preload("res://stake.tscn")
+var sniper = preload("res://db_sniper.tscn")
+
 @onready var hud = $MultiplayerMenu/HUD
 @onready var main_menu = $MultiplayerMenu/MainMenuScreen
 
@@ -67,6 +70,8 @@ func _on_multiplayer_menu_add_player():
 						player_class = speed_gun.instantiate()
 					"Stake":
 						player_class = stake.instantiate()
+					"Sniper":
+						player_class = sniper.instantiate()
 				
 				if player.is_multiplayer_authority():
 					player.health_component.connect("change_health", update_health_bar)
@@ -110,6 +115,8 @@ func _on_multiplayer_spawner_spawned(node):
 					player_class = speed_gun.instantiate()
 				"Stake":
 					player_class = stake.instantiate()
+				"Sniper":
+					player_class = sniper.instantiate()
 			
 			if node.is_multiplayer_authority():
 				_add_weapon_class(node)

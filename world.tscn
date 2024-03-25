@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=15 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_rxlvp"]
 [ext_resource type="PackedScene" uid="uid://dpp36leb612fw" path="res://arena.tscn" id="1_sm485"]
 [ext_resource type="Script" path="res://MultiplayerMenu.gd" id="3_asb1u"]
 [ext_resource type="Script" path="res://HUD.gd" id="4_3loky"]
 [ext_resource type="Texture2D" uid="uid://belxpkhe22pnq" path="res://addons/kenney_particle_pack/circle_05.png" id="5_osqmr"]
+[ext_resource type="Texture2D" uid="uid://djocoyt5s36bk" path="res://images/sniperADS.png" id="6_51bju"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uc3qh"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -151,6 +152,10 @@ text = "Speed Gun"
 layout_mode = 2
 text = "Stake"
 
+[node name="Sniper" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+text = "Sniper"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
@@ -251,6 +256,17 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_adxas")
 value = 100.0
 show_percentage = false
 
+[node name="SniperADS" type="TextureRect" parent="MultiplayerMenu/HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_51bju")
+expand_mode = 2
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
 spawn_path = NodePath("..")
@@ -264,6 +280,7 @@ spawn_path = NodePath("..")
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Freeze Gun" to="MultiplayerMenu" method="_on_freeze_gun_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Speed Gun" to="MultiplayerMenu" method="_on_speed_gun_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Stake" to="MultiplayerMenu" method="_on_stake_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Sniper" to="MultiplayerMenu" method="_on_sniper_pressed"]
 [connection signal="changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_h_slider_changed"]
 [connection signal="value_changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_sens_slider_value_changed"]
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

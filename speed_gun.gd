@@ -24,6 +24,10 @@ func _unhandled_input(_event):
 				reset_stat_gun(false)
 		else:
 			reset_stat_gun(false)
+		
+		recoil = true
+		await get_tree().create_timer(0.1).timeout
+		recoil = false
 	
 	if Input.is_action_just_pressed("reload") and animation_player.current_animation != "reload" and current_ammo != max_ammo:
 		reload_weapon.rpc()
@@ -41,11 +45,11 @@ func handle_speed_gun_variables():
 		if current_damage > 100:
 			current_damage = 100
 	
-	if animation_player.speed_scale < 4:
+	if animation_player.speed_scale < 5:
 		current_animation_speed += animation_increase
 		animation_player.speed_scale = current_animation_speed
-		if animation_player.speed_scale > 4:
-			current_animation_speed = 4
+		if animation_player.speed_scale > 5:
+			current_animation_speed = 5
 	
 	if player.camera.fov < 140:
 		player.camera.fov += 1

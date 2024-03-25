@@ -9,7 +9,7 @@ func _unhandled_input(_event):
 	if Input.is_action_just_pressed("reload") and animation_player.current_animation != "reload" and current_ammo != max_ammo:
 		reload_weapon.rpc()
 
-func _physics_process(_delta):
+func _process(_delta):
 	if !player.is_multiplayer_authority():
 		return
 	
@@ -22,7 +22,7 @@ func _physics_process(_delta):
 		if raycast.is_colliding():
 			var collider = raycast.get_collider()
 			var origin = raycast.global_transform.origin
-
+			
 			var distance_check = (origin.distance_to(raycast.get_collision_point())) / 2
 			distance_check = int(distance_check) 
 			if distance_check >= current_damage:
@@ -31,6 +31,10 @@ func _physics_process(_delta):
 			if collider.is_in_group("Hurtbox"):
 				on_hit_effect()
 				collider.handle_damage_collision(falloff_damage)
+		
+		recoil = true
+		await get_tree().create_timer(0.1).timeout
+		recoil = false
 
 
 func _on_firing_rate_timeout():

@@ -15,6 +15,7 @@ var smg_gun = preload("res://pistol_2.tscn")
 var freeze_gun = preload("res://pistol_freeze.tscn")
 var speed_gun = preload("res://speed_gun.tscn")
 var stake = preload("res://stake.tscn")
+var sniper = preload("res://db_sniper.tscn")
 
 var player_sensitivity = 11
 
@@ -150,6 +151,11 @@ func _on_speed_gun_pressed():
 func _on_stake_pressed():
 	weapon_class_node = stake
 	_class_selected("Stake")
+
+
+func _on_sniper_pressed():
+	weapon_class_node = sniper
+	_class_selected("Sniper")
 
 
 func _class_selected(weapon_class, peer_id = multiplayer.get_unique_id()):

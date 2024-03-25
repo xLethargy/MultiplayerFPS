@@ -66,7 +66,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("StakeElements:position")
+tracks/1/path = NodePath("WeaponSway/StakeElements:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -78,7 +78,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("StakeElements:rotation")
+tracks/2/path = NodePath("WeaponSway/StakeElements:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -90,22 +90,10 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath(".:rotation")
+tracks/3/path = NodePath(".:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -119,19 +107,19 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath("WeaponSway/StakeElements:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 1.5),
 "transitions": PackedFloat32Array(-2, -2),
 "update": 0,
-"values": [Vector3(0.435, 0.148, -0.356), Vector3(0.435, 0.108, -0.356)]
+"values": [Vector3(0, 0, 0), Vector3(0, -0.04, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
+tracks/1/path = NodePath("WeaponSway/StakeElements:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -175,7 +163,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("StakeElements:position")
+tracks/1/path = NodePath("WeaponSway/StakeElements:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -187,7 +175,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("StakeElements:rotation")
+tracks/2/path = NodePath("WeaponSway/StakeElements:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -208,27 +196,30 @@ _data = {
 [sub_resource type="BoxShape3D" id="BoxShape3D_da14s"]
 size = Vector3(0.5, 0.5, 2.00049)
 
-[node name="Stake" type="Node3D"]
+[node name="Stake" type="Node3D" node_paths=PackedStringArray("weapon_sway_node")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_2cfut")
+weapon_sway_node = NodePath("WeaponSway")
 default_damage = 50
 max_ammo = 1
 default_player_speed = 9.5
 current_ammo = 1
 
-[node name="StakeElements" type="Node3D" parent="."]
+[node name="WeaponSway" type="Node3D" parent="."]
+
+[node name="StakeElements" type="Node3D" parent="WeaponSway"]
 transform = Transform3D(0.035, 0, 0, 0, 0.035, 0, 0, 0, 0.035, 0, 0, 0)
 
-[node name="StakeMesh" type="MeshInstance3D" parent="StakeElements"]
+[node name="StakeMesh" type="MeshInstance3D" parent="WeaponSway/StakeElements"]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0)
 mesh = SubResource("ArrayMesh_hpnm1")
 skeleton = NodePath("")
 
-[node name="Arm" type="MeshInstance3D" parent="StakeElements"]
+[node name="Arm" type="MeshInstance3D" parent="WeaponSway/StakeElements"]
 unique_name_in_owner = true
 transform = Transform3D(28.4627, -2.49016, 0, 1.24508, 14.2313, 24.7436, -2.15655, -24.6494, 14.2857, 0.66123, -3.50801, 5.38626)
 mesh = SubResource("CapsuleMesh_2u6ly")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 
 [node name="Hitmarker" type="TextureRect" parent="."]
 visible = false

@@ -82,7 +82,7 @@ script = ExtResource("9_6b75t")
 replication_config = SubResource("SceneReplicationConfig_frqxj")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://pistol.tscn", "res://pistol_2.tscn", "res://pistol_freeze.tscn", "res://speed_gun.tscn", "res://stake.tscn")
+_spawnable_scenes = PackedStringArray("res://pistol.tscn", "res://pistol_2.tscn", "res://pistol_freeze.tscn", "res://speed_gun.tscn", "res://stake.tscn", "res://db_sniper.tscn")
 spawn_path = NodePath("../View")
 
 [connection signal="timeout" from="HealthComponent/HealTimer" to="HealthComponent" method="_on_heal_timer_timeout"]
