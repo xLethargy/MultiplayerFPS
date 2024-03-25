@@ -18,7 +18,7 @@ var damage = 15
 var can_shoot = true
 
 func _ready():
-	player.default_speed = 6
+	player.default_speed = 5
 	player.change_speed_and_jump()
 
 func _physics_process(_delta):

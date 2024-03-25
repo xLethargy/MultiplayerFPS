@@ -7,9 +7,9 @@ extends CharacterBody3D
 @onready var mesh = $MeshInstance3D
 @onready var hurtbox = $HurtboxComponent
 
-var default_speed = 7.5
+var default_speed = 6.5
 var current_speed = default_speed
-var default_jump_velocity = 5.5
+var default_jump_velocity = 6.5
 var current_jump_velocity = default_jump_velocity
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -33,6 +33,20 @@ func _ready():
 	var id = multiplayer.get_unique_id()
 	if Global.players.has(id):
 		sensitivity = Global.players[id].Sensitivity
+	
+	await get_tree().create_timer(2).timeout
+	for i in Global.players:
+		var player = get_node_or_null(str(Global.players[i].ID))
+		if player != null:
+			match Global.players[i].Team:
+				1:
+					player.change_material("Blue")
+				2:
+					player.change_material("Red")
+				3:
+					player.change_material("Green")
+				4:
+					player.change_material("Yellow")
 
 
 func _enter_tree():
@@ -98,36 +112,40 @@ func update_current_class(new_weapon):
 			weapon = new_weapon
 			view.add_child(new_weapon)
 			
-			change_material.rpc(current_colour)
-
+			change_material.rpc(current_colour, false)
 
 @rpc ("any_peer", "call_local", "reliable")
-func change_material(material):
+func change_material(material, want_timer = true):
 	#need to connect signal for when player loads
-	await get_tree().create_timer(0.1).timeout
+	if want_timer:
+		await get_tree().create_timer(0.1).timeout
 	weapon = view.get_child(1)
 	if material == "Blue":
 		var blue = preload("res://materials/blue.tres")
 		mesh.set_surface_override_material(0, blue)
-		weapon.arm.set_surface_override_material(0, blue)
+		if weapon != null:
+			weapon.arm.set_surface_override_material(0, blue)
 		current_colour = "Blue"
 		change_layers.rpc()
 	elif material == "Red":
 		var red = preload("res://materials/red.tres")
 		mesh.set_surface_override_material(0, red)
-		weapon.arm.set_surface_override_material(0, red)
+		if weapon != null:
+			weapon.arm.set_surface_override_material(0, red)
 		change_layers.rpc()
 		current_colour = "Red"
 	elif material == "Green":
 		var green = preload("res://materials/green.tres")
 		mesh.set_surface_override_material(0, green)
-		weapon.arm.set_surface_override_material(0, green)
+		if weapon != null:
+			weapon.arm.set_surface_override_material(0, green)
 		change_layers.rpc()
 		current_colour = "Green"
 	elif material == "Yellow":
 		var yellow = preload("res://materials/yellow.tres")
 		mesh.set_surface_override_material(0, yellow)
-		weapon.arm.set_surface_override_material(0, yellow)
+		if weapon != null:
+			weapon.arm.set_surface_override_material(0, yellow)
 		change_layers.rpc()
 		current_colour = "Yellow"
 

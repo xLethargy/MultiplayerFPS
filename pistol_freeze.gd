@@ -27,7 +27,7 @@ var player_died = false
 var current_health
 
 func _ready():
-	player.default_speed = 6.5
+	player.default_speed = 5.5
 	player.change_speed_and_jump()
 
 func _unhandled_input(_event):

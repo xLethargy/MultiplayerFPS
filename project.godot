@@ -72,3 +72,7 @@ test={
 3d_physics/layer_3="team2"
 3d_physics/layer_4="team3"
 3d_physics/layer_5="team4"
+
+[physics]
+
+3d/default_gravity=19.6

@@ -150,7 +150,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
-length = 0.4
+length = 0.6
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -158,7 +158,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(-0.01, 0.4),
+"times": PackedFloat32Array(-0.01, 0.6),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0.435, 0.178, -0.356), Vector3(0.435, 0.148, -0.356)]
@@ -170,10 +170,10 @@ tracks/1/path = NodePath(".:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.6),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector3(1.0472, 0, 0), Vector3(0, 0, 0)]
+"values": [Vector3(1.39626, 0, 0), Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cthlp"]

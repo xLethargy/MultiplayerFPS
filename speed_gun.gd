@@ -22,7 +22,7 @@ var damage_increase = 0.5
 var player_speed_increase = 0.5
 
 func _ready():
-	player.default_speed = 5
+	player.default_speed = 4
 	player.change_speed_and_jump()
 	player.health_component.connect("death", reset_speed_gun)
 
