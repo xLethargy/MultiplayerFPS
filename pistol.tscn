@@ -1,10 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://cmlx8217nhub"]
+[gd_scene load_steps=21 format=3 uid="uid://cmlx8217nhub"]
 
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="1_4flk3"]
 [ext_resource type="Script" path="res://pistol.gd" id="1_lrfq1"]
 [ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://hitmarker.png" id="3_7vlyy"]
 [ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://hitmarker.wav" id="4_3q4ty"]
-[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://materials/red.tres" id="4_jvk7i"]
 [ext_resource type="AudioStream" uid="uid://4x7mg7hb3117" path="res://sounds/deagle1.wav" id="5_rq315"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y7230"]
@@ -48,7 +47,6 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_vghpt")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_33bxf"]
-material = ExtResource("4_jvk7i")
 radius = 0.1
 height = 0.6
 

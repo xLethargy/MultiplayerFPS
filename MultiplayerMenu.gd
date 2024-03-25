@@ -58,7 +58,6 @@ func _on_host_pressed():
 	upnp_setup()
 	
 	send_player_information(name_entry.text, multiplayer.get_unique_id())
-	Global.teams = 3
 
 
 func _on_join_pressed():

@@ -48,15 +48,7 @@ func set_collision_layers():
 				raycast.set_collision_mask_value(2, true)
 				raycast.set_collision_mask_value(3, true)
 				raycast.set_collision_mask_value(4, true)
-			else:
-				#else gets put on team 1
-				self.set_collision_layer_value(2, true)
-				self.set_collision_mask_value(2, true)
-				
-				raycast.set_collision_mask_value(3, true)
-				raycast.set_collision_mask_value(4, true)
-				raycast.set_collision_mask_value(5, true)
-			
+
 
 @rpc("any_peer")
 func handle_damage_collision(damage):

@@ -69,19 +69,10 @@ func _on_multiplayer_menu_add_player():
 						player_class = stake.instantiate()
 				
 				if player.is_multiplayer_authority():
-					match Global.players[i].Team:
-						1:
-							player.change_material.rpc("Blue")
-						2:
-							player.change_material.rpc("Red")
-						3:
-							player.change_material.rpc("Green")
-						4:
-							player.change_material.rpc("Yellow")
-					
 					player.health_component.connect("change_health", update_health_bar)
 					_add_weapon_class(player)
 				update_health_bar(player.health_component.current_health)
+
 
 func _on_multiplayer_menu_remove_player(peer_id):
 	Global.players.erase(peer_id)
@@ -91,11 +82,6 @@ func _on_multiplayer_menu_remove_player(peer_id):
 
 
 func _open_choose_class(_peer_id):
-	#player = get_node_or_null(str(peer_id))
-	#if player:
-		#player.global_position = Vector3(0, -100, 0)
-		#player.change_speed_and_jump()
-		#player.frozen = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	hud.hide()
 	main_menu.show()
@@ -128,6 +114,30 @@ func _on_multiplayer_spawner_spawned(node):
 			if node.is_multiplayer_authority():
 				_add_weapon_class(node)
 		
+		for i in Global.players:
+			player = get_node_or_null(str(Global.players[i].ID))
+			if player != null:
+				if player.name == "1":
+					match Global.players[i].Team:
+						1:
+							player.change_material.rpc("Blue")
+						2:
+							player.change_material.rpc("Red")
+						3:
+							player.change_material.rpc("Green")
+						4:
+							player.change_material.rpc("Yellow")
+				else:
+					match Global.players[i].Team:
+						1:
+							player.change_material(player.current_colour)
+						2:
+							player.change_material(player.current_colour)
+						3:
+							player.change_material(player.current_colour)
+						4:
+							player.change_material(player.current_colour)
+					
 
 
 func _add_weapon_class(player_node):

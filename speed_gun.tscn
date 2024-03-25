@@ -1,8 +1,7 @@
-[gd_scene load_steps=23 format=3 uid="uid://dc347rbgdujlm"]
+[gd_scene load_steps=22 format=3 uid="uid://dc347rbgdujlm"]
 
 [ext_resource type="Script" path="res://speed_gun.gd" id="1_sou6r"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_l7vj3"]
-[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://materials/red.tres" id="3_8b2b7"]
 [ext_resource type="AudioStream" uid="uid://c6bayu1os1ll5" path="res://sounds/revolver1.wav" id="4_1246g"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l0b7l"]
@@ -300,7 +299,6 @@ _data = {
 }
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_5hto8"]
-material = ExtResource("3_8b2b7")
 radius = 0.1
 height = 0.6
 
