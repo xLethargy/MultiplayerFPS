@@ -138,6 +138,10 @@ text = "Freeze Gun"
 layout_mode = 2
 text = "Speed Gun"
 
+[node name="Stake" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+text = "Stake"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
@@ -213,6 +217,7 @@ spawn_path = NodePath("..")
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Pistol Two" to="MultiplayerMenu" method="_on_pistol_two_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Freeze Gun" to="MultiplayerMenu" method="_on_freeze_gun_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Speed Gun" to="MultiplayerMenu" method="_on_speed_gun_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Stake" to="MultiplayerMenu" method="_on_stake_pressed"]
 [connection signal="changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_h_slider_changed"]
 [connection signal="value_changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_sens_slider_value_changed"]
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

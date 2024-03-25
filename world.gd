@@ -7,10 +7,12 @@ var pistol_one = preload("res://pistol.tscn")
 var smg_gun = preload("res://pistol_2.tscn")
 var freeze_gun = preload("res://pistol_freeze.tscn")
 var speed_gun = preload("res://speed_gun.tscn")
+var stake = preload("res://stake.tscn")
 @onready var hud = $MultiplayerMenu/HUD
 @onready var main_menu = $MultiplayerMenu/MainMenuScreen
 
 @onready var timer = get_tree().create_timer(2.0)
+
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
@@ -49,6 +51,10 @@ func _on_multiplayer_menu_add_player():
 						player.change_material.rpc("Blue")
 					2:
 						player.change_material.rpc("Red")
+					3:
+						player.change_material.rpc("Green")
+					4:
+						player.change_material.rpc("Yellow")
 				
 				match Global.players[i].Class:
 					"PistolOne":
@@ -59,13 +65,19 @@ func _on_multiplayer_menu_add_player():
 						player_class = freeze_gun.instantiate()
 					"SpeedGun":
 						player_class = speed_gun.instantiate()
+					"Stake":
+						player_class = stake.instantiate()
 				
 				if player.is_multiplayer_authority():
 					match Global.players[i].Team:
 						1:
-							player.change_material("Blue")
+							player.change_material.rpc("Blue")
 						2:
-							player.change_material("Red")
+							player.change_material.rpc("Red")
+						3:
+							player.change_material.rpc("Green")
+						4:
+							player.change_material.rpc("Yellow")
 					
 					player.health_component.connect("change_health", update_health_bar)
 					_add_weapon_class(player)
@@ -101,16 +113,17 @@ func _on_multiplayer_spawner_spawned(node):
 		
 		var id = str(node.name).to_int()
 		if Global.players.has(id):
-			if Global.players[id].Class == "PistolOne":
-				player_class = pistol_one.instantiate()
-			elif Global.players[id].Class == "SMG":
-				player_class = smg_gun.instantiate()
-			elif Global.players[id].Class == "FreezeGun":
-				player_class = freeze_gun.instantiate()
-			elif Global.players[id].Class == "SpeedGun":
-				player_class = speed_gun.instantiate()
-			
-			print (Global.players)
+			match Global.players[id].Class:
+				"PistolOne":
+					player_class = pistol_one.instantiate()
+				"SMG":
+					player_class = smg_gun.instantiate()
+				"FreezeGun":
+					player_class = freeze_gun.instantiate()
+				"SpeedGun":
+					player_class = speed_gun.instantiate()
+				"Stake":
+					player_class = stake.instantiate()
 			
 			if node.is_multiplayer_authority():
 				_add_weapon_class(node)
@@ -120,9 +133,14 @@ func _on_multiplayer_spawner_spawned(node):
 			if player != null:
 				match Global.players[i].Team:
 					1:
-						player.change_material.rpc("Blue")
+						player.change_material("Blue")
 					2:
-						player.change_material.rpc("Red")
+						player.change_material("Red")
+					3:
+						player.change_material("Green")
+					4:
+						player.change_material("Yellow")
+					
 
 
 func _add_weapon_class(player_node):

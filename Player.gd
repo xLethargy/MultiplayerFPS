@@ -5,6 +5,7 @@ extends CharacterBody3D
 @onready var camera = $View/Camera3D
 @onready var view = $View
 @onready var mesh = $MeshInstance3D
+@onready var hurtbox = $HurtboxComponent
 
 var default_speed = 7.5
 var current_speed = default_speed
@@ -77,8 +78,6 @@ func change_hud_health(health_value):
 
 @rpc ("any_peer", "call_local")
 func change_speed_and_jump(speed_effect = default_speed, jump_height = default_jump_velocity):
-	print ("default: ", default_speed)
-	print ("speed effect: ", speed_effect)
 	current_speed = speed_effect
 	current_jump_velocity = jump_height
 
@@ -104,24 +103,36 @@ func update_current_class(new_weapon):
 
 @rpc ("any_peer", "call_local", "reliable")
 func change_material(material):
-	await get_tree().create_timer(0.01).timeout
+	#need to connect signal for when player loads
+	await get_tree().create_timer(0.1).timeout
 	weapon = view.get_child(1)
 	if material == "Blue":
 		var blue = preload("res://materials/blue.tres")
 		mesh.set_surface_override_material(0, blue)
 		weapon.arm.set_surface_override_material(0, blue)
 		current_colour = "Blue"
-		change_layers.rpc(2)
+		change_layers.rpc()
 	elif material == "Red":
 		var red = preload("res://materials/red.tres")
 		mesh.set_surface_override_material(0, red)
 		weapon.arm.set_surface_override_material(0, red)
-		change_layers.rpc(3)
+		change_layers.rpc()
 		current_colour = "Red"
+	elif material == "Green":
+		var green = preload("res://materials/green.tres")
+		mesh.set_surface_override_material(0, green)
+		weapon.arm.set_surface_override_material(0, green)
+		change_layers.rpc()
+		current_colour = "Green"
+	elif material == "Yellow":
+		var yellow = preload("res://materials/yellow.tres")
+		mesh.set_surface_override_material(0, yellow)
+		weapon.arm.set_surface_override_material(0, yellow)
+		change_layers.rpc()
+		current_colour = "Yellow"
+
 
 @rpc ("call_local", "any_peer")
-func change_layers(team):
+func change_layers():
 	if is_multiplayer_authority():
 		mesh.visible = false
-		
-		self.set_collision_layer_value(team, true)

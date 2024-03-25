@@ -1,13 +1,14 @@
 [gd_scene load_steps=9 format=3 uid="uid://c01cfmt48npc0"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_yahtk"]
-[ext_resource type="Material" uid="uid://d2mww1dn4jyf6" path="res://materials/red.tres" id="2_pbo3q"]
 [ext_resource type="Script" path="res://health.gd" id="7_y81fr"]
 [ext_resource type="Script" path="res://hurtbox.gd" id="8_i8qa3"]
 [ext_resource type="Script" path="res://shoot.gd" id="9_6b75t"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hcq18"]
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_5lii6"]
-material = ExtResource("2_pbo3q")
+material = SubResource("StandardMaterial3D_hcq18")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tgsde"]
 
@@ -27,6 +28,12 @@ properties/3/replication_mode = 1
 properties/4/path = NodePath("View:rotation")
 properties/4/spawn = true
 properties/4/replication_mode = 1
+properties/5/path = NodePath("HurtboxComponent:collision_layer")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath("HurtboxComponent:collision_mask")
+properties/6/spawn = true
+properties/6/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 collision_layer = 0
@@ -49,7 +56,6 @@ fov = 90.0
 
 [node name="RayCast3D" type="RayCast3D" parent="View/Camera3D"]
 target_position = Vector3(0, 0, -50)
-collision_mask = 9
 collide_with_areas = true
 
 [node name="HealthComponent" type="Node3D" parent="."]
@@ -60,7 +66,7 @@ wait_time = 5.0
 one_shot = true
 
 [node name="HurtboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("health_component") groups=["Hurtbox"]]
-collision_layer = 8
+collision_layer = 0
 collision_mask = 0
 script = ExtResource("8_i8qa3")
 health_component = NodePath("../HealthComponent")
@@ -76,8 +82,7 @@ script = ExtResource("9_6b75t")
 replication_config = SubResource("SceneReplicationConfig_frqxj")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://pistol.tscn", "res://pistol_2.tscn", "res://pistol_freeze.tscn", "res://speed_gun.tscn")
+_spawnable_scenes = PackedStringArray("res://pistol.tscn", "res://pistol_2.tscn", "res://pistol_freeze.tscn", "res://speed_gun.tscn", "res://stake.tscn")
 spawn_path = NodePath("../View")
 
 [connection signal="timeout" from="HealthComponent/HealTimer" to="HealthComponent" method="_on_heal_timer_timeout"]
-[connection signal="body_entered" from="HurtboxComponent" to="HurtboxComponent" method="_on_body_entered"]

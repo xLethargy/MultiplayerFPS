@@ -70,5 +70,5 @@ test={
 3d_physics/layer_1="world"
 3d_physics/layer_2="team1"
 3d_physics/layer_3="team2"
-3d_physics/layer_4="hurtbox"
-3d_physics/layer_5="projectiles"
+3d_physics/layer_4="team3"
+3d_physics/layer_5="team4"
