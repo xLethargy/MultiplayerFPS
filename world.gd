@@ -128,19 +128,6 @@ func _on_multiplayer_spawner_spawned(node):
 			if node.is_multiplayer_authority():
 				_add_weapon_class(node)
 		
-		for i in Global.players:
-			player = get_node_or_null(str(Global.players[i].ID))
-			if player != null:
-				match Global.players[i].Team:
-					1:
-						player.change_material("Blue")
-					2:
-						player.change_material("Red")
-					3:
-						player.change_material("Green")
-					4:
-						player.change_material("Yellow")
-					
 
 
 func _add_weapon_class(player_node):

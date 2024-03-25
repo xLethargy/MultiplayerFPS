@@ -34,19 +34,7 @@ func _ready():
 	if Global.players.has(id):
 		sensitivity = Global.players[id].Sensitivity
 	
-	await get_tree().create_timer(2).timeout
-	for i in Global.players:
-		var player = get_node_or_null(str(Global.players[i].ID))
-		if player != null:
-			match Global.players[i].Team:
-				1:
-					player.change_material("Blue")
-				2:
-					player.change_material("Red")
-				3:
-					player.change_material("Green")
-				4:
-					player.change_material("Yellow")
+
 
 
 func _enter_tree():
@@ -73,6 +61,8 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = current_jump_velocity
 	
+	
+	
 	input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
@@ -94,6 +84,11 @@ func change_hud_health(health_value):
 func change_speed_and_jump(speed_effect = default_speed, jump_height = default_jump_velocity):
 	current_speed = speed_effect
 	current_jump_velocity = jump_height
+	
+	if speed_effect == default_speed:
+		camera.fov = 90
+	elif speed_effect == 1.5:
+		camera.fov = 70
 
 
 @rpc ("call_local")

@@ -1,10 +1,11 @@
 extends Area3D
 
-var damage = 50
+var damage
 
 func _ready():
 	await get_tree().create_timer(0.1).timeout
 	set_collision_layers.rpc()
+	damage = owner.current_damage
 
 
 @rpc ("any_peer")

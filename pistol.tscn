@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cmlx8217nhub"]
+[gd_scene load_steps=22 format=3 uid="uid://cmlx8217nhub"]
 
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="1_4flk3"]
 [ext_resource type="Script" path="res://pistol.gd" id="1_lrfq1"]
@@ -46,6 +46,11 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_vghpt")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_33bxf"]
+material = ExtResource("4_jvk7i")
+radius = 0.1
+height = 0.6
 
 [sub_resource type="Gradient" id="Gradient_0x0qt"]
 offsets = PackedFloat32Array(0, 0.272727, 1)
@@ -102,6 +107,30 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Gun:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Gun:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_p8xlp"]
 resource_name = "idle"
@@ -148,6 +177,34 @@ tracks/0/keys = {
 "values": [Vector3(0.435, 0.148, -0.356), Vector3(0.373, 0.108, -0.356), Vector3(0.435, 0.148, -0.356), Vector3(0.525, 0.108, -0.356)]
 }
 
+[sub_resource type="Animation" id="Animation_foak2"]
+resource_name = "reload"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Gun:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 1.3),
+"transitions": PackedFloat32Array(0.25, 0.25, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.05, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Gun:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 1.3, 1.5),
+"transitions": PackedFloat32Array(0.25, 0.25, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.610865, 0, 0), Vector3(0.261799, 0, 0), Vector3(0, 0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
 length = 0.6
@@ -181,24 +238,35 @@ _data = {
 "RESET": SubResource("Animation_anl2s"),
 "idle": SubResource("Animation_p8xlp"),
 "move": SubResource("Animation_yijs0"),
+"reload": SubResource("Animation_foak2"),
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_33bxf"]
-material = ExtResource("4_jvk7i")
-radius = 0.1
-height = 0.6
-
-[node name="Pistol" type="Node3D"]
+[node name="Pistol" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio") groups=["AmmoCounter", "Ranged"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_lrfq1")
+muzzle_flash = NodePath("Gun/MuzzleFlash")
+gun_audio = NodePath("DeagleAudio")
+local_gun_audio = NodePath("LocalDeagleAudio")
+default_damage = 25
+max_ammo = 7
+current_ammo = 7
+mag_type = "Single"
 
-[node name="Cube" type="MeshInstance3D" parent="."]
+[node name="Gun" type="Node3D" parent="."]
+
+[node name="Cube" type="MeshInstance3D" parent="Gun"]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
 mesh = SubResource("ArrayMesh_6a3ml")
 skeleton = NodePath("")
 
-[node name="MuzzleFlash" type="GPUParticles3D" parent="."]
+[node name="Arm" type="MeshInstance3D" parent="Gun"]
+unique_name_in_owner = true
+transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, -0.136921, 0.139884)
+mesh = SubResource("CapsuleMesh_33bxf")
+skeleton = NodePath("../..")
+
+[node name="MuzzleFlash" type="GPUParticles3D" parent="Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.238783, -0.447912)
 emitting = false
 amount = 1
@@ -241,10 +309,6 @@ libraries = {
 autoplay = "idle"
 playback_default_blend_time = 0.05
 
-[node name="Arm" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, -0.136921, 0.139884)
-mesh = SubResource("CapsuleMesh_33bxf")
-
 [node name="DeagleAudio" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("5_rq315")
 volume_db = -30.0
@@ -255,6 +319,3 @@ max_db = -20.0
 stream = ExtResource("5_rq315")
 volume_db = -15.0
 pitch_scale = 0.75
-
-[connection signal="timeout" from="Hitmarkerlength" to="." method="_on_hitmarkerlength_timeout"]
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

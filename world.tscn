@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=14 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_rxlvp"]
 [ext_resource type="PackedScene" uid="uid://dpp36leb612fw" path="res://arena.tscn" id="1_sm485"]
@@ -24,6 +24,15 @@ bg_color = Color(0.639216, 0.117647, 0.172549, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cuny2"]
 bg_color = Color(0.223529, 0.709804, 0.27451, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mv5p7"]
+font_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_54oud"]
+bg_color = Color(0.384314, 0.384314, 0.384314, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adxas"]
+bg_color = Color(0.486275, 0.854902, 0.992157, 1)
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_rxlvp")
@@ -158,7 +167,6 @@ layout_mode = 2
 value = 11.0
 
 [node name="HUD" type="Control" parent="MultiplayerMenu"]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -202,6 +210,44 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_f6uqw")
 theme_override_styles/fill = SubResource("StyleBoxFlat_cuny2")
+value = 100.0
+show_percentage = false
+
+[node name="Ammo" type="Label" parent="MultiplayerMenu/HUD"]
+custom_minimum_size = Vector2(60, 35)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -55.0
+offset_top = -33.0
+offset_right = -15.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "9999"
+label_settings = SubResource("LabelSettings_mv5p7")
+horizontal_alignment = 2
+
+[node name="AmmoBar" type="ProgressBar" parent="MultiplayerMenu/HUD"]
+visible = false
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -137.0
+offset_top = -33.0
+offset_right = -12.0
+offset_bottom = -18.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_54oud")
+theme_override_styles/fill = SubResource("StyleBoxFlat_adxas")
 value = 100.0
 show_percentage = false
 

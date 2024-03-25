@@ -75,6 +75,11 @@ material = SubResource("StandardMaterial3D_5yqdu")
 size = Vector2(0.5, 0.5)
 orientation = 2
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gs4yj"]
+material = ExtResource("5_pscie")
+radius = 0.1
+height = 0.6
+
 [sub_resource type="Animation" id="Animation_anl2s"]
 length = 0.001
 tracks/0/type = "value"
@@ -149,7 +154,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
-length = 0.4
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -157,7 +162,7 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(-0.01, 0.4),
+"times": PackedFloat32Array(-0.01, 0.2),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0.435, 0.178, -0.356), Vector3(0.435, 0.148, -0.356)]
@@ -169,7 +174,7 @@ tracks/1/path = NodePath(".:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0.610865, 0, 0), Vector3(0, 0, 0)]
@@ -183,21 +188,23 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_gs4yj"]
-material = ExtResource("5_pscie")
-radius = 0.1
-height = 0.6
-
-[node name="PistolThree" type="Node3D"]
+[node name="PistolThree" type="Node3D" node_paths=PackedStringArray("muzzle_flash") groups=["AmmoBar", "Ranged"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_ikep0")
+muzzle_flash = NodePath("Gun/MuzzleFlash")
+default_damage = 15
+max_ammo = 10
+current_ammo = 10
+mag_type = "Laser"
 
-[node name="Cube" type="MeshInstance3D" parent="."]
+[node name="Gun" type="Node3D" parent="."]
+
+[node name="Cube" type="MeshInstance3D" parent="Gun"]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
 mesh = SubResource("ArrayMesh_vhbjr")
 skeleton = NodePath("")
 
-[node name="MuzzleFlash" type="GPUParticles3D" parent="."]
+[node name="MuzzleFlash" type="GPUParticles3D" parent="Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.238783, -0.447912)
 emitting = false
 amount = 1
@@ -206,6 +213,12 @@ one_shot = true
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_0uxsu")
 draw_pass_1 = SubResource("PlaneMesh_qr5g0")
+
+[node name="Arm" type="MeshInstance3D" parent="Gun"]
+unique_name_in_owner = true
+transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, -0.136921, 0.139884)
+mesh = SubResource("CapsuleMesh_gs4yj")
+skeleton = NodePath("../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -237,17 +250,15 @@ stream = ExtResource("4_in4s8")
 volume_db = -10.0
 
 [node name="Hitmarkerlength" type="Timer" parent="."]
-wait_time = 0.15
+wait_time = 0.1
 one_shot = true
 
 [node name="SlowTimer" type="Timer" parent="."]
 wait_time = 2.5
 one_shot = true
 
-[node name="Arm" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, -0.136921, 0.139884)
-mesh = SubResource("CapsuleMesh_gs4yj")
+[node name="FreezeRegenTimer" type="Timer" parent="."]
+wait_time = 3.0
 
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
-[connection signal="timeout" from="Hitmarkerlength" to="." method="_on_hitmarkerlength_timeout"]
 [connection signal="timeout" from="SlowTimer" to="." method="_on_slow_timer_timeout"]
+[connection signal="timeout" from="FreezeRegenTimer" to="." method="_on_freeze_regen_timer_timeout"]

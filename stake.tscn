@@ -213,6 +213,10 @@ size = Vector3(0.5, 0.5, 2.00049)
 [node name="Stake" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_2cfut")
+default_damage = 50
+max_ammo = 1
+default_player_speed = 9.5
+current_ammo = 1
 
 [node name="StakeElements" type="Node3D" parent="."]
 transform = Transform3D(0.035, 0, 0, 0, 0.035, 0, 0, 0, 0.035, 0, 0, 0)
@@ -223,6 +227,7 @@ mesh = SubResource("ArrayMesh_hpnm1")
 skeleton = NodePath("")
 
 [node name="Arm" type="MeshInstance3D" parent="StakeElements"]
+unique_name_in_owner = true
 transform = Transform3D(28.4627, -2.49016, 0, 1.24508, 14.2313, 24.7436, -2.15655, -24.6494, 14.2857, 0.66123, -3.50801, 5.38626)
 mesh = SubResource("CapsuleMesh_2u6ly")
 skeleton = NodePath("../..")
@@ -270,6 +275,3 @@ script = ExtResource("5_irixa")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0924071)
 shape = SubResource("BoxShape3D_da14s")
 disabled = true
-
-[connection signal="timeout" from="Hitmarkerlength" to="." method="_on_hitmarkerlength_timeout"]
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

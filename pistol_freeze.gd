@@ -1,19 +1,7 @@
-extends Node3D
+extends Weapon
 
-@onready var audio_player : AudioStreamPlayer = $AudioStreamPlayer
+@onready var freeze_regen_timer = $FreezeRegenTimer
 
-@onready var animation_player = $AnimationPlayer
-@onready var muzzle_flash = $MuzzleFlash
-@onready var hitmarker = $Hitmarker
-@onready var hitmarker_timer = $Hitmarkerlength
-@onready var arm = $Arm
-
-@onready var raycast = $"../Camera3D/RayCast3D"
-
-@onready var level_scene = get_tree().current_scene
-@onready var player = get_parent().get_parent()
-
-var damage = 10
 var freeze_damage = 20
 
 var hit_player = {}
@@ -26,24 +14,28 @@ var player_died = false
 
 var current_health
 
-func _ready():
-	player.default_speed = 5.5
-	player.change_speed_and_jump()
+var freeze_regen = false
+
+var frozen = false
 
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():
 		return
 	
-	if Input.is_action_just_pressed("shoot") and animation_player.current_animation != "shoot":
-		play_shoot_effects.rpc()
+	if Input.is_action_just_pressed("shoot") and animation_player.current_animation != "shoot" and ammo_bar.value > 0:
+		play_shoot_effects()
+		ammo_bar.value -= 10
+		freeze_regen = false
+		freeze_regen_timer.stop()
+		freeze_regen_timer.start()
 		
 		if raycast.is_colliding():
 			var collider = raycast.get_collider()
 			if collider.is_in_group("Hurtbox"):
-				play_local_shoot_effects()
-				audio_player.play()
-				collider.handle_damage_collision(damage)
-				current_health = collider.owner.health_component.current_health - damage
+				on_hit_effect()
+				collider.handle_damage_collision(current_damage)
+				
+				current_health = collider.owner.health_component.current_health - current_damage
 				
 				if !hit_player.has(collider):
 					hit_player[collider] = {
@@ -51,11 +43,15 @@ func _unhandled_input(_event):
 						"HitsTaken": 0
 					}
 				
-				if current_health > 0:
+				if current_health > 0 and !frozen:
 					store_freeze_information(collider)
 				else:
 					hit_player[collider].HitsTaken = 0
-				
+
+
+func _process(delta):
+	if freeze_regen and ammo_bar.value != ammo_bar.max_value:
+		ammo_bar.value += 15 * delta
 
 
 @rpc ("any_peer")
@@ -64,6 +60,8 @@ func store_freeze_information(collider):
 	
 	if hit_player[collider].HitsTaken == 3:
 		hit_player[collider].HitsTaken = 0
+		
+		frozen = true
 		
 		var old_collider_speed
 		if old_collider_speed != slow_speed:
@@ -74,46 +72,17 @@ func store_freeze_information(collider):
 		collider.handle_damage_collision(freeze_damage)
 		current_health = collider.owner.health_component.current_health - freeze_damage
 		
-		if current_health - damage > 0:
+		if current_health - current_damage > 0:
 			collider.handle_speed_collision(slow_speed, jump_height)
 			$SlowTimer.start()
 			await $SlowTimer.timeout
 			if !collider == null:
 				collider.handle_speed_collision(old_collider_speed)
+				frozen = false
 		else:
 			$SlowTimer.stop()
-	
-	
-
-func _physics_process(_delta):
-	if !player.is_multiplayer_authority():
-		return
-	
-	if !animation_player.current_animation == "shoot":
-		if player.input_dir != Vector2.ZERO and player.is_on_floor():
-			_play_animation.rpc("move")
-		else:
-			_play_animation.rpc("idle")
+			frozen = false
 
 
-@rpc ("call_local", "any_peer")
-func play_shoot_effects():
-	animation_player.stop()
-	animation_player.play("shoot")
-	muzzle_flash.restart()
-	muzzle_flash.emitting = true
-	
-	#level_scene.spawn_bullet(bullet_scene, bullet_spawn_location, owner)
-
-@rpc ("call_local", "any_peer")
-func _play_animation(animation_string):
-	animation_player.play(animation_string)
-
-
-func play_local_shoot_effects():
-	hitmarker.show()
-	hitmarker_timer.start()
-
-
-func _on_hitmarkerlength_timeout():
-	hitmarker.hide()
+func _on_freeze_regen_timer_timeout():
+	freeze_regen = true
