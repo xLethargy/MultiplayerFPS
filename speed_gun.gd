@@ -21,9 +21,9 @@ func _unhandled_input(_event):
 				
 				handle_speed_gun_variables.rpc()
 			else:
-				reset_stat_gun(false)
+				reset_stat_gun.rpc(false)
 		else:
-			reset_stat_gun(false)
+			reset_stat_gun.rpc(false)
 		
 		recoil = true
 		await get_tree().create_timer(0.1).timeout

@@ -45,6 +45,7 @@ var recoil = false
 @export var recoil_amount : float = 1
 
 var tracer_timer : Timer
+var aiming = false
 
 func _ready():
 	await get_tree().create_timer(0.1).timeout
@@ -83,10 +84,11 @@ func _physics_process(delta):
 	if !player.is_multiplayer_authority():
 		return
 	
-	if !animation_player.current_animation == "shoot" and !animation_player.current_animation == "reload":
-		if player.input_dir != Vector2.ZERO and player.is_on_floor():
+	if !animation_player.current_animation == "shoot" and !animation_player.current_animation == "reload" and !animation_player.current_animation == "aiming":
+		
+		if player.input_dir != Vector2.ZERO and player.is_on_floor() and !aiming:
 			_play_animation.rpc("move")
-		elif player.input_dir == Vector2.ZERO:
+		elif player.input_dir == Vector2.ZERO and !aiming:
 			_play_animation.rpc("idle")
 	
 	if recoil:
@@ -110,7 +112,9 @@ func play_shoot_effects():
 	if local_gun_audio != null:
 		local_gun_audio.play()
 	
-	animation_player.stop()
+	print (animation_player.current_animation)
+	if animation_player.current_animation != "aiming":
+		animation_player.stop()
 	animation_player.play("shoot")
 	
 	if is_in_group("Ranged"):
@@ -120,10 +124,15 @@ func play_shoot_effects():
 		queued_reload = false
 		ammo_counter.text = str(current_ammo)
 
+
 @rpc ("call_local", "any_peer", "reliable")
 func _play_animation(animation_string):
 	animation_player.play(animation_string)
 
+
+@rpc ("any_peer", "reliable")
+func _play_ads_animation(animation_string):
+	animation_player.play(animation_string)
 
 @rpc ("any_peer")
 func play_spatial_audio():
@@ -165,6 +174,7 @@ func _on_animation_player_animation_finished(anim_name):
 		_play_animation.rpc("reload")
 
 
+@rpc ("call_local", "any_peer")
 func reset_stat_gun(reset_ammo = true):
 	player.change_speed_and_jump()
 	current_animation_speed = default_animation_speed

@@ -1,31 +1,34 @@
 extends Weapon
 
 @onready var tracer_spawn = $WeaponSway/TracerSpawn
+@onready var gun = $WeaponSway/AllMesh/Gun
 @export var bullet_tracer_scene : PackedScene
-
-
-var aiming = false
-
-signal create_tracer(pos, rot)
 
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():
 		return
 	
-	if Input.is_action_just_pressed("right_click") and current_ammo > 0:
+	if Input.is_action_just_pressed("right_click") and current_ammo > 0 and !aiming:
 		aiming = true
 		hud.sniper_ads.show()
 		hud.healthbar.hide()
+		_play_ads_animation.rpc("aiming")
 		self.hide()
+		tracer_spawn.position = Vector3(-0.435, 0.234, -0.389)
 		player.camera.fov = 30
 		
 		player.change_speed_and_jump(2)
-	elif Input.is_action_just_released("right_click") or current_ammo == 0:
+	if (Input.is_action_just_released("right_click") or current_ammo == 0) and aiming:
 		aiming = false
 		hud.sniper_ads.hide()
 		hud.healthbar.show()
+		
+		tracer_spawn.position = Vector3(0, 0.234, -0.389)
+		
 		self.show()
+		_play_ads_animation.rpc("RESET")
 		player.camera.fov = 90
+		
 		
 		player.change_speed_and_jump()
 	
@@ -39,6 +42,7 @@ func _unhandled_input(_event):
 		elif aiming:
 			raycast.target_position = Vector3(0, 0, -50)
 		
+		print("play shoot effects")
 		play_shoot_effects()
 		play_spatial_audio.rpc()
 		

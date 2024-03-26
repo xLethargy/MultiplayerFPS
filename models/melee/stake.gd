@@ -1,9 +1,18 @@
 extends Weapon
 
+@onready var dash_cooldown_timer = $DashCooldown
+
 var charging = false
 var charge_attack = false
+var can_dash = true
 
-var count = 0
+var count = 10
+
+
+func _process(delta):
+	if charging:
+		count += delta * 3
+
 
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():
@@ -13,13 +22,26 @@ func _unhandled_input(_event):
 		play_shoot_effects()
 		play_spatial_audio.rpc()
 	
-	if Input.is_action_just_pressed("right_click"):
-		charging = true
-	elif Input.is_action_just_released("right_click"):
-		charging = false
-		var target_position = Vector3(player.global_position.x + 10, player.global_position.y + 5, player.global_position.z + 10)
-		#target_position.y = player.global_position.y + 5
-		var tween = create_tween()
-		tween.set_parallel(true)
-		tween.tween_property(player, "position", target_position, 1)
-		#player.animation_player.play("charge")
+	if can_dash:
+		if Input.is_action_just_pressed("right_click"):
+			charging = true
+			player.charging_dash = true
+		elif Input.is_action_just_released("right_click") and !player.in_dash and charging:
+			can_dash = false
+			charging = false
+			var boost_z = get_global_transform().basis.z * count
+			boost_z.y = -15
+			
+			player.charging_dash = false
+			player.in_air = true
+			player.in_dash = true
+			player.current_gravity *= 2
+			player.in_air_timer.start()
+			player.velocity = -boost_z
+			
+			dash_cooldown_timer.start()
+			count = 10
+
+
+func _on_dash_cooldown_timeout():
+	can_dash = true

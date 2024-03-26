@@ -264,3 +264,9 @@ script = ExtResource("5_irixa")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0924071)
 shape = SubResource("BoxShape3D_da14s")
 disabled = true
+
+[node name="DashCooldown" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]

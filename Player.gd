@@ -7,6 +7,7 @@ extends CharacterBody3D
 @onready var view = $View
 @onready var mesh = $MeshInstance3D
 @onready var hurtbox = $HurtboxComponent
+@onready var in_air_timer = Timer.new()
 
 var default_speed = 6.5
 var current_speed = default_speed
@@ -20,7 +21,8 @@ var weapon_sway_amount : float = 0.01
 
 var mouse_input : Vector2
 
-var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var default_gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var current_gravity = default_gravity
 
 var input_dir
 
@@ -32,7 +34,9 @@ var current_colour = "Red"
 
 var sensitivity = 11
 
-var last_direction
+var in_dash = false
+var in_air = false
+var charging_dash = false
 
 func _ready():
 	if !is_multiplayer_authority():
@@ -43,6 +47,10 @@ func _ready():
 	var id = multiplayer.get_unique_id()
 	if Global.players.has(id):
 		sensitivity = Global.players[id].Sensitivity
+	
+	in_air_timer.wait_time = 0.3
+	in_air_timer.connect("timeout", _on_in_air_timer_timeout)
+	add_child(in_air_timer, true)
 
 
 func _enter_tree():
@@ -65,22 +73,26 @@ func _physics_process(delta):
 		return
 	
 	if not is_on_floor():
-		velocity.y -= gravity * delta
+		print (current_gravity)
+		velocity.y -= current_gravity * delta
 	
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor() and !charging_dash:
 		velocity.y = current_jump_velocity
 	
 	
 	
 	input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if direction:
-		last_direction = direction
-		velocity.x = direction.x * current_speed
-		velocity.z = direction.z * current_speed
-	else:
-		velocity.x = move_toward(velocity.x, 0, current_speed)
-		velocity.z = move_toward(velocity.z, 0, current_speed)
+	if !in_dash:
+		if direction and !charging_dash:
+			velocity.x = direction.x * current_speed
+			velocity.z = direction.z * current_speed
+		else:
+			velocity.x = move_toward(velocity.x, 0, current_speed)
+			velocity.z = move_toward(velocity.z, 0, current_speed)
+	elif in_dash and !in_air and is_on_floor():
+		in_dash = false
+		current_gravity = default_gravity
 	
 	if !frozen:
 		move_and_slide()
@@ -178,3 +190,7 @@ func weapon_sway(delta):
 		if weapon.weapon_sway_node:
 			weapon.weapon_sway_node.rotation.x = lerp(weapon.weapon_sway_node.rotation.x, mouse_input.y * weapon_sway_amount, 10 * delta)
 			weapon.weapon_sway_node.rotation.y = lerp(weapon.weapon_sway_node.rotation.y, mouse_input.x * weapon_sway_amount, 10 * delta)
+
+
+func _on_in_air_timer_timeout():
+	in_air = false
