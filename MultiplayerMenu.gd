@@ -18,8 +18,6 @@ var speed_gun = preload("res://speed_gun.tscn")
 var stake = preload("res://stake.tscn")
 var sniper = preload("res://db_sniper.tscn")
 
-var player_sensitivity = 11
-
 var team_setter = 0
 var teams = Global.teams
 
@@ -92,20 +90,24 @@ func connection_failed():
 	print ("connection failed")
 
 @rpc("any_peer")
-func send_player_information(given_name, id, weapon_class = ""):
+func send_player_information(given_name, id, weapon_class = "", team = team_setter, score = 0, player_sensitivity = 11):
 	team_setter = (team_setter % teams) + 1
+	if given_name == "":
+		given_name = str(id)
+	
 	if !Global.players.has(id):
 		Global.players[id] = {
 			"Name": given_name,
 			"ID": id,
 			"Class": weapon_class,
 			"Team": team_setter,
-			"Sensitivity": player_sensitivity
+			"Sensitivity": player_sensitivity,
+			"Score": score
 		}
 	
 	if multiplayer.is_server():
 		for i in Global.players:
-			send_player_information.rpc(Global.players[i].Name, i)
+			send_player_information.rpc(Global.players[i].Name, i, Global.players[i].Class, Global.players[i].Team, Global.players[i].Score, Global.players[i].Sensitivity)
 
 
 func upnp_setup():
@@ -199,6 +201,6 @@ func update_class(id, weapon_class):
 func _on_sens_slider_value_changed(value):
 	var id = multiplayer.get_unique_id()
 	sensitivity.text = str(value)
-	player_sensitivity = value
+	var player_sensitivity = value
 	if Global.players.has(id):
 		Global.players[id].Sensitivity = player_sensitivity

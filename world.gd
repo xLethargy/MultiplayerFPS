@@ -13,6 +13,9 @@ var sniper = preload("res://db_sniper.tscn")
 
 var bullet_tracer_scene = preload("res://bullet_tracer.tscn")
 
+var player_score_label = preload("res://player_score.tscn")
+@onready var player_labels = $MultiplayerMenu/Score/PlayerLabels
+
 @onready var hud = $MultiplayerMenu/HUD
 @onready var main_menu = $MultiplayerMenu/MainMenuScreen
 
@@ -75,8 +78,10 @@ func _on_multiplayer_menu_add_player():
 					"Sniper":
 						player_class = sniper.instantiate()
 				
+				
 				if player.is_multiplayer_authority():
 					player.health_component.connect("change_health", update_health_bar)
+					_add_score_label(Global.players[i].Name, Global.players[i].Score, Global.players[i].ID)
 					_add_weapon_class(player)
 				update_health_bar(player.health_component.current_health)
 				
@@ -122,12 +127,16 @@ func _on_multiplayer_spawner_spawned(node):
 				"Sniper":
 					player_class = sniper.instantiate()
 			
+			
 			if node.is_multiplayer_authority():
 				_add_weapon_class(node)
 			
+			
+			_add_score_label.rpc(Global.players[id].Name, Global.players[id].Score, Global.players[id].ID)
 		for i in Global.players:
 			player = get_node_or_null(str(Global.players[i].ID))
 			if player != null:
+				_add_score_label(Global.players[i].Name, Global.players[i].Score, Global.players[i].ID)
 				if player.name == "1":
 					match Global.players[i].Team:
 						1:
@@ -139,6 +148,7 @@ func _on_multiplayer_spawner_spawned(node):
 						4:
 							player.change_material.rpc("Yellow")
 				else:
+					
 					match Global.players[i].Team:
 						1:
 							player.change_material(player.current_colour)
@@ -154,3 +164,11 @@ func _add_weapon_class(player_node):
 	player_class.name = "item" + str(randf_range(0, 10))
 	player_node.view.add_child(player_class, true)
 	player_node.weapon = player_class
+
+
+@rpc("any_peer", "reliable")
+func _add_score_label(name, score, id):
+	var player_label = player_score_label.instantiate()
+	player_label.name = str(id)
+	player_label.text = name + ": " + str(score)
+	player_labels.add_child(player_label, true)

@@ -374,8 +374,10 @@ stream = ExtResource("4_1246g")
 volume_db = -30.0
 unit_size = 25.0
 max_db = -20.0
+max_polyphony = 8
 
 [node name="LocalRevolverAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_1246g")
 volume_db = -15.0
 pitch_scale = 0.75
+max_polyphony = 8

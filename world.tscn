@@ -268,9 +268,23 @@ grow_vertical = 2
 texture = ExtResource("6_51bju")
 expand_mode = 2
 
+[node name="Score" type="Control" parent="MultiplayerMenu"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayerLabels" type="VBoxContainer" parent="MultiplayerMenu/Score"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
 spawn_path = NodePath("..")
+
+[node name="MultiplayerSpawner2" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("../MultiplayerMenu/Score/PlayerLabels")
 
 [connection signal="add_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_add_player"]
 [connection signal="remove_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_remove_player"]

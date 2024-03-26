@@ -73,7 +73,6 @@ func _physics_process(delta):
 		return
 	
 	if not is_on_floor():
-		print (current_gravity)
 		velocity.y -= current_gravity * delta
 	
 	if Input.is_action_just_pressed("jump") and is_on_floor() and !charging_dash:
@@ -140,6 +139,8 @@ func change_material(material, want_timer = true):
 		mesh.set_surface_override_material(0, blue)
 		if weapon != null:
 			weapon.arm.set_surface_override_material(0, blue)
+			if weapon.arm_two != null:
+				weapon.arm_two.set_surface_override_material(0, blue)
 		current_colour = "Blue"
 		change_layers.rpc()
 	elif material == "Red":
@@ -147,6 +148,8 @@ func change_material(material, want_timer = true):
 		mesh.set_surface_override_material(0, red)
 		if weapon != null:
 			weapon.arm.set_surface_override_material(0, red)
+			if weapon.arm_two != null:
+				weapon.arm_two.set_surface_override_material(0, red)
 		change_layers.rpc()
 		current_colour = "Red"
 	elif material == "Green":
@@ -154,6 +157,8 @@ func change_material(material, want_timer = true):
 		mesh.set_surface_override_material(0, green)
 		if weapon != null:
 			weapon.arm.set_surface_override_material(0, green)
+			if weapon.arm_two != null:
+				weapon.arm_two.set_surface_override_material(0, green)
 		change_layers.rpc()
 		current_colour = "Green"
 	elif material == "Yellow":
@@ -161,6 +166,8 @@ func change_material(material, want_timer = true):
 		mesh.set_surface_override_material(0, yellow)
 		if weapon != null:
 			weapon.arm.set_surface_override_material(0, yellow)
+			if weapon.arm_two != null:
+				weapon.arm_two.set_surface_override_material(0, yellow)
 		change_layers.rpc()
 		current_colour = "Yellow"
 

@@ -14,8 +14,8 @@ func _unhandled_input(_event):
 		hud.healthbar.hide()
 		_play_ads_animation.rpc("aiming")
 		self.hide()
-		tracer_spawn.position = Vector3(-0.435, 0.234, -0.389)
-		player.camera.fov = 30
+		tracer_spawn.position = Vector3(-0.435, 0.162, -0.394)
+		player.camera.fov = 20
 		
 		player.change_speed_and_jump(2)
 	if (Input.is_action_just_released("right_click") or current_ammo == 0) and aiming:
@@ -23,12 +23,11 @@ func _unhandled_input(_event):
 		hud.sniper_ads.hide()
 		hud.healthbar.show()
 		
-		tracer_spawn.position = Vector3(0, 0.234, -0.389)
+		tracer_spawn.position = Vector3(0, 0.162, -0.394)
 		
 		self.show()
 		_play_ads_animation.rpc("RESET")
 		player.camera.fov = 90
-		
 		
 		player.change_speed_and_jump()
 	
@@ -42,7 +41,6 @@ func _unhandled_input(_event):
 		elif aiming:
 			raycast.target_position = Vector3(0, 0, -50)
 		
-		print("play shoot effects")
 		play_shoot_effects()
 		play_spatial_audio.rpc()
 		

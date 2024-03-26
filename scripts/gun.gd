@@ -8,6 +8,7 @@ extends Node3D
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
 @onready var arm = %Arm
+@onready var arm_two = get_node_or_null("WeaponSway/AllMesh/Pivot2/Arm2")
 @export var gun_audio : AudioStreamPlayer3D
 @export var local_gun_audio : AudioStreamPlayer
 
@@ -112,7 +113,6 @@ func play_shoot_effects():
 	if local_gun_audio != null:
 		local_gun_audio.play()
 	
-	print (animation_player.current_animation)
 	if animation_player.current_animation != "aiming":
 		animation_player.stop()
 	animation_player.play("shoot")
