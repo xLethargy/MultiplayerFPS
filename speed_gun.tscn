@@ -134,7 +134,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("WeaponSway/Gun:position")
+tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -146,7 +146,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("WeaponSway/Gun:rotation")
+tracks/2/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -158,7 +158,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("WeaponSway/Pivot:rotation")
+tracks/3/path = NodePath("WeaponSway/AllMesh/Pivot:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -175,7 +175,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("WeaponSway:position")
+tracks/0/path = NodePath("WeaponSway/AllMesh:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -187,7 +187,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("WeaponSway:rotation")
+tracks/1/path = NodePath("WeaponSway/AllMesh:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -219,7 +219,7 @@ length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("WeaponSway/Gun:position")
+tracks/0/path = NodePath("WeaponSway/AllMesh/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -231,7 +231,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("WeaponSway/Gun:rotation")
+tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -247,7 +247,7 @@ length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("WeaponSway/Gun:position")
+tracks/0/path = NodePath("WeaponSway/AllMesh/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -259,7 +259,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("WeaponSway/Gun:rotation")
+tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -271,7 +271,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("WeaponSway/Pivot:rotation")
+tracks/2/path = NodePath("WeaponSway/AllMesh/Pivot:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -293,7 +293,7 @@ _data = {
 [node name="SpeedGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoCounter", "DeathReset", "Ranged"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_sou6r")
-muzzle_flash = NodePath("WeaponSway/Gun/MuzzleFlash")
+muzzle_flash = NodePath("WeaponSway/AllMesh/Gun/MuzzleFlash")
 gun_audio = NodePath("RevolverAudio")
 local_gun_audio = NodePath("LocalRevolverAudio")
 weapon_sway_node = NodePath("WeaponSway")
@@ -307,14 +307,16 @@ recoil_amount = 0.6
 
 [node name="WeaponSway" type="Node3D" parent="."]
 
-[node name="Gun" type="Node3D" parent="WeaponSway"]
+[node name="AllMesh" type="Node3D" parent="WeaponSway"]
 
-[node name="Cube" type="MeshInstance3D" parent="WeaponSway/Gun"]
+[node name="Gun" type="Node3D" parent="WeaponSway/AllMesh"]
+
+[node name="Cube" type="MeshInstance3D" parent="WeaponSway/AllMesh/Gun"]
 transform = Transform3D(-1.31134e-08, 0, -0.132, 0, 0.132, 0, 0.3, 0, -5.7699e-09, 0, 0.08, -0.27)
 mesh = SubResource("ArrayMesh_5rsq2")
 skeleton = NodePath("")
 
-[node name="MuzzleFlash" type="GPUParticles3D" parent="WeaponSway/Gun"]
+[node name="MuzzleFlash" type="GPUParticles3D" parent="WeaponSway/AllMesh/Gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.193751, -0.587213)
 emitting = false
 amount = 1
@@ -324,14 +326,14 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_hngsa")
 draw_pass_1 = SubResource("PlaneMesh_bruoh")
 
-[node name="Pivot" type="Node3D" parent="WeaponSway"]
+[node name="Pivot" type="Node3D" parent="WeaponSway/AllMesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.267588, 0.30705)
 
-[node name="Arm" type="MeshInstance3D" parent="WeaponSway/Pivot"]
+[node name="Arm" type="MeshInstance3D" parent="WeaponSway/AllMesh/Pivot"]
 unique_name_in_owner = true
 transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, 0.120736, -0.167182)
 mesh = SubResource("CapsuleMesh_5hto8")
-skeleton = NodePath("../../..")
+skeleton = NodePath("../../../..")
 
 [node name="Hitmarker" type="TextureRect" parent="."]
 visible = false

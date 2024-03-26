@@ -1,5 +1,6 @@
 extends CharacterBody3D
 
+@onready var animation_player = $AnimationPlayer
 @onready var health_component = $HealthComponent
 @onready var shoot_component = $ShootComponent
 @onready var camera = $View/Camera3D
@@ -12,10 +13,10 @@ var current_speed = default_speed
 var default_jump_velocity = 6.5
 var current_jump_velocity = default_jump_velocity
 
-var player_rotation_amount = 0.05
-var weapon_rotation_amount = 0.5
+var player_rotation_amount = 0
+var weapon_rotation_amount = 0.25
 
-@export var weapon_sway_amount : float = 0.01
+var weapon_sway_amount : float = 0.01
 
 var mouse_input : Vector2
 
@@ -30,6 +31,8 @@ var frozen = false
 var current_colour = "Red"
 
 var sensitivity = 11
+
+var last_direction
 
 func _ready():
 	if !is_multiplayer_authority():
@@ -72,6 +75,7 @@ func _physics_process(delta):
 	input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
+		last_direction = direction
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
 	else:

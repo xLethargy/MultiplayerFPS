@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=3 uid="uid://c4m1k72wuemul"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gtggc"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lyp7m"]
+material = SubResource("StandardMaterial3D_gtggc")
+size = Vector3(0.05, 0.05, 50)
+
+[sub_resource type="Animation" id="Animation_wv6vg"]
+resource_name = "tracer"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TracerMesh/MeshInstance3D:transparency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(2.5, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_l1in3"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nvqu0"]
+_data = {
+"RESET": SubResource("Animation_l1in3"),
+"tracer": SubResource("Animation_wv6vg")
+}
+
+[node name="Tracer" type="Node3D"]
+
+[node name="TracerMesh" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TracerMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+transparency = 1.0
+mesh = SubResource("BoxMesh_lyp7m")
+skeleton = NodePath("../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_nvqu0")
+}
+autoplay = "tracer"

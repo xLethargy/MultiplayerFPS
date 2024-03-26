@@ -1,7 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://clb40ee8wur3p"]
+[gd_scene load_steps=24 format=3 uid="uid://clb40ee8wur3p"]
 
 [ext_resource type="Script" path="res://DBSniper.gd" id="1_unx4c"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_0d1f6"]
+[ext_resource type="PackedScene" uid="uid://c4m1k72wuemul" path="res://bullet_tracer.tscn" id="2_57thw"]
 [ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://hitmarker.png" id="3_ndn2x"]
 [ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://hitmarker.wav" id="4_r75xf"]
 [ext_resource type="AudioStream" uid="uid://4x7mg7hb3117" path="res://sounds/deagle1.wav" id="5_wirde"]
@@ -237,9 +238,10 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[node name="DBSniper" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "weapon_sway_node") groups=["AmmoCounter", "NoCrosshair", "Ranged"]]
+[node name="DBSniper" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "weapon_sway_node") groups=["AmmoCounter", "NoCrosshair", "Ranged", "Sniper"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_unx4c")
+bullet_tracer_scene = ExtResource("2_57thw")
 muzzle_flash = NodePath("WeaponSway/Gun/MuzzleFlash")
 weapon_sway_node = NodePath("WeaponSway")
 default_damage = 80
@@ -251,6 +253,9 @@ weapon_rotation_amount = 0.05
 recoil_amount = 2.5
 
 [node name="WeaponSway" type="Node3D" parent="."]
+
+[node name="TracerSpawn" type="Marker3D" parent="WeaponSway"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.234024, -0.388559)
 
 [node name="Gun" type="Node3D" parent="WeaponSway"]
 

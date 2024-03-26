@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c01cfmt48npc0"]
+[gd_scene load_steps=12 format=3 uid="uid://c01cfmt48npc0"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_yahtk"]
 [ext_resource type="Script" path="res://health.gd" id="7_y81fr"]
@@ -34,6 +34,66 @@ properties/5/replication_mode = 1
 properties/6/path = NodePath("HurtboxComponent:collision_mask")
 properties/6/spawn = true
 properties/6/replication_mode = 1
+
+[sub_resource type="Animation" id="Animation_4o61v"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3l047"]
+resource_name = "charge"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 1),
+"transitions": PackedFloat32Array(2, 0.25, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 2.5, -3.5), Vector3(0, 0, -7)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(2),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a8wc5"]
+_data = {
+"RESET": SubResource("Animation_4o61v"),
+"charge": SubResource("Animation_3l047")
+}
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 collision_layer = 0
@@ -84,5 +144,10 @@ replication_config = SubResource("SceneReplicationConfig_frqxj")
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://pistol.tscn", "res://pistol_2.tscn", "res://pistol_freeze.tscn", "res://speed_gun.tscn", "res://stake.tscn", "res://db_sniper.tscn")
 spawn_path = NodePath("../View")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_a8wc5")
+}
 
 [connection signal="timeout" from="HealthComponent/HealTimer" to="HealthComponent" method="_on_heal_timer_timeout"]

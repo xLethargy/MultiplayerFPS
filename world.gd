@@ -11,6 +11,8 @@ var speed_gun = preload("res://speed_gun.tscn")
 var stake = preload("res://stake.tscn")
 var sniper = preload("res://db_sniper.tscn")
 
+var bullet_tracer_scene = preload("res://bullet_tracer.tscn")
+
 @onready var hud = $MultiplayerMenu/HUD
 @onready var main_menu = $MultiplayerMenu/MainMenuScreen
 
@@ -77,6 +79,7 @@ func _on_multiplayer_menu_add_player():
 					player.health_component.connect("change_health", update_health_bar)
 					_add_weapon_class(player)
 				update_health_bar(player.health_component.current_health)
+				
 
 
 func _on_multiplayer_menu_remove_player(peer_id):
@@ -100,6 +103,7 @@ func update_health_bar(health_value):
 func _on_multiplayer_spawner_spawned(node):
 	if node.is_multiplayer_authority():
 		node.health_component.connect("change_health", update_health_bar)
+		
 		update_health_bar(node.health_component.current_health)
 		
 		var id = str(node.name).to_int()
@@ -120,7 +124,7 @@ func _on_multiplayer_spawner_spawned(node):
 			
 			if node.is_multiplayer_authority():
 				_add_weapon_class(node)
-		
+			
 		for i in Global.players:
 			player = get_node_or_null(str(Global.players[i].ID))
 			if player != null:
@@ -144,7 +148,6 @@ func _on_multiplayer_spawner_spawned(node):
 							player.change_material(player.current_colour)
 						4:
 							player.change_material(player.current_colour)
-					
 
 
 func _add_weapon_class(player_node):

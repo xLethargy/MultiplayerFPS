@@ -9,6 +9,7 @@ extends CanvasLayer
 @onready var sensitivity_slider = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/SensSlider
 
 @onready var hud = $HUD
+@onready var level_scene = get_tree().current_scene
 
 var pistol_one = preload("res://pistol.tscn")
 var smg_gun = preload("res://pistol_2.tscn")
@@ -78,6 +79,7 @@ func peer_connected(peer_id):
 
 
 func peer_disconnected(peer_id):
+	team_setter -= 1
 	remove_player.emit(peer_id)
 
 

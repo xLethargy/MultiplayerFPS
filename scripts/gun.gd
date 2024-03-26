@@ -44,9 +44,14 @@ var queued_reload = false
 var recoil = false
 @export var recoil_amount : float = 1
 
+var tracer_timer : Timer
+
 func _ready():
 	await get_tree().create_timer(0.1).timeout
 	if player.is_multiplayer_authority():
+		
+		raycast.target_position = Vector3(0, 0, -50)
+		
 		player.default_speed = default_player_speed
 		player.change_speed_and_jump()
 		current_ammo = max_ammo
