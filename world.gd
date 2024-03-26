@@ -54,16 +54,6 @@ func _on_multiplayer_menu_add_player():
 				
 				add_child(player, true)
 				
-				match Global.players[i].Team:
-					1:
-						player.change_material.rpc("Blue")
-					2:
-						player.change_material.rpc("Red")
-					3:
-						player.change_material.rpc("Green")
-					4:
-						player.change_material.rpc("Yellow")
-				
 				match Global.players[i].Class:
 					"PistolOne":
 						player_class = pistol_one.instantiate()
@@ -77,6 +67,16 @@ func _on_multiplayer_menu_add_player():
 						player_class = stake.instantiate()
 					"Sniper":
 						player_class = sniper.instantiate()
+				
+				match Global.players[i].Team:
+					1:
+						player.change_material("Blue")
+					2:
+						player.change_material("Red")
+					3:
+						player.change_material("Green")
+					4:
+						player.change_material("Yellow")
 				
 				
 				if player.is_multiplayer_authority():
@@ -127,37 +127,36 @@ func _on_multiplayer_spawner_spawned(node):
 				"Sniper":
 					player_class = sniper.instantiate()
 			
-			
 			if node.is_multiplayer_authority():
 				_add_weapon_class(node)
 			
 			
 			_add_score_label.rpc(Global.players[id].Name, Global.players[id].Score, Global.players[id].ID)
+			match Global.players[id].Team:
+				1:
+					node.change_material.rpc("Blue")
+				2:
+					node.change_material.rpc("Red")
+				3:
+					node.change_material.rpc("Green")
+				4:
+					node.change_material.rpc("Yellow")
+			
+			
 		for i in Global.players:
 			player = get_node_or_null(str(Global.players[i].ID))
 			if player != null:
 				_add_score_label(Global.players[i].Name, Global.players[i].Score, Global.players[i].ID)
-				if player.name == "1":
-					match Global.players[i].Team:
-						1:
-							player.change_material.rpc("Blue")
-						2:
-							player.change_material.rpc("Red")
-						3:
-							player.change_material.rpc("Green")
-						4:
-							player.change_material.rpc("Yellow")
-				else:
-					
-					match Global.players[i].Team:
-						1:
-							player.change_material(player.current_colour)
-						2:
-							player.change_material(player.current_colour)
-						3:
-							player.change_material(player.current_colour)
-						4:
-							player.change_material(player.current_colour)
+				
+				match Global.players[i].Team:
+					1:
+						player.change_material("Blue")
+					2:
+						player.change_material("Red")
+					3:
+						player.change_material("Green")
+					4:
+						player.change_material("Yellow")
 
 
 func _add_weapon_class(player_node):
@@ -167,8 +166,8 @@ func _add_weapon_class(player_node):
 
 
 @rpc("any_peer", "reliable")
-func _add_score_label(name, score, id):
+func _add_score_label(given_name, score, id):
 	var player_label = player_score_label.instantiate()
 	player_label.name = str(id)
-	player_label.text = name + ": " + str(score)
+	player_label.text = given_name + ": " + str(score)
 	player_labels.add_child(player_label, true)

@@ -83,19 +83,19 @@ func peer_disconnected(peer_id):
 
 func connected_to_server():
 	print("connected to server")
-	send_player_information.rpc_id(1, name_entry.text, multiplayer.get_unique_id())
+	send_player_information.rpc_id(1, name_entry.text, multiplayer.get_unique_id(), team_setter)
 
 
 func connection_failed():
 	print ("connection failed")
 
 @rpc("any_peer")
-func send_player_information(given_name, id, weapon_class = "", team = team_setter, score = 0, player_sensitivity = 11):
-	team_setter = (team_setter % teams) + 1
+func send_player_information(given_name, id, _team = team_setter, weapon_class = "", score = 0, player_sensitivity = 11):
 	if given_name == "":
 		given_name = str(id)
 	
 	if !Global.players.has(id):
+		team_setter = (team_setter % teams) + 1
 		Global.players[id] = {
 			"Name": given_name,
 			"ID": id,
@@ -105,9 +105,10 @@ func send_player_information(given_name, id, weapon_class = "", team = team_sett
 			"Score": score
 		}
 	
+	print (Global.players)
 	if multiplayer.is_server():
 		for i in Global.players:
-			send_player_information.rpc(Global.players[i].Name, i, Global.players[i].Class, Global.players[i].Team, Global.players[i].Score, Global.players[i].Sensitivity)
+			send_player_information.rpc(Global.players[i].Name, i, Global.players[i].Team, Global.players[i].Class, Global.players[i].Score, Global.players[i].Sensitivity)
 
 
 func upnp_setup():

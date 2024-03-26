@@ -7,7 +7,7 @@ func _ready():
 	#_update_colour.rpc()
 	pass
 
-func _process(delta):
+func _process(_delta):
 	_update_score()
 
 
