@@ -184,7 +184,7 @@ func _class_selected(weapon_class, peer_id = multiplayer.get_unique_id()):
 
 func player_died():
 	var player_class = weapon_class_node.instantiate()
-	check_for_player.global_position = Vector3(0, 0, 0)
+	#check_for_player.global_position = spawn_points.get_child(0, 4).position
 	check_for_player.update_current_class(player_class)
 	check_for_player.weapon = player_class
 	check_for_player.change_speed_and_jump()

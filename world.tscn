@@ -27,7 +27,7 @@ bg_color = Color(0.639216, 0.117647, 0.172549, 1)
 bg_color = Color(0.223529, 0.709804, 0.27451, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_mv5p7"]
-font_size = 24
+font_size = 36
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_54oud"]
 bg_color = Color(0.384314, 0.384314, 0.384314, 1)
@@ -222,13 +222,13 @@ show_percentage = false
 [node name="Ammo" type="Label" parent="MultiplayerMenu/HUD"]
 custom_minimum_size = Vector2(60, 35)
 layout_mode = 1
-anchors_preset = 3
+anchors_preset = -1
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -55.0
-offset_top = -33.0
+offset_left = -75.0
+offset_top = -45.0
 offset_right = -15.0
 offset_bottom = -10.0
 grow_horizontal = 0
@@ -239,7 +239,7 @@ horizontal_alignment = 2
 
 [node name="AmmoBar" type="ProgressBar" parent="MultiplayerMenu/HUD"]
 visible = false
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -282,16 +282,18 @@ offset_bottom = 40.0
 [node name="SpawnPoints" type="Node3D" parent="."]
 
 [node name="1" type="Marker3D" parent="SpawnPoints"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 20)
 
 [node name="2" type="Marker3D" parent="SpawnPoints"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -20)
 
 [node name="3" type="Marker3D" parent="SpawnPoints"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 2, 0)
 
 [node name="4" type="Marker3D" parent="SpawnPoints"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2, 0)
+
+[node name="5" type="Marker3D" parent="SpawnPoints"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")

@@ -269,12 +269,7 @@ volume_db = -10.0
 wait_time = 0.1
 one_shot = true
 
-[node name="SlowTimer" type="Timer" parent="."]
-wait_time = 2.5
-one_shot = true
-
 [node name="FreezeRegenTimer" type="Timer" parent="."]
 wait_time = 3.0
 
-[connection signal="timeout" from="SlowTimer" to="." method="_on_slow_timer_timeout"]
 [connection signal="timeout" from="FreezeRegenTimer" to="." method="_on_freeze_regen_timer_timeout"]

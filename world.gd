@@ -21,6 +21,7 @@ var player_score_label = preload("res://player_score.tscn")
 
 @onready var timer = get_tree().create_timer(2.0)
 
+@onready var spawn_points = $SpawnPoints
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
@@ -43,8 +44,6 @@ func send_to_main_menu():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _on_multiplayer_menu_add_player():
-	#var index = 0 THIS IS FOR SPAWNING PLAYERS IN
-	
 	if multiplayer.is_server():
 		for i in Global.players:
 			player = get_node_or_null(str(Global.players[i].ID))
@@ -52,7 +51,9 @@ func _on_multiplayer_menu_add_player():
 				player = player_scene.instantiate()
 				player.name = str(Global.players[i].ID)
 				
+				
 				add_child(player, true)
+				player.position = spawn_points.get_child(randi_range(0, 4)).position
 				
 				match Global.players[i].Class:
 					"PistolOne":

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://player_score.gd" id="1_38f78"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_nhk66"]
-font_size = 24
+font_size = 36
 font_color = Color(0.941176, 0.682353, 0.917647, 1)
 
 [node name="PlayerScore" type="Label"]

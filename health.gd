@@ -1,5 +1,6 @@
 extends Node3D
 
+@onready var spawn_points = get_tree().current_scene.spawn_points
 @onready var player = owner
 @onready var heal_timer = $HealTimer
 var can_heal = false
@@ -23,7 +24,7 @@ func receive_damage(damage):
 	current_health -= damage
 	if current_health <= 0:
 		current_health = max_health
-		player.position = Vector3.ZERO
+		player.position = spawn_points.get_child(randi_range(0, 4)).position
 		player.change_speed_and_jump()
 		heal_timer.stop()
 		death.emit()

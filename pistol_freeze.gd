@@ -74,13 +74,10 @@ func store_freeze_information(collider):
 		
 		if current_health - current_damage > 0:
 			collider.handle_speed_collision(slow_speed, jump_height)
-			$SlowTimer.start()
-			await $SlowTimer.timeout
 			if !collider == null:
-				collider.handle_speed_collision(old_collider_speed)
+				collider.handle_speed_collision(old_collider_speed, collider.player.default_jump_velocity, true)
 				frozen = false
 		else:
-			$SlowTimer.stop()
 			frozen = false
 
 

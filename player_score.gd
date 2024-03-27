@@ -4,7 +4,7 @@ var score = 0
 @onready var id = name.to_int()
 
 func _ready():
-	#_update_colour.rpc()
+	#_update_colour()
 	pass
 
 func _process(_delta):

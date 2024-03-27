@@ -6,12 +6,12 @@ var charging = false
 var charge_attack = false
 var can_dash = true
 
-var count = 10
+var count = 15
 
 
 func _process(delta):
 	if charging:
-		count += delta * 3
+		count += delta * 5
 
 
 func _unhandled_input(_event):
@@ -40,7 +40,7 @@ func _unhandled_input(_event):
 			player.velocity = -boost_z
 			
 			dash_cooldown_timer.start()
-			count = 10
+			count = 15
 
 
 func _on_dash_cooldown_timeout():

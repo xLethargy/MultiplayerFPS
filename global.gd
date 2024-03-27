@@ -1,5 +1,6 @@
 extends Node
 
+@onready var screen_size = DisplayServer.screen_get_size()
 
 var players = {}
 

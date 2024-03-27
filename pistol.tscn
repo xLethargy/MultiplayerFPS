@@ -302,7 +302,7 @@ playback_default_blend_time = 0.05
 [node name="DeagleAudio" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("5_rq315")
 volume_db = -30.0
-unit_size = 25.0
+unit_size = 40.0
 max_db = -20.0
 max_polyphony = 4
 
