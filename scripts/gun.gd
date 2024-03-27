@@ -13,6 +13,7 @@ extends Node3D
 @export var local_gun_audio : AudioStreamPlayer
 
 @onready var raycast = $"../Camera3D/RayCast3D"
+var no_scope_raycast
 
 @export var weapon_sway_node : Node3D
 
@@ -79,6 +80,10 @@ func _ready():
 			crosshair.show()
 		
 		player.health_component.connect("death", reset_stat_gun)
+		
+		if self.is_in_group("Sniper"):
+			no_scope_raycast = $WeaponSway/NoScopeRaycast
+			set_collision_layers()
 
 
 func _physics_process(delta):
@@ -191,3 +196,29 @@ func reset_stat_gun(reset_ammo = true):
 		current_ammo = max_ammo
 		ammo_counter.text = str(current_ammo)
 		ammo_bar.value = ammo_bar.max_value
+
+
+#@rpc ("call_local", "any_peer", "reliable")
+func set_collision_layers():
+	await get_tree().create_timer(0.1).timeout 
+	if Global.players.has(multiplayer.get_unique_id()):
+		var id = multiplayer.get_unique_id()
+		
+		# set layer to team it is on, set raycast to all teams but itself
+		if no_scope_raycast != null:
+			if Global.players[id].Team == 1:
+				no_scope_raycast.set_collision_mask_value(3, true)
+				no_scope_raycast.set_collision_mask_value(4, true)
+				no_scope_raycast.set_collision_mask_value(5, true)
+			elif Global.players[id].Team == 2:
+				no_scope_raycast.set_collision_mask_value(2, true)
+				no_scope_raycast.set_collision_mask_value(4, true)
+				no_scope_raycast.set_collision_mask_value(5, true)
+			elif Global.players[id].Team == 3:
+				no_scope_raycast.set_collision_mask_value(2, true)
+				no_scope_raycast.set_collision_mask_value(3, true)
+				no_scope_raycast.set_collision_mask_value(5, true)
+			elif Global.players[id].Team == 4:
+				no_scope_raycast.set_collision_mask_value(2, true)
+				no_scope_raycast.set_collision_mask_value(3, true)
+				no_scope_raycast.set_collision_mask_value(4, true)

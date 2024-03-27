@@ -8,6 +8,7 @@ var can_heal = false
 var max_health = 100
 @export var current_health = max_health
 
+signal flinch(damage)
 signal change_health(health_value)
 signal death
 
@@ -33,6 +34,7 @@ func receive_damage(damage):
 		heal_timer.start()
 	
 	change_health.emit(current_health)
+	flinch.emit(damage)
 
 
 func _on_heal_timer_timeout():

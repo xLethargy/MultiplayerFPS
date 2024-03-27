@@ -1,9 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=32 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_rxlvp"]
 [ext_resource type="PackedScene" uid="uid://dpp36leb612fw" path="res://arena.tscn" id="1_sm485"]
 [ext_resource type="Script" path="res://MultiplayerMenu.gd" id="3_asb1u"]
 [ext_resource type="Script" path="res://HUD.gd" id="4_3loky"]
+[ext_resource type="StyleBox" uid="uid://d0b38dfc76hfy" path="res://ui/redwarning.tres" id="4_h4lil"]
+[ext_resource type="Script" path="res://WarningPrompt.gd" id="5_hhjua"]
 [ext_resource type="Texture2D" uid="uid://belxpkhe22pnq" path="res://addons/kenney_particle_pack/circle_05.png" id="5_osqmr"]
 [ext_resource type="Texture2D" uid="uid://djocoyt5s36bk" path="res://images/sniperADS.png" id="6_51bju"]
 
@@ -19,6 +21,51 @@ background_mode = 2
 sky = SubResource("Sky_m6tua")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="LabelSettings" id="LabelSettings_0se3p"]
+font_size = 24
+
+[sub_resource type="Theme" id="Theme_lb84u"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_4sr3w"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_f4rxh"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_1p5i3"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_5nfux"]
+default_font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_538o8"]
+font_size = 24
+
+[sub_resource type="Theme" id="Theme_u28t4"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_qxm7d"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_7aniu"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_nsjv6"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_n1aia"]
+default_font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_ewm0o"]
+font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_3ki6q"]
+font_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e8jmi"]
+bg_color = Color(0.231373, 0.509804, 0.207843, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f6uqw"]
 bg_color = Color(0.639216, 0.117647, 0.172549, 1)
@@ -67,24 +114,25 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.607843, 0.376471, 0.301961, 1)
+color = Color(0.203922, 0.266667, 0.733333, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="MainMenu" type="PanelContainer" parent="MultiplayerMenu/MainMenuScreen"]
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.311
-anchor_top = 0.282
-anchor_right = 0.689
-anchor_bottom = 0.718
-offset_left = 0.227966
-offset_top = -0.236008
-offset_right = -0.228027
-offset_bottom = 0.235962
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu"]
-custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -96,80 +144,185 @@ theme_override_constants/margin_bottom = 15
 [node name="ServerJoiner" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 15
+alignment = 1
 
 [node name="Label" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
 layout_mode = 2
 text = "Main Menu"
+label_settings = SubResource("LabelSettings_0se3p")
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Host" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+theme = SubResource("Theme_lb84u")
 text = "Host"
 
 [node name="Join" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+theme = SubResource("Theme_4sr3w")
 text = "Join"
 
 [node name="NameEntry" type="LineEdit" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+theme = SubResource("Theme_f4rxh")
 placeholder_text = "Enter Name"
 alignment = 1
 
 [node name="AddressEntry" type="LineEdit" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+theme = SubResource("Theme_1p5i3")
 placeholder_text = "Enter Address to Join"
 alignment = 1
+
+[node name="Quit Game" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_5nfux")
+theme_override_styles/normal = ExtResource("4_h4lil")
+text = "Quit Game"
+
+[node name="TeamChooser" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Label" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser"]
+layout_mode = 2
+text = "Choose Team"
+label_settings = SubResource("LabelSettings_0se3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Host" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_lb84u")
+text = "Host"
+
+[node name="Join" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_4sr3w")
+text = "Join"
 
 [node name="ChooseClass" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 15
+alignment = 1
 
 [node name="Choose Class" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
 layout_mode = 2
 text = "Choose a Class"
+label_settings = SubResource("LabelSettings_538o8")
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Pistol One" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+theme = SubResource("Theme_u28t4")
 text = "Pistol One"
 
 [node name="SMG" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+theme = SubResource("Theme_qxm7d")
 text = "SMG"
 
 [node name="Freeze Gun" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+theme = SubResource("Theme_7aniu")
 text = "Freeze Gun"
 
 [node name="Speed Gun" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+theme = SubResource("Theme_nsjv6")
 text = "Speed Gun"
 
 [node name="Stake" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+theme = SubResource("Theme_n1aia")
 text = "Stake"
 
 [node name="Sniper" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+theme = SubResource("Theme_5nfux")
 text = "Sniper"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
-custom_minimum_size = Vector2(300, 0)
+[node name="VBoxContainer" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
 layout_mode = 2
 
-[node name="Sensitivity" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer"]
+[node name="Label" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer"]
+layout_mode = 2
+text = "Sensitivity:"
+label_settings = SubResource("LabelSettings_ewm0o")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="Sensitivity" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 text = "11"
+label_settings = SubResource("LabelSettings_3ki6q")
 vertical_alignment = 1
 
-[node name="SensSlider" type="HSlider" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer"]
-custom_minimum_size = Vector2(260, 30)
+[node name="SensSlider" type="HSlider" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(370, 30)
 layout_mode = 2
 value = 11.0
+
+[node name="Leave Match" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_5nfux")
+theme_override_styles/normal = ExtResource("4_h4lil")
+text = "Leave Match"
+
+[node name="WarningPrompt" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+script = ExtResource("5_hhjua")
+
+[node name="WarningLabel" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt"]
+layout_mode = 2
+text = "Are you sure you 
+want to leave the match?"
+label_settings = SubResource("LabelSettings_0se3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt"]
+layout_mode = 2
+alignment = 1
+
+[node name="Yes" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt/HBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme = SubResource("Theme_lb84u")
+theme_override_styles/normal = SubResource("StyleBoxFlat_e8jmi")
+text = "Yes"
+
+[node name="No" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt/HBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme = SubResource("Theme_4sr3w")
+theme_override_styles/normal = ExtResource("4_h4lil")
+text = "No"
 
 [node name="HUD" type="Control" parent="MultiplayerMenu"]
 visible = false
@@ -239,17 +392,17 @@ horizontal_alignment = 2
 
 [node name="AmmoBar" type="ProgressBar" parent="MultiplayerMenu/HUD"]
 visible = false
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(250, 30)
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -137.0
-offset_top = -33.0
-offset_right = -12.0
-offset_bottom = -18.0
+anchors_preset = -1
+anchor_left = 0.864
+anchor_top = 0.956
+anchor_right = 0.994
+anchor_bottom = 0.983
+offset_left = 124.12
+offset_top = 14.52
+offset_right = -0.47998
+offset_bottom = 0.359985
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_54oud")
@@ -306,12 +459,16 @@ spawn_path = NodePath("../MultiplayerMenu/Score/PlayerLabels")
 [connection signal="remove_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_remove_player"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Host" to="MultiplayerMenu" method="_on_host_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Join" to="MultiplayerMenu" method="_on_join_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Quit Game" to="MultiplayerMenu" method="_on_quit_game_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Pistol One" to="MultiplayerMenu" method="_on_pistol_one_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/SMG" to="MultiplayerMenu" method="_on_pistol_two_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Freeze Gun" to="MultiplayerMenu" method="_on_freeze_gun_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Speed Gun" to="MultiplayerMenu" method="_on_speed_gun_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Stake" to="MultiplayerMenu" method="_on_stake_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Sniper" to="MultiplayerMenu" method="_on_sniper_pressed"]
-[connection signal="changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_h_slider_changed"]
-[connection signal="value_changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_sens_slider_value_changed"]
+[connection signal="changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_h_slider_changed"]
+[connection signal="value_changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_sens_slider_value_changed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Leave Match" to="MultiplayerMenu" method="_on_leave_match_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt/HBoxContainer/Yes" to="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt" method="_on_yes_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt/HBoxContainer/No" to="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt" method="_on_no_pressed"]
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

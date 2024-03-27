@@ -18,6 +18,7 @@ var player_score_label = preload("res://player_score.tscn")
 
 @onready var hud = $MultiplayerMenu/HUD
 @onready var main_menu = $MultiplayerMenu/MainMenuScreen
+@onready var choose_class = $MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass
 
 @onready var timer = get_tree().create_timer(2.0)
 
@@ -27,13 +28,10 @@ func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
 		if !main_menu.visible:
 			_open_choose_class(multiplayer.get_unique_id())
-		else:
-			if multiplayer.is_server():
-				send_to_main_menu.rpc()
-				get_tree().quit()
-			else:
-				_on_multiplayer_menu_remove_player(multiplayer.get_unique_id())
-				get_tree().quit()
+		elif choose_class.visible and player != null:
+			main_menu.hide()
+			hud.show()
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 @rpc("any_peer", "reliable")

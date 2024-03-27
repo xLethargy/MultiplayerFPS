@@ -33,28 +33,19 @@ func _unhandled_input(_event):
 	
 	
 	if Input.is_action_just_pressed("shoot") and animation_player.current_animation != "shoot" and current_ammo >= 1:
-		if !aiming:
-			var random_spread_y = randf_range(-10, 10)
-			var random_spread_x = randf_range(-10, 10)
-			raycast.target_position.y = random_spread_y
-			raycast.target_position.x = random_spread_x
-		elif aiming:
-			raycast.target_position = Vector3(0, 0, -50)
-		
 		play_shoot_effects()
 		play_spatial_audio.rpc()
 		
-		await get_tree().create_timer(0.01).timeout
-		if raycast.is_colliding():
-			var collider = raycast.get_collider()
-			var collider_collision_point = raycast.get_collision_point()
-			spawn_tracer_pivot.rpc(collider_collision_point)
+		if !aiming:
+			var random_spread_y = randf_range(-7.5, 7.5)
+			var random_spread_x = randf_range(-7.5, 7.5)
+			no_scope_raycast.target_position.y = random_spread_y
+			no_scope_raycast.target_position.x = random_spread_x
+			await get_tree().create_timer(0.01).timeout
 			
-			if collider.is_in_group("Hurtbox"):
-				on_hit_effect()
-				collider.handle_damage_collision(current_damage)
-		else:
-			spawn_tracer_pivot.rpc()
+			handle_raycast(no_scope_raycast)
+		elif aiming:
+			handle_raycast(raycast)
 		
 		recoil = true
 		await get_tree().create_timer(0.1).timeout
@@ -63,6 +54,18 @@ func _unhandled_input(_event):
 	if Input.is_action_just_pressed("reload") and animation_player.current_animation != "reload" and current_ammo != max_ammo:
 		reload_weapon.rpc()
 
+
+func handle_raycast(given_raycast):
+	if given_raycast.is_colliding():
+		var collider = given_raycast.get_collider()
+		var collider_collision_point = given_raycast.get_collision_point()
+		spawn_tracer_pivot.rpc(collider_collision_point)
+		
+		if collider.is_in_group("Hurtbox"):
+			on_hit_effect()
+			collider.handle_damage_collision(current_damage)
+	else:
+		spawn_tracer_pivot.rpc()
 
 @rpc ("any_peer", "call_local", "reliable")
 func spawn_tracer_pivot(collider = null):

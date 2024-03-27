@@ -5,8 +5,9 @@ extends CanvasLayer
 @onready var choose_class = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass
 @onready var address_entry = $MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/AddressEntry
 @onready var name_entry = $MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/NameEntry
-@onready var sensitivity = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/Sensitivity
-@onready var sensitivity_slider = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/HBoxContainer/SensSlider
+@onready var sensitivity = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/Sensitivity
+@onready var sensitivity_slider = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/SensSlider
+@onready var warning_prompt = $MainMenuScreen/MainMenu/MarginContainer/WarningPrompt
 
 @onready var hud = $HUD
 @onready var level_scene = get_tree().current_scene
@@ -32,6 +33,8 @@ var weapon_class_node
 
 signal add_player
 signal remove_player
+
+signal warning_signal(menu)
 
 func _ready():
 	multiplayer.peer_connected.connect(peer_connected, multiplayer.get_unique_id())
@@ -205,3 +208,15 @@ func _on_sens_slider_value_changed(value):
 	var player_sensitivity = value
 	if Global.players.has(id):
 		Global.players[id].Sensitivity = player_sensitivity
+
+
+func _on_quit_game_pressed():
+	server_joiner.hide()
+	warning_prompt.show()
+	warning_signal.emit("ServerJoiner")
+
+
+func _on_leave_match_pressed():
+	choose_class.hide()
+	warning_prompt.show()
+	warning_signal.emit("ChooseClass")

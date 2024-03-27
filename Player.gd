@@ -38,6 +38,9 @@ var in_dash = false
 var in_air = false
 var charging_dash = false
 
+var flinch = false
+var flinch_amount
+
 func _ready():
 	if !is_multiplayer_authority():
 		return
@@ -51,7 +54,26 @@ func _ready():
 	in_air_timer.wait_time = 0.3
 	in_air_timer.connect("timeout", _on_in_air_timer_timeout)
 	add_child(in_air_timer, true)
+	
+	health_component.connect("flinch", _begin_flinch)
 
+
+func _begin_flinch(damage):
+	flinch = true
+	
+	if damage <= 10:
+		flinch_amount = 0.1
+	elif damage <= 20:
+		flinch_amount = 0.25
+	elif damage <= 40:
+		flinch_amount = 0.75
+	elif damage <= 101:
+		flinch_amount = 1.5
+	else:
+		flinch_amount = 0.1
+	
+	await get_tree().create_timer(0.1).timeout
+	flinch = false
 
 func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
@@ -96,6 +118,12 @@ func _physics_process(delta):
 		camera_tilt.rpc(input_dir.x, delta)
 		weapon_tilt.rpc(input_dir.x, delta)
 		weapon_sway.rpc(delta)
+	
+	if flinch:
+		var flinch_adjustment = view.rotation.x + flinch_amount * delta
+		if flinch_adjustment > deg_to_rad(90):
+			flinch_adjustment = deg_to_rad(90)
+		view.rotation.x = flinch_adjustment
 
 
 func change_hud_health(health_value):

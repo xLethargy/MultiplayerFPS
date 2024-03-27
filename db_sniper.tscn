@@ -642,6 +642,12 @@ recoil_amount = 2.5
 [node name="TracerSpawn" type="Marker3D" parent="WeaponSway"]
 transform = Transform3D(-1, 1.50996e-07, 1.11022e-16, -1.50969e-07, -0.999821, 0.018892, 2.85261e-09, 0.018892, 0.999821, 0, 0.162021, -1.19931)
 
+[node name="NoScopeRaycast" type="RayCast3D" parent="WeaponSway"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.162021, -1.19931)
+target_position = Vector3(0, 0, -50)
+hit_from_inside = true
+collide_with_areas = true
+
 [node name="AllMesh" type="Node3D" parent="WeaponSway"]
 
 [node name="Gun" type="Node3D" parent="WeaponSway/AllMesh"]
