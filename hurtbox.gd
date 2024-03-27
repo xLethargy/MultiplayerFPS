@@ -14,7 +14,7 @@ func _ready():
 	
 	
 
-@rpc ("call_local", "any_peer")
+@rpc ("call_local", "any_peer", "reliable")
 func set_collision_layers():
 	await get_tree().create_timer(0.1).timeout 
 	if is_multiplayer_authority():
@@ -52,7 +52,7 @@ func set_collision_layers():
 				raycast.set_collision_mask_value(4, true)
 
 
-@rpc("any_peer")
+@rpc("any_peer", "reliable")
 func handle_damage_collision(damage):
 	var id = multiplayer.get_unique_id()
 	_update_global_score.rpc(damage, id)
@@ -75,7 +75,7 @@ func _on_area_entered(area):
 		area.play_hit_effects()
 
 
-@rpc ("any_peer", "call_local")
+@rpc ("any_peer", "call_local", "reliable")
 func _update_global_score(damage, id):
 	if health_component.current_health - damage <= 0:
 		

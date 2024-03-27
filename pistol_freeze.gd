@@ -58,7 +58,7 @@ func _process(delta):
 		ammo_bar.value += 15 * delta
 
 
-@rpc ("any_peer")
+@rpc ("any_peer", "reliable")
 func store_freeze_information(collider):
 	hit_player[collider].HitsTaken += 1
 	

@@ -18,7 +18,7 @@ func _process(delta):
 			current_health = max_health
 		change_health.emit(current_health)
 
-@rpc ("any_peer")
+@rpc ("any_peer", "reliable")
 func receive_damage(damage):
 	can_heal = false
 	current_health -= damage

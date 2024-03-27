@@ -99,7 +99,7 @@ func _physics_process(delta):
 		view.rotation.x = recoil_adjustment
 
 
-@rpc ("call_local", "any_peer")
+@rpc ("call_local", "any_peer", "reliable")
 func reload_weapon():
 	if animation_player.current_animation == "shoot" and !queued_reload:
 		animation_player.queue("reload")
@@ -125,7 +125,7 @@ func play_shoot_effects():
 		ammo_counter.text = str(current_ammo)
 
 
-@rpc ("call_local", "any_peer", "reliable")
+@rpc ("call_local", "any_peer", "unreliable")
 func _play_animation(animation_string):
 	animation_player.play(animation_string)
 
@@ -134,7 +134,7 @@ func _play_animation(animation_string):
 func _play_ads_animation(animation_string):
 	animation_player.play(animation_string)
 
-@rpc ("any_peer")
+@rpc ("any_peer", "reliable")
 func play_spatial_audio():
 	if gun_audio != null:
 		gun_audio.play()
@@ -174,7 +174,7 @@ func _on_animation_player_animation_finished(anim_name):
 		_play_animation.rpc("reload")
 
 
-@rpc ("call_local", "any_peer")
+@rpc ("call_local", "any_peer", "reliable")
 func reset_stat_gun(reset_ammo = true):
 	player.change_speed_and_jump()
 	current_animation_speed = default_animation_speed
@@ -182,6 +182,10 @@ func reset_stat_gun(reset_ammo = true):
 	current_damage = default_damage
 	
 	player.camera.fov = 90
+	
+	aiming = false
+	hud.sniper_ads.hide()
+	hud.healthbar.show()
 	
 	if reset_ammo:
 		current_ammo = max_ammo

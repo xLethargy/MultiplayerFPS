@@ -34,7 +34,7 @@ func _unhandled_input(_event):
 
 
 
-@rpc ("any_peer", "call_local")
+@rpc ("any_peer", "call_local", "reliable")
 func handle_speed_gun_variables():
 	if player.current_speed < 25:
 		player.increase_speed(player_speed_increase)

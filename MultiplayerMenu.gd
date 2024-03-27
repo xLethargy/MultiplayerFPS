@@ -89,7 +89,7 @@ func connected_to_server():
 func connection_failed():
 	print ("connection failed")
 
-@rpc("any_peer")
+@rpc("any_peer", "reliable")
 func send_player_information(given_name, id, _team = team_setter, weapon_class = "", score = 0, player_sensitivity = 11):
 	if given_name == "":
 		given_name = str(id)
@@ -128,7 +128,7 @@ func upnp_setup():
 	print ("Success! Join Address: %s" % upnp.query_external_address())
 
 
-@rpc ("any_peer", "call_local")
+@rpc ("any_peer", "call_local", "reliable")
 func _server_add_player():
 	add_player.emit()
 
@@ -193,7 +193,7 @@ func player_died():
 func save_class(saved_class):
 	weapon_class_node = saved_class
 
-@rpc ("any_peer", "call_local")
+@rpc ("any_peer", "call_local", "reliable")
 func update_class(id, weapon_class):
 	if Global.players.has(id):
 		Global.players[id].Class = weapon_class

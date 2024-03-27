@@ -8,7 +8,7 @@ func _ready():
 	damage = owner.current_damage
 
 
-@rpc ("any_peer")
+@rpc ("any_peer", "reliable")
 func set_collision_layers():
 	await get_tree().create_timer(0.1).timeout 
 	if owner.player.is_multiplayer_authority():

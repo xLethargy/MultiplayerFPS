@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dpp36leb612fw"]
+[gd_scene load_steps=6 format=3 uid="uid://dpp36leb612fw"]
 
 [ext_resource type="PackedScene" uid="uid://vp87qdf4rx67" path="res://arena.glb" id="1_6227c"]
 [ext_resource type="Material" uid="uid://drxfp3qp8acgn" path="res://materials/orange.tres" id="2_b7d0w"]
 [ext_resource type="Texture2D" uid="uid://goee7adxjpdp" path="res://addons/kenney_prototype_textures/dark/texture_09.png" id="3_e5wpx"]
+[ext_resource type="PackedScene" uid="uid://1qx3r3cx6sg1" path="res://models/objects/box.tscn" id="4_btmeb"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qqx8f"]
 albedo_texture = ExtResource("3_e5wpx")
@@ -23,3 +24,6 @@ surface_material_override/8 = ExtResource("2_b7d0w")
 surface_material_override/9 = ExtResource("2_b7d0w")
 surface_material_override/10 = ExtResource("2_b7d0w")
 surface_material_override/11 = ExtResource("2_b7d0w")
+
+[node name="Box" parent="." index="1" instance=ExtResource("4_btmeb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.5, -3)

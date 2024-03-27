@@ -64,7 +64,7 @@ func _unhandled_input(_event):
 		reload_weapon.rpc()
 
 
-@rpc ("any_peer", "call_local")
+@rpc ("any_peer", "call_local", "reliable")
 func spawn_tracer_pivot(collider = null):
 	var distance = 1
 	if collider != null:

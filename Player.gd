@@ -78,8 +78,6 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump") and is_on_floor() and !charging_dash:
 		velocity.y = current_jump_velocity
 	
-	
-	
 	input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if !in_dash:
@@ -104,13 +102,13 @@ func change_hud_health(health_value):
 	$HUD/Healthbar.value = health_value
 
 
-@rpc ("any_peer", "call_local")
+@rpc ("any_peer", "call_local", "reliable")
 func change_speed_and_jump(speed_effect = default_speed, jump_height = default_jump_velocity):
 	current_speed = speed_effect
 	current_jump_velocity = jump_height
 
 
-@rpc ("call_local")
+@rpc ("call_local", "reliable")
 func increase_speed(speed_effect):
 	current_speed += speed_effect
 
@@ -172,25 +170,25 @@ func change_material(material, want_timer = true):
 		current_colour = "Yellow"
 
 
-@rpc ("call_local", "any_peer")
+@rpc ("call_local", "any_peer", "reliable")
 func change_layers():
 	if is_multiplayer_authority():
 		mesh.visible = false
 
 
-@rpc ("call_local", "any_peer")
+@rpc ("call_local", "any_peer", "unreliable")
 func camera_tilt(input_x, delta):
 	self.rotation.z = lerp(self.rotation.z, -input_x * player_rotation_amount, 5 * delta)
 
 
-@rpc ("call_local", "any_peer")
+@rpc ("call_local", "any_peer", "unreliable")
 func weapon_tilt(input_x, delta):
 	if weapon:
 		if weapon.weapon_sway_node:
 			weapon.weapon_sway_node.rotation.z = lerp(weapon.weapon_sway_node.rotation.z, -input_x * weapon_rotation_amount, 5 * delta)
 
 
-@rpc ("call_local", "any_peer")
+@rpc ("call_local", "any_peer", "unreliable")
 func weapon_sway(delta):
 	mouse_input = lerp(mouse_input, Vector2.ZERO, 10 * delta)
 	if weapon:

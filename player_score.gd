@@ -19,7 +19,7 @@ func _update_score():
 				self.text = Global.players[id].Name + ": " + str(Global.players[id].Score)
 
 
-@rpc("any_peer", "call_local")
+@rpc("any_peer", "call_local", "reliable")
 func _update_colour():
 	if Global.players.has(id):
 		if Global.players != {}:

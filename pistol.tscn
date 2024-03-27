@@ -240,6 +240,7 @@ max_ammo = 7
 current_ammo = 7
 mag_type = "Single"
 weapon_rotation_amount = 0.25
+recoil_amount = 2.5
 
 [node name="WeaponSway" type="Node3D" parent="."]
 
