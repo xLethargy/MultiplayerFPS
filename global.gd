@@ -6,4 +6,4 @@ var players = {}
 
 var game_in_progress = false
 
-var teams = 4
+var teams = 12

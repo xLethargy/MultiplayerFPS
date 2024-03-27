@@ -7,7 +7,7 @@ extends CanvasLayer
 @onready var name_entry = $MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/NameEntry
 @onready var sensitivity = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/Sensitivity
 @onready var sensitivity_slider = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/SensSlider
-@onready var warning_prompt = $MainMenuScreen/MainMenu/MarginContainer/WarningPrompt
+@onready var team_chooser = $MainMenuScreen/MainMenu/MarginContainer/TeamChooser
 
 @onready var hud = $HUD
 @onready var level_scene = get_tree().current_scene
@@ -20,13 +20,14 @@ var stake = preload("res://stake.tscn")
 var sniper = preload("res://db_sniper.tscn")
 
 var team_setter = 0
-var teams = Global.teams
 
 var death_connected = false
 
-const PORT = 9999
+var port = 9999
 
 var enet_peer
+
+var upnp
 
 var check_for_player
 var weapon_class_node
@@ -45,13 +46,16 @@ func _ready():
 
 func _on_host_pressed():
 	server_joiner.hide()
-	choose_class.show()
-	
+	team_chooser.show()
+
+func setup_server():
 	enet_peer = ENetMultiplayerPeer.new()
 	
-	var error = enet_peer.create_server(PORT)
+	var error = enet_peer.create_server(port)
 	if error != OK:
 		print ("cannot host...")
+		team_chooser.hide()
+		server_joiner.show()
 		return
 	
 	enet_peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
@@ -61,14 +65,16 @@ func _on_host_pressed():
 	upnp_setup()
 	
 	send_player_information(name_entry.text, multiplayer.get_unique_id())
-
+	
+	team_chooser.hide()
+	choose_class.show()
 
 func _on_join_pressed():
 	enet_peer = ENetMultiplayerPeer.new()
 	server_joiner.hide()
 	choose_class.show()
 	
-	enet_peer.create_client(address_entry.text, PORT)
+	enet_peer.create_client(address_entry.text, port)
 	
 	enet_peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
 	
@@ -98,7 +104,7 @@ func send_player_information(given_name, id, _team = team_setter, weapon_class =
 		given_name = str(id)
 	
 	if !Global.players.has(id):
-		team_setter = (team_setter % teams) + 1
+		team_setter = (team_setter % Global.teams) + 1
 		Global.players[id] = {
 			"Name": given_name,
 			"ID": id,
@@ -108,14 +114,18 @@ func send_player_information(given_name, id, _team = team_setter, weapon_class =
 			"Score": score
 		}
 	
-	print (Global.players)
 	if multiplayer.is_server():
 		for i in Global.players:
 			send_player_information.rpc(Global.players[i].Name, i, Global.players[i].Team, Global.players[i].Class, Global.players[i].Score, Global.players[i].Sensitivity)
+			_update_global_teams.rpc(Global.teams)
 
+
+@rpc("any_peer", "reliable")
+func _update_global_teams(value):
+	Global.teams = value
 
 func upnp_setup():
-	var upnp = UPNP.new()
+	upnp = UPNP.new()
 	
 	var discover_result = upnp.discover()
 	assert(discover_result == UPNP.UPNP_RESULT_SUCCESS, \
@@ -124,7 +134,7 @@ func upnp_setup():
 	assert(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway(), \
 		"UPNP Invalid Gateway!")
 	
-	var map_result = upnp.add_port_mapping(PORT)
+	var map_result = upnp.add_port_mapping(port)
 	assert(map_result == UPNP.UPNP_RESULT_SUCCESS, \
 		"UPNP Port Mapping Failed! Error %s" % map_result)
 	
@@ -205,18 +215,25 @@ func update_class(id, weapon_class):
 func _on_sens_slider_value_changed(value):
 	var id = multiplayer.get_unique_id()
 	sensitivity.text = str(value)
-	var player_sensitivity = value
+	var player_sensitivity : float = value
 	if Global.players.has(id):
 		Global.players[id].Sensitivity = player_sensitivity
+		var player = get_tree().current_scene.get_node_or_null(str(id))
+		if player != null:
+			player.sensitivity = player_sensitivity
+			if player_sensitivity < 6:
+				player.sens_to_sway = 2
+			elif player_sensitivity < 30:
+				player.sens_to_sway = 10
+			else:
+				player.sens_to_sway = 30
 
 
 func _on_quit_game_pressed():
 	server_joiner.hide()
-	warning_prompt.show()
 	warning_signal.emit("ServerJoiner")
 
 
 func _on_leave_match_pressed():
 	choose_class.hide()
-	warning_prompt.show()
 	warning_signal.emit("ChooseClass")

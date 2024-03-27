@@ -21,9 +21,9 @@ func _unhandled_input(_event):
 				
 				handle_speed_gun_variables.rpc()
 			else:
-				reset_stat_gun.rpc(false)
+				_half_stat_variables.rpc()
 		else:
-			reset_stat_gun.rpc(false)
+			_half_stat_variables.rpc()
 		
 		recoil = true
 		await get_tree().create_timer(0.1).timeout
@@ -56,3 +56,25 @@ func handle_speed_gun_variables():
 		if player.camera.fov > 140:
 			player.camera.fov = 140
 
+
+@rpc ("call_local", "any_peer", "reliable")
+func _half_stat_variables():
+	var halved_speed = player.current_speed - 4
+	var halved_animation_speed = current_animation_speed - 0.8
+	var halved_damage = current_damage - 4
+	var halved_fov = player.camera.fov - 8
+	
+	if halved_speed < player.default_speed:
+		halved_speed = player.default_speed
+	if halved_animation_speed < default_animation_speed:
+		halved_animation_speed = default_animation_speed
+	if halved_damage < default_damage:
+		halved_damage = default_damage
+	if halved_fov < 90:
+		halved_fov = 90
+	
+	player.change_speed_and_jump(halved_speed)
+	current_animation_speed = halved_animation_speed
+	animation_player.speed_scale = current_animation_speed
+	current_damage = halved_damage
+	player.camera.fov = halved_fov

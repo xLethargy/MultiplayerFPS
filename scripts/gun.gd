@@ -179,8 +179,12 @@ func _on_animation_player_animation_finished(anim_name):
 		_play_animation.rpc("reload")
 
 
-@rpc ("call_local", "any_peer", "reliable")
 func reset_stat_gun(reset_ammo = true):
+	reset_stat_gun_for_all.rpc(reset_ammo)
+
+
+@rpc ("call_local", "any_peer", "reliable")
+func reset_stat_gun_for_all(reset_ammo = true):
 	player.change_speed_and_jump()
 	current_animation_speed = default_animation_speed
 	animation_player.speed_scale = current_animation_speed
@@ -197,8 +201,6 @@ func reset_stat_gun(reset_ammo = true):
 		ammo_counter.text = str(current_ammo)
 		ammo_bar.value = ammo_bar.max_value
 
-
-#@rpc ("call_local", "any_peer", "reliable")
 func set_collision_layers():
 	await get_tree().create_timer(0.1).timeout 
 	if Global.players.has(multiplayer.get_unique_id()):
@@ -206,19 +208,22 @@ func set_collision_layers():
 		
 		# set layer to team it is on, set raycast to all teams but itself
 		if no_scope_raycast != null:
-			if Global.players[id].Team == 1:
-				no_scope_raycast.set_collision_mask_value(3, true)
-				no_scope_raycast.set_collision_mask_value(4, true)
-				no_scope_raycast.set_collision_mask_value(5, true)
-			elif Global.players[id].Team == 2:
+			if Global.teams != 12:
+				if Global.players[id].Team == 1:
+					no_scope_raycast.set_collision_mask_value(3, true)
+					no_scope_raycast.set_collision_mask_value(4, true)
+					no_scope_raycast.set_collision_mask_value(5, true)
+				elif Global.players[id].Team == 2:
+					no_scope_raycast.set_collision_mask_value(2, true)
+					no_scope_raycast.set_collision_mask_value(4, true)
+					no_scope_raycast.set_collision_mask_value(5, true)
+				elif Global.players[id].Team == 3:
+					no_scope_raycast.set_collision_mask_value(2, true)
+					no_scope_raycast.set_collision_mask_value(3, true)
+					no_scope_raycast.set_collision_mask_value(5, true)
+				elif Global.players[id].Team == 4:
+					no_scope_raycast.set_collision_mask_value(2, true)
+					no_scope_raycast.set_collision_mask_value(3, true)
+					no_scope_raycast.set_collision_mask_value(4, true)
+			else:
 				no_scope_raycast.set_collision_mask_value(2, true)
-				no_scope_raycast.set_collision_mask_value(4, true)
-				no_scope_raycast.set_collision_mask_value(5, true)
-			elif Global.players[id].Team == 3:
-				no_scope_raycast.set_collision_mask_value(2, true)
-				no_scope_raycast.set_collision_mask_value(3, true)
-				no_scope_raycast.set_collision_mask_value(5, true)
-			elif Global.players[id].Team == 4:
-				no_scope_raycast.set_collision_mask_value(2, true)
-				no_scope_raycast.set_collision_mask_value(3, true)
-				no_scope_raycast.set_collision_mask_value(4, true)

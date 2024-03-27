@@ -23,6 +23,7 @@ var player_score_label = preload("res://player_score.tscn")
 @onready var timer = get_tree().create_timer(2.0)
 
 @onready var spawn_points = $SpawnPoints
+var added_label = false
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
@@ -69,29 +70,42 @@ func _on_multiplayer_menu_add_player():
 				
 				match Global.players[i].Team:
 					1:
-						player.change_material("Blue")
+						player.change_material.rpc("Blue")
 					2:
-						player.change_material("Red")
+						player.change_material.rpc("Red")
 					3:
-						player.change_material("Green")
+						player.change_material.rpc("Green")
 					4:
-						player.change_material("Yellow")
+						player.change_material.rpc("Yellow")
+					_:
+						player.change_material.rpc("Pink")
 				
 				
 				if player.is_multiplayer_authority():
 					player.health_component.connect("change_health", update_health_bar)
 					_add_score_label(Global.players[i].Name, Global.players[i].Score, Global.players[i].ID)
+					_add_score_label.rpc(Global.players[i].Name, Global.players[i].Score, Global.players[i].ID)
 					_add_weapon_class(player)
 				update_health_bar(player.health_component.current_health)
 				
 
 
 func _on_multiplayer_menu_remove_player(peer_id):
-	Global.players.erase(peer_id)
+	remove_player_for_all.rpc(peer_id)
+	
+
+@rpc ("call_local", "any_peer")
+func remove_player_for_all(peer_id):
+	print (Global.players)
+	
 	player = get_node_or_null(str(peer_id))
 	if player:
 		player.queue_free()
-
+	var player_label = player_labels.get_node_or_null(str(peer_id))
+	if player_label:
+		player_label.queue_free()
+	
+	Global.players.erase(peer_id)
 
 func _open_choose_class(_peer_id):
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -140,6 +154,8 @@ func _on_multiplayer_spawner_spawned(node):
 					node.change_material.rpc("Green")
 				4:
 					node.change_material.rpc("Yellow")
+				_:
+					node.change_material.rpc("Pink")
 			
 			
 		for i in Global.players:
@@ -156,6 +172,8 @@ func _on_multiplayer_spawner_spawned(node):
 						player.change_material("Green")
 					4:
 						player.change_material("Yellow")
+					_:
+						player.change_material("Pink")
 
 
 func _add_weapon_class(player_node):
@@ -170,3 +188,4 @@ func _add_score_label(given_name, score, id):
 	player_label.name = str(id)
 	player_label.text = given_name + ": " + str(score)
 	player_labels.add_child(player_label, true)
+	added_label = true

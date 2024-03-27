@@ -22,34 +22,40 @@ func set_collision_layers():
 			var id = multiplayer.get_unique_id()
 			
 			# set layer to team it is on, set raycast to all teams but itself
-			if Global.players[id].Team == 1:
+			if Global.teams != 12:
+				if Global.players[id].Team == 1:
+					self.set_collision_layer_value(2, true)
+					self.set_collision_mask_value(2, true)
+					
+					raycast.set_collision_mask_value(3, true)
+					raycast.set_collision_mask_value(4, true)
+					raycast.set_collision_mask_value(5, true)
+				elif Global.players[id].Team == 2:
+					self.set_collision_layer_value(3, true)
+					self.set_collision_mask_value(3, true)
+					
+					raycast.set_collision_mask_value(2, true)
+					raycast.set_collision_mask_value(4, true)
+					raycast.set_collision_mask_value(5, true)
+				elif Global.players[id].Team == 3:
+					self.set_collision_layer_value(4, true)
+					self.set_collision_mask_value(4, true)
+					
+					raycast.set_collision_mask_value(2, true)
+					raycast.set_collision_mask_value(3, true)
+					raycast.set_collision_mask_value(5, true)
+				elif Global.players[id].Team == 4:
+					self.set_collision_layer_value(5, true)
+					self.set_collision_mask_value(5, true)
+					
+					raycast.set_collision_mask_value(2, true)
+					raycast.set_collision_mask_value(3, true)
+					raycast.set_collision_mask_value(4, true)
+			else:
 				self.set_collision_layer_value(2, true)
 				self.set_collision_mask_value(2, true)
 				
-				raycast.set_collision_mask_value(3, true)
-				raycast.set_collision_mask_value(4, true)
-				raycast.set_collision_mask_value(5, true)
-			elif Global.players[id].Team == 2:
-				self.set_collision_layer_value(3, true)
-				self.set_collision_mask_value(3, true)
-				
 				raycast.set_collision_mask_value(2, true)
-				raycast.set_collision_mask_value(4, true)
-				raycast.set_collision_mask_value(5, true)
-			elif Global.players[id].Team == 3:
-				self.set_collision_layer_value(4, true)
-				self.set_collision_mask_value(4, true)
-				
-				raycast.set_collision_mask_value(2, true)
-				raycast.set_collision_mask_value(3, true)
-				raycast.set_collision_mask_value(5, true)
-			elif Global.players[id].Team == 4:
-				self.set_collision_layer_value(5, true)
-				self.set_collision_mask_value(5, true)
-				
-				raycast.set_collision_mask_value(2, true)
-				raycast.set_collision_mask_value(3, true)
-				raycast.set_collision_mask_value(4, true)
 
 
 @rpc("any_peer", "reliable")

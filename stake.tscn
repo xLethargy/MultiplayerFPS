@@ -202,7 +202,7 @@ script = ExtResource("1_2cfut")
 weapon_sway_node = NodePath("WeaponSway")
 default_damage = 34
 max_ammo = 1
-default_player_speed = 8.5
+default_player_speed = 9.0
 current_ammo = 1
 
 [node name="WeaponSway" type="Node3D" parent="."]

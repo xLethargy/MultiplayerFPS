@@ -32,7 +32,8 @@ var frozen = false
 
 var current_colour = "Red"
 
-var sensitivity = 11
+var sensitivity : float = 11
+var sens_to_sway : float = 10
 
 var in_dash = false
 var in_air = false
@@ -40,6 +41,14 @@ var charging_dash = false
 
 var flinch = false
 var flinch_amount
+
+#COLOURS
+
+const BLUE = preload("res://materials/blue.tres")
+const RED = preload("res://materials/red.tres")
+const GREEN = preload("res://materials/green.tres")
+const YELLOW = preload("res://materials/yellow.tres")
+const PINK = preload("res://materials/pink.tres")
 
 func _ready():
 	if !is_multiplayer_authority():
@@ -161,41 +170,45 @@ func change_material(material, want_timer = true):
 		await get_tree().create_timer(0.1).timeout
 	weapon = view.get_child(1)
 	if material == "Blue":
-		var blue = preload("res://materials/blue.tres")
-		mesh.set_surface_override_material(0, blue)
+		mesh.set_surface_override_material(0, BLUE)
 		if weapon != null:
-			weapon.arm.set_surface_override_material(0, blue)
+			weapon.arm.set_surface_override_material(0, BLUE)
 			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, blue)
+				weapon.arm_two.set_surface_override_material(0, BLUE)
 		current_colour = "Blue"
 		change_layers.rpc()
 	elif material == "Red":
-		var red = preload("res://materials/red.tres")
-		mesh.set_surface_override_material(0, red)
+		mesh.set_surface_override_material(0, RED)
 		if weapon != null:
-			weapon.arm.set_surface_override_material(0, red)
+			weapon.arm.set_surface_override_material(0, RED)
 			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, red)
+				weapon.arm_two.set_surface_override_material(0, RED)
 		change_layers.rpc()
 		current_colour = "Red"
 	elif material == "Green":
-		var green = preload("res://materials/green.tres")
-		mesh.set_surface_override_material(0, green)
+		mesh.set_surface_override_material(0, GREEN)
 		if weapon != null:
-			weapon.arm.set_surface_override_material(0, green)
+			weapon.arm.set_surface_override_material(0, GREEN)
 			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, green)
+				weapon.arm_two.set_surface_override_material(0, GREEN)
 		change_layers.rpc()
 		current_colour = "Green"
 	elif material == "Yellow":
-		var yellow = preload("res://materials/yellow.tres")
-		mesh.set_surface_override_material(0, yellow)
+		mesh.set_surface_override_material(0, YELLOW)
 		if weapon != null:
-			weapon.arm.set_surface_override_material(0, yellow)
+			weapon.arm.set_surface_override_material(0, YELLOW)
 			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, yellow)
+				weapon.arm_two.set_surface_override_material(0, YELLOW)
 		change_layers.rpc()
 		current_colour = "Yellow"
+	else:
+		mesh.set_surface_override_material(0, PINK)
+		if weapon != null:
+			weapon.arm.set_surface_override_material(0, PINK)
+			if weapon.arm_two != null:
+				weapon.arm_two.set_surface_override_material(0, PINK)
+		change_layers.rpc()
+		current_colour = "Pink"
 
 
 @rpc ("call_local", "any_peer", "reliable")
@@ -206,23 +219,23 @@ func change_layers():
 
 @rpc ("call_local", "any_peer", "unreliable")
 func camera_tilt(input_x, delta):
-	self.rotation.z = lerp(self.rotation.z, -input_x * player_rotation_amount, 5 * delta)
+	self.rotation.z = lerp(self.rotation.z, -input_x * player_rotation_amount, sens_to_sway / 2 * delta)
 
 
 @rpc ("call_local", "any_peer", "unreliable")
 func weapon_tilt(input_x, delta):
 	if weapon:
 		if weapon.weapon_sway_node:
-			weapon.weapon_sway_node.rotation.z = lerp(weapon.weapon_sway_node.rotation.z, -input_x * weapon_rotation_amount, 5 * delta)
+			weapon.weapon_sway_node.rotation.z = lerp(weapon.weapon_sway_node.rotation.z, -input_x * weapon_rotation_amount, sens_to_sway / 2 * delta)
 
 
 @rpc ("call_local", "any_peer", "unreliable")
 func weapon_sway(delta):
-	mouse_input = lerp(mouse_input, Vector2.ZERO, 10 * delta)
+	mouse_input = lerp(mouse_input, Vector2.ZERO, sens_to_sway * delta)
 	if weapon:
 		if weapon.weapon_sway_node:
-			weapon.weapon_sway_node.rotation.x = lerp(weapon.weapon_sway_node.rotation.x, mouse_input.y * weapon_sway_amount, 10 * delta)
-			weapon.weapon_sway_node.rotation.y = lerp(weapon.weapon_sway_node.rotation.y, mouse_input.x * weapon_sway_amount, 10 * delta)
+			weapon.weapon_sway_node.rotation.x = lerp(weapon.weapon_sway_node.rotation.x, mouse_input.y * weapon_sway_amount, sens_to_sway * delta)
+			weapon.weapon_sway_node.rotation.y = lerp(weapon.weapon_sway_node.rotation.y, mouse_input.x * weapon_sway_amount, sens_to_sway * delta)
 
 
 func _on_in_air_timer_timeout():
