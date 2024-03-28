@@ -28,7 +28,6 @@ func _unhandled_input(_event):
 func handle_raycast(given_raycast):
 	if given_raycast.is_colliding():
 		var collider = given_raycast.get_collider()
-		var collider_collision_point = given_raycast.get_collision_point()
 		
 		if collider.is_in_group("Hurtbox"):
 			if collider.owner.is_in_group("Enemy"):
@@ -42,8 +41,6 @@ func handle_raycast(given_raycast):
 
 @rpc ("any_peer", "call_local", "reliable")
 func _spawn_coin():
-	var distance = 1
-	
 	var coin = coin_scene.instantiate()
 	
 	coin.position = coin_marker.global_position

@@ -37,8 +37,8 @@ func _on_yes_pressed():
 	elif last_menu == choose_class:
 		self.hide()
 		if multiplayer.is_server():
-			var upnp = multiplayer_menu.upnp
-			var port = multiplayer_menu.port
+			var _upnp = multiplayer_menu.upnp
+			var _port = multiplayer_menu.port
 			#upnp.delete_port_mapping(port)
 			get_tree().current_scene.send_to_main_menu.rpc()
 			get_tree().current_scene.send_to_main_menu()
@@ -46,7 +46,9 @@ func _on_yes_pressed():
 		else:
 			var id = multiplayer.get_unique_id()
 			multiplayer.peer_disconnected.emit(id)
-			get_tree().reload_current_scene()
+			await get_tree().create_timer(0.5).timeout
+			get_tree().quit()
+			Global.players = {}
 			#get_tree().current_scene._on_multiplayer_menu_remove_player.rpc_id(1, multiplayer.get_unique_id())
 			#get_tree().current_scene.send_to_main_menu()
 			

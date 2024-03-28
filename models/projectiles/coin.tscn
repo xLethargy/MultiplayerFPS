@@ -40,4 +40,7 @@ script = ExtResource("1_jdkf4")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent"]
 shape = SubResource("SphereShape3D_4aw83")
 
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, 50)
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

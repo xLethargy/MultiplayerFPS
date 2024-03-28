@@ -65,6 +65,7 @@ func setup_server():
 	
 	upnp_setup()
 	
+	team_setter = (team_setter % Global.teams) + 1
 	send_player_information(name_entry.text, multiplayer.get_unique_id())
 	
 	team_chooser.hide()
@@ -87,35 +88,36 @@ func peer_connected(peer_id):
 
 
 func peer_disconnected(peer_id):
-	team_setter -= 1
 	remove_player.emit(peer_id)
 
 
 func connected_to_server():
 	print("connected to server")
-	send_player_information.rpc_id(1, name_entry.text, multiplayer.get_unique_id(), team_setter)
+	send_player_information.rpc_id(1, name_entry.text, multiplayer.get_unique_id())
 
 
 func connection_failed():
 	print ("connection failed")
 
+
 @rpc("any_peer", "reliable")
-func send_player_information(given_name, id, _team = team_setter, weapon_class = "", score = 0, player_sensitivity = 11):
+func send_player_information(given_name, id, team = team_setter, weapon_class = "", score = 0, player_sensitivity = 11):
 	if given_name == "":
 		given_name = str(id)
 	
 	if !Global.players.has(id):
-		team_setter = (team_setter % Global.teams) + 1
+		print (multiplayer.get_unique_id(), " ", team_setter)
 		Global.players[id] = {
 			"Name": given_name,
 			"ID": id,
 			"Class": weapon_class,
-			"Team": team_setter,
+			"Team": team,
 			"Sensitivity": player_sensitivity,
 			"Score": score
 		}
 	
 	if multiplayer.is_server():
+		team_setter = (team_setter % Global.teams) + 1
 		for i in Global.players:
 			send_player_information.rpc(Global.players[i].Name, i, Global.players[i].Team, Global.players[i].Class, Global.players[i].Score, Global.players[i].Sensitivity)
 			_update_global_teams.rpc(Global.teams)

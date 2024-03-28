@@ -17,6 +17,7 @@ var bullet_tracer_scene = preload("res://bullet_tracer.tscn")
 var player_score_label = preload("res://player_score.tscn")
 @onready var player_labels = $MultiplayerMenu/Score/PlayerLabels
 
+@onready var multiplayer_menu = $MultiplayerMenu
 @onready var hud = $MultiplayerMenu/HUD
 @onready var main_menu = $MultiplayerMenu/MainMenuScreen
 @onready var choose_class = $MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass
@@ -30,9 +31,6 @@ func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
 		if !main_menu.visible:
 			_open_choose_class(multiplayer.get_unique_id())
-			for i in get_tree().get_nodes_in_group("Enemy"):
-				print ("player")
-				print (i)
 		elif choose_class.visible and player != null:
 			main_menu.hide()
 			hud.show()
@@ -96,11 +94,14 @@ func _on_multiplayer_menu_add_player():
 
 
 func _on_multiplayer_menu_remove_player(peer_id):
+	Global.players.erase(peer_id)
 	remove_player_for_all.rpc(peer_id)
-	
+
 
 @rpc ("call_local", "any_peer")
 func remove_player_for_all(peer_id):
+	#multiplayer_menu.team_setter -= 1
+	Global.players.erase(peer_id)
 	player = get_node_or_null(str(peer_id))
 	if player:
 		player.queue_free()
@@ -108,7 +109,7 @@ func remove_player_for_all(peer_id):
 	if player_label:
 		player_label.queue_free()
 	
-	Global.players.erase(peer_id)
+	
 
 func _open_choose_class(_peer_id):
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -201,11 +202,10 @@ func _add_score_label(given_name, score, id):
 @rpc("any_peer", "call_local", "reliable")
 func _add_to_group():
 	var current_id = multiplayer.get_unique_id()
+	print (Global.players)
 	for i in Global.players:
-		var player = get_node_or_null(str(Global.players[i].ID))
-		print (player, " ", current_id)
+		var player_in_tree = get_node_or_null(str(Global.players[i].ID))
 		if Global.players[i].Team != Global.players[current_id].Team:
-			player.add_to_group("Enemy")
+			player_in_tree.add_to_group("Enemy")
 		else:
-			player.add_to_group("Team")
-		print ("----------")
+			player_in_tree.add_to_group("Team")
