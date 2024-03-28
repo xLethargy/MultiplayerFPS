@@ -60,7 +60,6 @@ skeleton = NodePath("")
 stream = ExtResource("2_5fh3n")
 volume_db = -20.0
 max_db = -15.0
-autoplay = true
 max_distance = 10.0
 
 [connection signal="finished" from="AudioStreamPlayer3D" to="." method="_on_audio_stream_player_3d_finished"]

@@ -45,3 +45,10 @@ func _unhandled_input(_event):
 
 func _on_dash_cooldown_timeout():
 	can_dash = true
+
+
+func _on_hitbox_area_entered(area):
+	if player.is_multiplayer_authority():
+		if area.owner.is_in_group("Enemy"):
+			area.handle_damage_collision(current_damage)
+			on_hit_effect()

@@ -10,6 +10,7 @@ var freeze_gun = preload("res://pistol_freeze.tscn")
 var speed_gun = preload("res://speed_gun.tscn")
 var stake = preload("res://stake.tscn")
 var sniper = preload("res://db_sniper.tscn")
+var coin_gun = preload("res://models/guns/coin_gun.tscn")
 
 var bullet_tracer_scene = preload("res://bullet_tracer.tscn")
 
@@ -29,6 +30,9 @@ func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
 		if !main_menu.visible:
 			_open_choose_class(multiplayer.get_unique_id())
+			for i in get_tree().get_nodes_in_group("Enemy"):
+				print ("player")
+				print (i)
 		elif choose_class.visible and player != null:
 			main_menu.hide()
 			hud.show()
@@ -50,7 +54,6 @@ func _on_multiplayer_menu_add_player():
 				player = player_scene.instantiate()
 				player.name = str(Global.players[i].ID)
 				
-				
 				add_child(player, true)
 				player.position = spawn_points.get_child(randi_range(0, 4)).position
 				
@@ -67,6 +70,8 @@ func _on_multiplayer_menu_add_player():
 						player_class = stake.instantiate()
 					"Sniper":
 						player_class = sniper.instantiate()
+					"CoinGun":
+						player_class = coin_gun.instantiate()
 				
 				match Global.players[i].Team:
 					1:
@@ -80,12 +85,12 @@ func _on_multiplayer_menu_add_player():
 					_:
 						player.change_material.rpc("Pink")
 				
-				
 				if player.is_multiplayer_authority():
 					player.health_component.connect("change_health", update_health_bar)
 					_add_score_label(Global.players[i].Name, Global.players[i].Score, Global.players[i].ID)
 					_add_score_label.rpc(Global.players[i].Name, Global.players[i].Score, Global.players[i].ID)
 					_add_weapon_class(player)
+					_add_to_group()
 				update_health_bar(player.health_component.current_health)
 				
 
@@ -96,8 +101,6 @@ func _on_multiplayer_menu_remove_player(peer_id):
 
 @rpc ("call_local", "any_peer")
 func remove_player_for_all(peer_id):
-	print (Global.players)
-	
 	player = get_node_or_null(str(peer_id))
 	if player:
 		player.queue_free()
@@ -124,6 +127,8 @@ func _on_multiplayer_spawner_spawned(node):
 		
 		update_health_bar(node.health_component.current_health)
 		
+		_add_to_group.rpc()
+		
 		var id = str(node.name).to_int()
 		if Global.players.has(id):
 			match Global.players[id].Class:
@@ -139,10 +144,11 @@ func _on_multiplayer_spawner_spawned(node):
 					player_class = stake.instantiate()
 				"Sniper":
 					player_class = sniper.instantiate()
+				"CoinGun":
+					player_class = coin_gun.instantiate()
 			
 			if node.is_multiplayer_authority():
 				_add_weapon_class(node)
-			
 			
 			_add_score_label.rpc(Global.players[id].Name, Global.players[id].Score, Global.players[id].ID)
 			match Global.players[id].Team:
@@ -156,6 +162,7 @@ func _on_multiplayer_spawner_spawned(node):
 					node.change_material.rpc("Yellow")
 				_:
 					node.change_material.rpc("Pink")
+			
 			
 			
 		for i in Global.players:
@@ -189,3 +196,16 @@ func _add_score_label(given_name, score, id):
 	player_label.text = given_name + ": " + str(score)
 	player_labels.add_child(player_label, true)
 	added_label = true
+
+
+@rpc("any_peer", "call_local", "reliable")
+func _add_to_group():
+	var current_id = multiplayer.get_unique_id()
+	for i in Global.players:
+		var player = get_node_or_null(str(Global.players[i].ID))
+		print (player, " ", current_id)
+		if Global.players[i].Team != Global.players[current_id].Team:
+			player.add_to_group("Enemy")
+		else:
+			player.add_to_group("Team")
+		print ("----------")

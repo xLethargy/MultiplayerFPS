@@ -1,5 +1,6 @@
 extends Weapon
 
+@onready var no_scope_raycast = $WeaponSway/NoScopeRaycast
 @onready var tracer_spawn = $WeaponSway/TracerSpawn
 @onready var gun = $WeaponSway/AllMesh/Gun
 @export var bullet_tracer_scene : PackedScene
@@ -51,7 +52,7 @@ func _unhandled_input(_event):
 		await get_tree().create_timer(0.1).timeout
 		recoil = false
 	
-	if Input.is_action_just_pressed("reload") and animation_player.current_animation != "reload" and current_ammo != max_ammo:
+	if Input.is_action_just_pressed("reload") and animation_player.current_animation != "reload" and current_ammo < max_ammo:
 		reload_weapon.rpc()
 
 
@@ -62,8 +63,9 @@ func handle_raycast(given_raycast):
 		spawn_tracer_pivot.rpc(collider_collision_point)
 		
 		if collider.is_in_group("Hurtbox"):
-			on_hit_effect()
-			collider.handle_damage_collision(current_damage)
+			if collider.owner.is_in_group("Enemy"):
+				on_hit_effect()
+				collider.handle_damage_collision(current_damage)
 	else:
 		spawn_tracer_pivot.rpc()
 
@@ -80,7 +82,7 @@ func spawn_tracer_pivot(collider = null):
 	
 	bullet_tracer.scale.z = distance
 	
-	bullet_tracer.name = "item" + str(randf_range(0, 10))
+	bullet_tracer.name = "tracer " + str(randf_range(0, 10))
 	
 	get_tree().current_scene.add_child(bullet_tracer, true)
 	

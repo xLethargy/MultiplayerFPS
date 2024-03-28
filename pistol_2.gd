@@ -29,8 +29,10 @@ func _process(_delta):
 				distance_check = current_damage - 1
 			var falloff_damage = current_damage - distance_check
 			if collider.is_in_group("Hurtbox"):
-				on_hit_effect()
-				collider.handle_damage_collision(falloff_damage)
+				if collider.owner.is_in_group("Enemy"):
+					if collider.has_method("handle_damage_collision"):
+						on_hit_effect()
+						collider.handle_damage_collision(falloff_damage)
 		
 		recoil = true
 		await get_tree().create_timer(0.1).timeout

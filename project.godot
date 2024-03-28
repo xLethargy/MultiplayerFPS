@@ -89,10 +89,8 @@ right_click={
 3d_render/layer_2="team1"
 3d_render/layer_3="team2"
 3d_physics/layer_1="world"
-3d_physics/layer_2="team1"
-3d_physics/layer_3="team2"
-3d_physics/layer_4="team3"
-3d_physics/layer_5="team4"
+3d_physics/layer_2="player"
+3d_physics/layer_3="projectiles"
 
 [physics]
 

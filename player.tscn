@@ -1,8 +1,8 @@
 [gd_scene load_steps=12 format=3 uid="uid://c01cfmt48npc0"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_yahtk"]
+[ext_resource type="PackedScene" uid="uid://b11hvk4bi65yt" path="res://components/hurtbox_component.tscn" id="3_upsjy"]
 [ext_resource type="Script" path="res://health.gd" id="7_y81fr"]
-[ext_resource type="Script" path="res://hurtbox.gd" id="8_i8qa3"]
 [ext_resource type="Script" path="res://shoot.gd" id="9_6b75t"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hcq18"]
@@ -116,6 +116,7 @@ fov = 90.0
 
 [node name="RayCast3D" type="RayCast3D" parent="View/Camera3D"]
 target_position = Vector3(0, 0, -50)
+collision_mask = 35
 collide_with_areas = true
 
 [node name="HealthComponent" type="Node3D" parent="."]
@@ -125,15 +126,10 @@ script = ExtResource("7_y81fr")
 wait_time = 5.0
 one_shot = true
 
-[node name="HurtboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("health_component") groups=["Hurtbox"]]
-collision_layer = 0
-collision_mask = 0
-script = ExtResource("8_i8qa3")
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("3_upsjy")]
+collision_layer = 2
+collision_mask = 2
 health_component = NodePath("../HealthComponent")
-
-[node name="HurtboxCollision" type="CollisionShape3D" parent="HurtboxComponent"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_tgsde")
 
 [node name="ShootComponent" type="Node3D" parent="."]
 script = ExtResource("9_6b75t")
@@ -142,7 +138,7 @@ script = ExtResource("9_6b75t")
 replication_config = SubResource("SceneReplicationConfig_frqxj")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://pistol.tscn", "res://pistol_2.tscn", "res://pistol_freeze.tscn", "res://speed_gun.tscn", "res://stake.tscn", "res://db_sniper.tscn")
+_spawnable_scenes = PackedStringArray("res://pistol.tscn", "res://pistol_2.tscn", "res://pistol_freeze.tscn", "res://speed_gun.tscn", "res://stake.tscn", "res://db_sniper.tscn", "res://models/guns/coin_gun.tscn")
 spawn_path = NodePath("../View")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

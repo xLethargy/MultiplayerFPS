@@ -18,6 +18,7 @@ var freeze_gun = preload("res://pistol_freeze.tscn")
 var speed_gun = preload("res://speed_gun.tscn")
 var stake = preload("res://stake.tscn")
 var sniper = preload("res://db_sniper.tscn")
+var coin_gun = preload("res://models/guns/coin_gun.tscn")
 
 var team_setter = 0
 
@@ -175,6 +176,9 @@ func _on_sniper_pressed():
 	weapon_class_node = sniper
 	_class_selected("Sniper")
 
+func _on_coin_gun_pressed():
+	weapon_class_node = coin_gun
+	_class_selected("CoinGun")
 
 func _class_selected(weapon_class, peer_id = multiplayer.get_unique_id()):
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

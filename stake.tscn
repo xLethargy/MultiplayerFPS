@@ -256,8 +256,8 @@ playback_default_blend_time = 0.05
 
 [node name="Hitbox" type="Area3D" parent="." groups=["Melee"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.435, 0.407, -0.581164)
-collision_layer = 0
-collision_mask = 0
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("5_irixa")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
@@ -269,4 +269,5 @@ disabled = true
 wait_time = 3.0
 one_shot = true
 
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]
