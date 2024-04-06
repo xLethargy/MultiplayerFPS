@@ -27,6 +27,9 @@ var player_score_label = preload("res://player_score.tscn")
 @onready var spawn_points = $SpawnPoints
 var added_label = false
 
+@onready var gold = preload("res://materials/gold.tres")
+@onready var black = preload("res://materials/black.tres")
+
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
 		if !main_menu.visible:
@@ -100,7 +103,6 @@ func _on_multiplayer_menu_remove_player(peer_id):
 
 @rpc ("call_local", "any_peer")
 func remove_player_for_all(peer_id):
-	#multiplayer_menu.team_setter -= 1
 	Global.players.erase(peer_id)
 	player = get_node_or_null(str(peer_id))
 	if player:
@@ -108,8 +110,7 @@ func remove_player_for_all(peer_id):
 	var player_label = player_labels.get_node_or_null(str(peer_id))
 	if player_label:
 		player_label.queue_free()
-	
-	
+
 
 func _open_choose_class(_peer_id):
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -209,3 +210,27 @@ func _add_to_group():
 			player_in_tree.add_to_group("Enemy")
 		else:
 			player_in_tree.add_to_group("Team")
+
+
+@rpc ("any_peer", "call_local", "reliable")
+func spawn_tracer_pivot(tracer_colour, tracer_spawn_pos, tracer_spawn_rot, distance = 1, collider = null):
+	var bullet_tracer = bullet_tracer_scene.instantiate()
+	
+	bullet_tracer.position = tracer_spawn_pos
+	bullet_tracer.rotation = tracer_spawn_rot
+	
+	bullet_tracer.scale.z = distance
+	
+	bullet_tracer.name = "tracer " + str(randf_range(0, 10))
+	
+	add_child(bullet_tracer, true)
+	
+	if tracer_colour == "gold":
+		bullet_tracer.mesh.set_surface_override_material(0, gold)
+	elif tracer_colour == "black":
+		bullet_tracer.mesh.set_surface_override_material(0, black)
+	
+	if collider != null:
+		bullet_tracer.look_at(collider)
+	await get_tree().create_timer(2).timeout
+	bullet_tracer.queue_free()

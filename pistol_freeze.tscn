@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://bs0tqd6ktvagl"]
+[gd_scene load_steps=20 format=3 uid="uid://bs0tqd6ktvagl"]
 
 [ext_resource type="Script" path="res://pistol_freeze.gd" id="1_ikep0"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_8g6ke"]
 [ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://hitmarker.png" id="3_5uiqe"]
 [ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://hitmarker.wav" id="4_in4s8"]
+[ext_resource type="AudioStream" uid="uid://dsoqro5ad7lsm" path="res://sounds/snow.wav" id="5_ppoav"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vpns1"]
 resource_name = "Material"
@@ -198,10 +199,12 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[node name="FreezeGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "weapon_sway_node") groups=["AmmoBar"]]
+[node name="FreezeGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoBar"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_ikep0")
 muzzle_flash = NodePath("WeaponSway/Gun/MuzzleFlash")
+gun_audio = NodePath("WeaponAudio")
+local_gun_audio = NodePath("LocalWeaponAudio")
 weapon_sway_node = NodePath("WeaponSway")
 default_damage = 15
 max_ammo = 10
@@ -271,5 +274,18 @@ one_shot = true
 
 [node name="FreezeRegenTimer" type="Timer" parent="."]
 wait_time = 3.0
+
+[node name="WeaponAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_ppoav")
+volume_db = -30.0
+unit_size = 40.0
+max_db = -20.0
+max_polyphony = 4
+
+[node name="LocalWeaponAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_ppoav")
+volume_db = -15.0
+pitch_scale = 0.75
+max_polyphony = 4
 
 [connection signal="timeout" from="FreezeRegenTimer" to="." method="_on_freeze_regen_timer_timeout"]

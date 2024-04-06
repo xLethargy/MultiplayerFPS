@@ -1,10 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c4m1k72wuemul"]
+[gd_scene load_steps=7 format=3 uid="uid://c4m1k72wuemul"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gtggc"]
-albedo_color = Color(0, 0, 0, 1)
+[ext_resource type="Script" path="res://bullet_tracer.gd" id="1_nvhjl"]
+[ext_resource type="Material" uid="uid://dn3v6pxakk5em" path="res://materials/black.tres" id="2_5fs5h"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_lyp7m"]
-material = SubResource("StandardMaterial3D_gtggc")
+material = ExtResource("2_5fs5h")
 size = Vector3(0.05, 0.05, 50)
 
 [sub_resource type="Animation" id="Animation_l1in3"]
@@ -33,12 +33,12 @@ _data = {
 }
 
 [node name="Tracer" type="Node3D"]
+script = ExtResource("1_nvhjl")
 
 [node name="TracerMesh" type="Node3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="TracerMesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
-transparency = 1.0
 mesh = SubResource("BoxMesh_lyp7m")
 skeleton = NodePath("../..")
 

@@ -1,14 +1,18 @@
-[gd_scene load_steps=33 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=45 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_rxlvp"]
 [ext_resource type="PackedScene" uid="uid://dpp36leb612fw" path="res://arena.tscn" id="1_sm485"]
 [ext_resource type="Script" path="res://MultiplayerMenu.gd" id="3_asb1u"]
 [ext_resource type="Script" path="res://HUD.gd" id="4_3loky"]
 [ext_resource type="StyleBox" uid="uid://d0b38dfc76hfy" path="res://ui/redwarning.tres" id="4_h4lil"]
+[ext_resource type="Texture2D" uid="uid://cbsmflq8gs6xe" path="res://images/HOST_highlighted.jpeg" id="4_lae6t"]
+[ext_resource type="Script" path="res://MainMenuScreen.gd" id="4_ntbcx"]
 [ext_resource type="Script" path="res://TeamChooser.gd" id="5_ett3o"]
 [ext_resource type="Script" path="res://WarningPrompt.gd" id="5_hhjua"]
 [ext_resource type="Texture2D" uid="uid://belxpkhe22pnq" path="res://addons/kenney_particle_pack/circle_05.png" id="5_osqmr"]
 [ext_resource type="Texture2D" uid="uid://djocoyt5s36bk" path="res://images/sniperADS.png" id="6_51bju"]
+[ext_resource type="Texture2D" uid="uid://bgcguukvfpf5u" path="res://images/HOST_NONhighlighted.jpeg" id="6_d4nsd"]
+[ext_resource type="Texture2D" uid="uid://da31vlhqumxfe" path="res://images/HOST_pressed.jpeg" id="7_4twsw"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uc3qh"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -29,6 +33,15 @@ font_size = 24
 [sub_resource type="Theme" id="Theme_lb84u"]
 default_font_size = 24
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n8i0k"]
+texture = ExtResource("6_d4nsd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o3x32"]
+texture = ExtResource("4_lae6t")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p1ksh"]
+texture = ExtResource("7_4twsw")
+
 [sub_resource type="Theme" id="Theme_4sr3w"]
 default_font_size = 24
 
@@ -40,6 +53,51 @@ default_font_size = 24
 
 [sub_resource type="Theme" id="Theme_5nfux"]
 default_font_size = 24
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_prt06"]
+texture = ExtResource("4_lae6t")
+
+[sub_resource type="Animation" id="Animation_uo1xs"]
+resource_name = "flicker"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Host:theme_override_styles/normal")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [SubResource("StyleBoxTexture_n8i0k"), SubResource("StyleBoxTexture_prt06"), SubResource("StyleBoxTexture_prt06")]
+}
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uin7q"]
+texture = ExtResource("6_d4nsd")
+
+[sub_resource type="Animation" id="Animation_a1bg6"]
+resource_name = "hover"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Host:theme_override_styles/hover")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [SubResource("StyleBoxTexture_o3x32"), SubResource("StyleBoxTexture_uin7q"), SubResource("StyleBoxTexture_uin7q")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6v2in"]
+_data = {
+"flicker": SubResource("Animation_uo1xs"),
+"hover": SubResource("Animation_a1bg6")
+}
 
 [sub_resource type="LabelSettings" id="LabelSettings_538o8"]
 font_size = 24
@@ -107,6 +165,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+script = ExtResource("4_ntbcx")
 
 [node name="ColorRect" type="ColorRect" parent="MultiplayerMenu/MainMenuScreen"]
 layout_mode = 1
@@ -158,7 +217,9 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 theme = SubResource("Theme_lb84u")
-text = "Host"
+theme_override_styles/normal = SubResource("StyleBoxTexture_n8i0k")
+theme_override_styles/hover = SubResource("StyleBoxTexture_o3x32")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_p1ksh")
 
 [node name="Join" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
 custom_minimum_size = Vector2(400, 50)
@@ -186,6 +247,12 @@ layout_mode = 2
 theme = SubResource("Theme_5nfux")
 theme_override_styles/normal = ExtResource("4_h4lil")
 text = "Quit Game"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+libraries = {
+"": SubResource("AnimationLibrary_6v2in")
+}
+autoplay = "flicker"
 
 [node name="TeamChooser" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
 visible = false
@@ -474,6 +541,8 @@ spawn_path = NodePath("..")
 
 [connection signal="add_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_add_player"]
 [connection signal="remove_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_remove_player"]
+[connection signal="mouse_entered" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Host" to="MultiplayerMenu/MainMenuScreen" method="_on_host_mouse_entered"]
+[connection signal="mouse_exited" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Host" to="MultiplayerMenu/MainMenuScreen" method="_on_host_mouse_exited"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Host" to="MultiplayerMenu" method="_on_host_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Join" to="MultiplayerMenu" method="_on_join_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Quit Game" to="MultiplayerMenu" method="_on_quit_game_pressed"]

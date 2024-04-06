@@ -60,33 +60,13 @@ func handle_raycast(given_raycast):
 	if given_raycast.is_colliding():
 		var collider = given_raycast.get_collider()
 		var collider_collision_point = given_raycast.get_collision_point()
-		spawn_tracer_pivot.rpc(collider_collision_point)
+		
+		var distance = raycast.global_position.distance_to(collider_collision_point) / 50
+		get_tree().current_scene.spawn_tracer_pivot.rpc("black", tracer_spawn.global_position, tracer_spawn.global_rotation, distance, collider_collision_point)
 		
 		if collider.is_in_group("Hurtbox"):
 			if collider.owner.is_in_group("Enemy"):
 				on_hit_effect()
 				collider.handle_damage_collision(current_damage)
 	else:
-		spawn_tracer_pivot.rpc()
-
-@rpc ("any_peer", "call_local", "reliable")
-func spawn_tracer_pivot(collider = null):
-	var distance = 1
-	if collider != null:
-		distance = raycast.global_position.distance_to(collider) / 50
-	
-	var bullet_tracer = bullet_tracer_scene.instantiate()
-	
-	bullet_tracer.position = tracer_spawn.global_position
-	bullet_tracer.rotation = tracer_spawn.global_rotation
-	
-	bullet_tracer.scale.z = distance
-	
-	bullet_tracer.name = "tracer " + str(randf_range(0, 10))
-	
-	get_tree().current_scene.add_child(bullet_tracer, true)
-	
-	if collider != null:
-		bullet_tracer.look_at(collider)
-	await get_tree().create_timer(2).timeout
-	bullet_tracer.queue_free()
+		get_tree().current_scene.spawn_tracer_pivot.rpc("black", tracer_spawn.global_position, tracer_spawn.global_rotation)

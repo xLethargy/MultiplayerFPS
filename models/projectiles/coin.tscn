@@ -1,15 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://b4ncbxm3wmm7c"]
+[gd_scene load_steps=15 format=3 uid="uid://b4ncbxm3wmm7c"]
 
 [ext_resource type="Script" path="res://models/projectiles/coinhurtbox.gd" id="1_jdkf4"]
 [ext_resource type="Script" path="res://models/projectiles/coin.gd" id="1_s2jxo"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ha4s8"]
-albedo_color = Color(0.988235, 0.811765, 0.054902, 1)
-metallic = 0.8
-roughness = 0.2
+[ext_resource type="Material" uid="uid://2qga2owh6n3d" path="res://materials/gold.tres" id="2_m0j10"]
+[ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="3_wtro8"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_j5vvl"]
-material = SubResource("StandardMaterial3D_ha4s8")
+material = ExtResource("2_m0j10")
 top_radius = 0.1
 bottom_radius = 0.1
 height = 0.04
@@ -19,9 +16,73 @@ points = PackedVector3Array(0, -0.02, -0.1, -0.00980815, -0.02, -0.0995302, 0, 0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4aw83"]
 
+[sub_resource type="Animation" id="Animation_4p8m7"]
+resource_name = "flicker"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MuzzleFlash:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HurtboxComponent/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pidp1"]
+_data = {
+"flicker": SubResource("Animation_4p8m7")
+}
+
+[sub_resource type="Gradient" id="Gradient_3il7o"]
+offsets = PackedFloat32Array(0, 0.272727, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_87ryy"]
+gradient = SubResource("Gradient_3il7o")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_r1gs1"]
+angle_min = 45.0
+angle_max = 45.0
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_87ryy")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5yqdu"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.945098, 0.968627, 0.6, 1)
+albedo_texture = ExtResource("3_wtro8")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ddl3n"]
+material = SubResource("StandardMaterial3D_5yqdu")
+size = Vector2(0.5, 0.5)
+orientation = 2
+
 [node name="Coin" type="RigidBody3D"]
-collision_layer = 0
-collision_mask = 31
+collision_layer = 4
+gravity_scale = 0.5
+continuous_cd = true
+max_contacts_reported = 1
+contact_monitor = true
 script = ExtResource("1_s2jxo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -33,14 +94,34 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 shape = SubResource("ConvexPolygonShape3D_yggu8")
 
 [node name="HurtboxComponent" type="Area3D" parent="." groups=["Hurtbox"]]
-collision_layer = 32
-collision_mask = 32
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("1_jdkf4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent"]
 shape = SubResource("SphereShape3D_4aw83")
+disabled = true
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
-target_position = Vector3(0, 0, 50)
+target_position = Vector3(0, 0, 0)
+collision_mask = 3
+hit_from_inside = true
+collide_with_areas = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_pidp1")
+}
+autoplay = "flicker"
+
+[node name="MuzzleFlash" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0569683)
+emitting = false
+amount = 1
+one_shot = true
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r1gs1")
+draw_pass_1 = SubResource("PlaneMesh_ddl3n")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="area_entered" from="HurtboxComponent" to="HurtboxComponent" method="_on_area_entered"]

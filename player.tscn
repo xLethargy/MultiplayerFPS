@@ -116,7 +116,7 @@ fov = 90.0
 
 [node name="RayCast3D" type="RayCast3D" parent="View/Camera3D"]
 target_position = Vector3(0, 0, -50)
-collision_mask = 35
+collision_mask = 39
 collide_with_areas = true
 
 [node name="HealthComponent" type="Node3D" parent="."]

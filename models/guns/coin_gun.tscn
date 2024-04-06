@@ -404,3 +404,9 @@ stream = SubResource("AudioStreamWAV_lqj4m")
 volume_db = -15.0
 pitch_scale = 0.5
 max_polyphony = 8
+
+[node name="CoinCooldown" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="CoinCooldown" to="." method="_on_coin_cooldown_timeout"]

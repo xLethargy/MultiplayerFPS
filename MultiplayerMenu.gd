@@ -106,7 +106,6 @@ func send_player_information(given_name, id, team = team_setter, weapon_class = 
 		given_name = str(id)
 	
 	if !Global.players.has(id):
-		print (multiplayer.get_unique_id(), " ", team_setter)
 		Global.players[id] = {
 			"Name": given_name,
 			"ID": id,

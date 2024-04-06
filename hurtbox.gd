@@ -26,5 +26,4 @@ func handle_speed_collision(speed_effect = player.default_speed, jump_height = p
 @rpc ("any_peer", "call_local", "reliable")
 func _update_global_score(damage, id):
 	if health_component.current_health - damage <= 0:
-		
 		Global.players[id].Score += 1
