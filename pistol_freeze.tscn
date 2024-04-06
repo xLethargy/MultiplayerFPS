@@ -1,10 +1,11 @@
-[gd_scene load_steps=20 format=3 uid="uid://bs0tqd6ktvagl"]
+[gd_scene load_steps=21 format=3 uid="uid://bs0tqd6ktvagl"]
 
 [ext_resource type="Script" path="res://pistol_freeze.gd" id="1_ikep0"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_8g6ke"]
 [ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://hitmarker.png" id="3_5uiqe"]
 [ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://hitmarker.wav" id="4_in4s8"]
 [ext_resource type="AudioStream" uid="uid://dsoqro5ad7lsm" path="res://sounds/snow.wav" id="5_ppoav"]
+[ext_resource type="AudioStream" uid="uid://cada3v715lp8l" path="res://sounds/ice_shatter.wav" id="6_r2nuy"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vpns1"]
 resource_name = "Material"
@@ -165,7 +166,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
-length = 0.3
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -173,7 +174,7 @@ tracks/0/path = NodePath("WeaponSway/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0, 0.03, 0), Vector3(0, 0, 0)]
@@ -185,7 +186,7 @@ tracks/1/path = NodePath("WeaponSway/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0.610865, 0, 0), Vector3(0, 0, 0)]
@@ -208,9 +209,10 @@ local_gun_audio = NodePath("LocalWeaponAudio")
 weapon_sway_node = NodePath("WeaponSway")
 default_damage = 15
 max_ammo = 10
+default_player_speed = 6.0
 current_ammo = 10
 mag_type = "Laser"
-weapon_rotation_amount = 0.25
+weapon_rotation_amount = 0.2
 recoil_amount = 0.5
 
 [node name="WeaponSway" type="Node3D" parent="."]
@@ -273,19 +275,24 @@ wait_time = 0.1
 one_shot = true
 
 [node name="FreezeRegenTimer" type="Timer" parent="."]
-wait_time = 3.0
+wait_time = 2.0
 
 [node name="WeaponAudio" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("5_ppoav")
-volume_db = -30.0
+volume_db = -20.0
 unit_size = 40.0
-max_db = -20.0
+max_db = -15.0
+pitch_scale = 2.0
 max_polyphony = 4
 
 [node name="LocalWeaponAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_ppoav")
-volume_db = -15.0
-pitch_scale = 0.75
+volume_db = -5.0
+pitch_scale = 2.0
 max_polyphony = 4
+
+[node name="IceShatterLocal" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_r2nuy")
+volume_db = -5.0
 
 [connection signal="timeout" from="FreezeRegenTimer" to="." method="_on_freeze_regen_timer_timeout"]

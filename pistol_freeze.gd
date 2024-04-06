@@ -1,6 +1,7 @@
 extends Weapon
 
 @onready var freeze_regen_timer = $FreezeRegenTimer
+@onready var ice_shatter_audio = $IceShatterLocal
 
 var freeze_damage = 20
 
@@ -25,6 +26,12 @@ func _unhandled_input(_event):
 	if Input.is_action_just_pressed("shoot") and animation_player.current_animation != "shoot" and ammo_bar.value > 0:
 		play_shoot_effects()
 		ammo_bar.value -= 10
+		
+		gun_audio.pitch_scale = 1.5 + (ammo_bar.value / 200)
+		local_gun_audio.pitch_scale = 1.5 + (ammo_bar.value / 200)
+		
+		print (gun_audio.pitch_scale)
+		
 		freeze_regen = false
 		freeze_regen_timer.stop()
 		freeze_regen_timer.start()
@@ -57,7 +64,7 @@ func _unhandled_input(_event):
 
 func _process(delta):
 	if freeze_regen and ammo_bar.value != ammo_bar.max_value:
-		ammo_bar.value += 15 * delta
+		ammo_bar.value += 20 * delta
 
 
 @rpc ("any_peer", "reliable")
@@ -65,6 +72,8 @@ func store_freeze_information(collider):
 	hit_player[collider].HitsTaken += 1
 	
 	if hit_player[collider].HitsTaken == 3:
+		ice_shatter_audio.play()
+		
 		hit_player[collider].HitsTaken = 0
 		
 		frozen = true
