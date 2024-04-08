@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://dpp36leb612fw"]
+[gd_scene load_steps=9 format=3 uid="uid://dpp36leb612fw"]
 
 [ext_resource type="PackedScene" uid="uid://vp87qdf4rx67" path="res://arena.glb" id="1_6227c"]
 [ext_resource type="Material" uid="uid://drxfp3qp8acgn" path="res://materials/orange.tres" id="2_b7d0w"]
+[ext_resource type="Script" path="res://arena.gd" id="2_m6ksy"]
 [ext_resource type="Texture2D" uid="uid://goee7adxjpdp" path="res://addons/kenney_prototype_textures/dark/texture_09.png" id="3_e5wpx"]
 [ext_resource type="PackedScene" uid="uid://1qx3r3cx6sg1" path="res://models/objects/box.tscn" id="4_btmeb"]
 [ext_resource type="PackedScene" uid="uid://cqic11uh1ybd6" path="res://components/out_of_bounds_detector.tscn" id="5_7lgy7"]
@@ -14,6 +15,7 @@ uv1_triplanar = true
 size = Vector3(0.2, 10, 60)
 
 [node name="arena" instance=ExtResource("1_6227c")]
+script = ExtResource("2_m6ksy")
 
 [node name="Arena" parent="." index="0"]
 surface_material_override/0 = ExtResource("2_b7d0w")

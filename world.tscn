@@ -1,9 +1,7 @@
-[gd_scene load_steps=48 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=47 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_rxlvp"]
-[ext_resource type="PackedScene" uid="uid://dpp36leb612fw" path="res://arena.tscn" id="1_sm485"]
 [ext_resource type="Script" path="res://MultiplayerMenu.gd" id="3_asb1u"]
-[ext_resource type="Script" path="res://arena.gd" id="3_xty1s"]
 [ext_resource type="Script" path="res://HUD.gd" id="4_3loky"]
 [ext_resource type="StyleBox" uid="uid://d0b38dfc76hfy" path="res://ui/redwarning.tres" id="4_h4lil"]
 [ext_resource type="Texture2D" uid="uid://cbsmflq8gs6xe" path="res://images/HOST_highlighted.jpeg" id="4_lae6t"]
@@ -15,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bgcguukvfpf5u" path="res://images/HOST_NONhighlighted.jpeg" id="6_d4nsd"]
 [ext_resource type="Texture2D" uid="uid://da31vlhqumxfe" path="res://images/HOST_pressed.jpeg" id="7_4twsw"]
 [ext_resource type="Texture2D" uid="uid://bt00f4guyerxd" path="res://images/join1.svg" id="8_3ioy5"]
+[ext_resource type="PackedScene" uid="uid://cqasao7l288a" path="res://models/levels/double_building.tscn" id="14_mbwj7"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uc3qh"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -156,9 +155,6 @@ environment = SubResource("Environment_khruk")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
-
-[node name="arena" parent="." instance=ExtResource("1_sm485")]
-script = ExtResource("3_xty1s")
 
 [node name="MultiplayerMenu" type="CanvasLayer" parent="."]
 script = ExtResource("3_asb1u")
@@ -528,6 +524,10 @@ offset_bottom = 40.0
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
 spawn_path = NodePath("..")
+
+[node name="CurrentMap" type="Node3D" parent="."]
+
+[node name="double_building" parent="CurrentMap" instance=ExtResource("14_mbwj7")]
 
 [connection signal="add_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_add_player"]
 [connection signal="remove_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_remove_player"]

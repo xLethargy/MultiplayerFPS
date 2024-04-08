@@ -195,6 +195,34 @@ tracks/6/keys = {
 "values": [Vector3(-1.5708, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_4vl0y"]
+resource_name = "flick"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponSway/AllMesh/Pivot2:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.2, 0.5, 1),
+"update": 0,
+"values": [Vector3(-1.5708, 0, 0), Vector3(0.698132, 0, 0), Vector3(-1.5708, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSway/AllMesh/Pivot2:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.2, 0.5, 1),
+"update": 0,
+"values": [Vector3(-1, -0.268, 0.307), Vector3(-1, -0.268, 0), Vector3(-1, -0.268, 0.307)]
+}
+
 [sub_resource type="Animation" id="Animation_p8xlp"]
 resource_name = "idle"
 length = 3.0
@@ -309,34 +337,6 @@ tracks/2/keys = {
 "values": [Vector3(0.349066, 0, 0), Vector3(0, 0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_4vl0y"]
-resource_name = "flick"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("WeaponSway/AllMesh/Pivot2:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(0.2, 0.5, 1),
-"update": 0,
-"values": [Vector3(-1.5708, 0, 0), Vector3(0.698132, 0, 0), Vector3(-1.5708, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("WeaponSway/AllMesh/Pivot2:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(0.2, 0.5, 1),
-"update": 0,
-"values": [Vector3(-1, -0.268, 0.307), Vector3(-1, -0.268, 0), Vector3(-1, -0.268, 0.307)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cthlp"]
 _data = {
 "RESET": SubResource("Animation_anl2s"),
@@ -403,7 +403,7 @@ mesh = SubResource("CapsuleMesh_8k6gp")
 skeleton = NodePath("../../../..")
 
 [node name="Pivot2" type="Node3D" parent="WeaponSway/AllMesh"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1, -0.268, 0.307)
+transform = Transform3D(1, 0, 0, 0, -3.61999e-06, 1, 0, -1, -3.61999e-06, -1, -0.268, 0.307)
 
 [node name="Arm2" type="MeshInstance3D" parent="WeaponSway/AllMesh/Pivot2"]
 transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, 0.120736, -0.167182)

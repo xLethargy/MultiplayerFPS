@@ -30,6 +30,8 @@ func _unhandled_input(event):
 		if event.is_action_pressed("right_click"):
 			charging = true
 			player.charging_dash = true
+			
+			
 		elif event.is_action_released("right_click") and !player.in_dash and charging:
 			can_dash = false
 			charging = false
