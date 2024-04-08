@@ -14,19 +14,23 @@ func _process(delta):
 		count += delta * 5
 
 
-func _unhandled_input(_event):
+func _unhandled_input(event):
 	if !player.is_multiplayer_authority():
 		return
 	
-	if Input.is_action_just_pressed("shoot") and animation_player.current_animation != "shoot":
+	if event.is_action_pressed("shoot") and animation_player.current_animation != "shoot":
+		var random_pitch = randf_range(0.75, 1.25)
+		gun_audio.pitch_scale = random_pitch
+		local_gun_audio.pitch_scale = random_pitch
+		
 		play_shoot_effects()
 		play_spatial_audio.rpc()
 	
 	if can_dash:
-		if Input.is_action_just_pressed("right_click"):
+		if event.is_action_pressed("right_click"):
 			charging = true
 			player.charging_dash = true
-		elif Input.is_action_just_released("right_click") and !player.in_dash and charging:
+		elif event.is_action_released("right_click") and !player.in_dash and charging:
 			can_dash = false
 			charging = false
 			var boost_z = get_global_transform().basis.z * count

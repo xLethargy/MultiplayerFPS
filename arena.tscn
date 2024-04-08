@@ -1,13 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://dpp36leb612fw"]
+[gd_scene load_steps=8 format=3 uid="uid://dpp36leb612fw"]
 
 [ext_resource type="PackedScene" uid="uid://vp87qdf4rx67" path="res://arena.glb" id="1_6227c"]
 [ext_resource type="Material" uid="uid://drxfp3qp8acgn" path="res://materials/orange.tres" id="2_b7d0w"]
 [ext_resource type="Texture2D" uid="uid://goee7adxjpdp" path="res://addons/kenney_prototype_textures/dark/texture_09.png" id="3_e5wpx"]
 [ext_resource type="PackedScene" uid="uid://1qx3r3cx6sg1" path="res://models/objects/box.tscn" id="4_btmeb"]
+[ext_resource type="PackedScene" uid="uid://cqic11uh1ybd6" path="res://components/out_of_bounds_detector.tscn" id="5_7lgy7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qqx8f"]
 albedo_texture = ExtResource("3_e5wpx")
 uv1_triplanar = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7480v"]
+size = Vector3(0.2, 10, 60)
 
 [node name="arena" instance=ExtResource("1_6227c")]
 
@@ -24,6 +28,22 @@ surface_material_override/8 = ExtResource("2_b7d0w")
 surface_material_override/9 = ExtResource("2_b7d0w")
 surface_material_override/10 = ExtResource("2_b7d0w")
 surface_material_override/11 = ExtResource("2_b7d0w")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Arena/StaticBody3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.1, 9, 6)
+shape = SubResource("BoxShape3D_7480v")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Arena/StaticBody3D" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.1, 9, 6)
+shape = SubResource("BoxShape3D_7480v")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Arena/StaticBody3D" index="3"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6, 9, 36.1)
+shape = SubResource("BoxShape3D_7480v")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Arena/StaticBody3D" index="4"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6, 9, -24.1)
+shape = SubResource("BoxShape3D_7480v")
 
 [node name="Box" parent="." index="1" instance=ExtResource("4_btmeb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.5, -3)
@@ -43,3 +63,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 2, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2, 0)
 
 [node name="5" type="Marker3D" parent="SpawnPoints" index="4"]
+
+[node name="OutOfBoundsDetector" parent="." index="3" instance=ExtResource("5_7lgy7")]

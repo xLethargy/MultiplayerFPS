@@ -1,8 +1,9 @@
-[gd_scene load_steps=24 format=3 uid="uid://bi1q33khvg02m"]
+[gd_scene load_steps=25 format=3 uid="uid://bi1q33khvg02m"]
 
 [ext_resource type="Script" path="res://coin_gun.gd" id="1_cqrq7"]
 [ext_resource type="Material" uid="uid://2qga2owh6n3d" path="res://materials/gold.tres" id="2_6krx6"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_se3w2"]
+[ext_resource type="AudioStream" uid="uid://cu662sujy0wrn" path="res://sounds/finger_snap.wav" id="4_bjy7p"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_p270e"]
 _surfaces = [{
@@ -369,7 +370,7 @@ current_ammo = 6
 mag_type = "Revolver"
 
 [node name="CoinMarker" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.79103, 0.242169, -0.197054)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.994453, 0.198632, -0.140367)
 
 [node name="WeaponSway" type="Node3D" parent="."]
 
@@ -463,6 +464,11 @@ max_polyphony = 8
 stream = SubResource("AudioStreamWAV_lqj4m")
 volume_db = -15.0
 pitch_scale = 0.5
+max_polyphony = 8
+
+[node name="LocalFingerSnap" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_bjy7p")
+volume_db = -5.0
 max_polyphony = 8
 
 [node name="CoinCooldown" type="Timer" parent="."]

@@ -150,8 +150,9 @@ func play_spatial_audio():
 		muzzle_flash.emitting = true
 
 
-func on_hit_effect():
-	audio_player.play()
+func on_hit_effect(audio = true):
+	if audio:
+		audio_player.play()
 	hitmarker.show()
 	hitmarker_timer.start()
 
@@ -202,6 +203,7 @@ func make_coin_invisible(coin_path):
 	coin.mesh.visible = false
 	coin.muzzle_flash.visible = false
 
+
 func handle_collision(collider, given_damage = current_damage):
 	if collider.is_in_group("Hurtbox"):
 		if collider.owner.is_in_group("Enemy"):
@@ -209,6 +211,6 @@ func handle_collision(collider, given_damage = current_damage):
 				on_hit_effect()
 				collider.handle_damage_collision(given_damage)
 		elif collider.has_method("handle_coin_collision"):
-			on_hit_effect()
+			on_hit_effect(false)
 			collider.handle_coin_collision()
 			make_coin_invisible.rpc(collider.owner.get_path())

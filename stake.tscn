@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://dydne2kqobdmc"]
+[gd_scene load_steps=16 format=3 uid="uid://dydne2kqobdmc"]
 
 [ext_resource type="Script" path="res://models/melee/stake.gd" id="1_2cfut"]
 [ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://hitmarker.png" id="3_xmgdn"]
 [ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://hitmarker.wav" id="4_h4vjt"]
+[ext_resource type="AudioStream" uid="uid://c5ywgaxw6qiph" path="res://sounds/swoosh.wav" id="5_06548"]
 [ext_resource type="Script" path="res://models/melee/hitbox.gd" id="5_irixa"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mcrxm"]
@@ -196,9 +197,11 @@ _data = {
 [sub_resource type="BoxShape3D" id="BoxShape3D_da14s"]
 size = Vector3(0.5, 0.5, 2.00049)
 
-[node name="Stake" type="Node3D" node_paths=PackedStringArray("weapon_sway_node")]
+[node name="Stake" type="Node3D" node_paths=PackedStringArray("gun_audio", "local_gun_audio", "weapon_sway_node")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_2cfut")
+gun_audio = NodePath("AttackAudio")
+local_gun_audio = NodePath("LocalAttackAudio")
 weapon_sway_node = NodePath("WeaponSway")
 default_damage = 34
 max_ammo = 1
@@ -268,6 +271,19 @@ disabled = true
 [node name="DashCooldown" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
+
+[node name="AttackAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_06548")
+volume_db = -15.0
+unit_size = 5.0
+max_db = -10.0
+max_distance = 7.0
+max_polyphony = 4
+
+[node name="LocalAttackAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_06548")
+volume_db = -5.0
+max_polyphony = 4
 
 [connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]
