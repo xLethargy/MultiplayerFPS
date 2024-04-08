@@ -2,7 +2,7 @@ extends Node3D
 
 @onready var heartbeat_audio = $"../HeartbeatAudio"
 
-@onready var spawn_points = get_tree().current_scene.spawn_points
+@onready var spawn_points = get_tree().current_scene.arena.spawn_points
 @onready var player = owner
 @onready var heal_timer = $HealTimer
 var can_heal = false

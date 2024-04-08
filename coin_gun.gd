@@ -11,6 +11,8 @@ func _unhandled_input(_event):
 		return
 	
 	if Input.is_action_just_pressed("right_click") and current_ammo > 0 and can_use_coin:
+		_play_animation.rpc("flick")
+		
 		can_use_coin = false
 		
 		var boost_z = get_global_transform().basis.z
@@ -29,7 +31,7 @@ func _unhandled_input(_event):
 			boost_z.y= -8.5
 		_spawn_coin.rpc(boost_z)
 		coin_cooldown_timer.start()
-		
+	
 	if Input.is_action_just_pressed("shoot") and animation_player.current_animation != "shoot" and current_ammo >= 1:
 		play_shoot_effects()
 		play_spatial_audio.rpc()

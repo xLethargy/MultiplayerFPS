@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bi1q33khvg02m"]
+[gd_scene load_steps=25 format=3 uid="uid://bi1q33khvg02m"]
 
 [ext_resource type="Script" path="res://coin_gun.gd" id="1_cqrq7"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_se3w2"]
@@ -108,6 +108,10 @@ orientation = 2
 radius = 0.1
 height = 0.6
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_lwpcb"]
+radius = 0.1
+height = 0.6
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_25k15"]
 load_path = "res://.godot/imported/hitmarker.png-1ac4e5da177c43b6bb9088dc9f77c00d.ctex"
 
@@ -177,6 +181,30 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("WeaponSway/AllMesh/Pivot2:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1, -0.268, 0.307)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("WeaponSway/AllMesh/Pivot2:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.5708, 0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_p8xlp"]
@@ -293,9 +321,38 @@ tracks/2/keys = {
 "values": [Vector3(0.349066, 0, 0), Vector3(0, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_4vl0y"]
+resource_name = "flick"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponSway/AllMesh/Pivot2:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.2, 0.5, 1),
+"update": 0,
+"values": [Vector3(-1.5708, 0, 0), Vector3(0.698132, 0, 0), Vector3(-1.5708, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSway/AllMesh/Pivot2:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.2, 0.5, 1),
+"update": 0,
+"values": [Vector3(-1, -0.268, 0.307), Vector3(-1, -0.268, 0), Vector3(-1, -0.268, 0.307)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cthlp"]
 _data = {
 "RESET": SubResource("Animation_anl2s"),
+"flick": SubResource("Animation_4vl0y"),
 "idle": SubResource("Animation_p8xlp"),
 "move": SubResource("Animation_yijs0"),
 "reload": SubResource("Animation_xu2h4"),
@@ -355,6 +412,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.267588, 0.30705)
 unique_name_in_owner = true
 transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, 0.120736, -0.167182)
 mesh = SubResource("CapsuleMesh_8k6gp")
+skeleton = NodePath("../../../..")
+
+[node name="Pivot2" type="Node3D" parent="WeaponSway/AllMesh"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1, -0.268, 0.307)
+
+[node name="Arm2" type="MeshInstance3D" parent="WeaponSway/AllMesh/Pivot2"]
+transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, 0.120736, -0.167182)
+mesh = SubResource("CapsuleMesh_lwpcb")
 skeleton = NodePath("../../../..")
 
 [node name="Hitmarker" type="TextureRect" parent="."]

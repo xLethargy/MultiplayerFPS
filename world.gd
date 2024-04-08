@@ -24,11 +24,12 @@ var player_score_label = preload("res://player_score.tscn")
 
 @onready var timer = get_tree().create_timer(2.0)
 
-@onready var spawn_points = $SpawnPoints
 var added_label = false
 
 @onready var gold = preload("res://materials/gold.tres")
 @onready var black = preload("res://materials/black.tres")
+
+@onready var arena = $arena
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
@@ -56,7 +57,7 @@ func _on_multiplayer_menu_add_player():
 				player.name = str(Global.players[i].ID)
 				
 				add_child(player, true)
-				player.position = spawn_points.get_child(randi_range(0, 4)).position
+				player.position = arena.spawn_points.get_child(randi_range(0, 4)).position
 				
 				match Global.players[i].Class:
 					"PistolOne":

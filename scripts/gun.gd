@@ -85,7 +85,7 @@ func _physics_process(delta):
 	if !player.is_multiplayer_authority():
 		return
 	
-	if !animation_player.current_animation == "shoot" and !animation_player.current_animation == "reload" and !animation_player.current_animation == "aiming":
+	if !animation_player.current_animation == "shoot" and !animation_player.current_animation == "reload" and !animation_player.current_animation == "aiming" and !animation_player.current_animation == "flick":
 		
 		if player.input_dir != Vector2.ZERO and player.is_on_floor() and !aiming:
 			_play_animation.rpc("move")
