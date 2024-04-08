@@ -30,8 +30,6 @@ func _unhandled_input(_event):
 		gun_audio.pitch_scale = 1.5 + (ammo_bar.value / 200)
 		local_gun_audio.pitch_scale = 1.5 + (ammo_bar.value / 200)
 		
-		print (gun_audio.pitch_scale)
-		
 		freeze_regen = false
 		freeze_regen_timer.stop()
 		freeze_regen_timer.start()

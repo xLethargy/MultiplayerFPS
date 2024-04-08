@@ -13,7 +13,7 @@ func _on_body_entered(_body):
 	queue_free()
 
 
-func _integrate_forces(state):
+func _integrate_forces(_state):
 	apply_velocity()
 
 

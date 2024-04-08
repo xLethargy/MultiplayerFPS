@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=47 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_rxlvp"]
 [ext_resource type="PackedScene" uid="uid://dpp36leb612fw" path="res://arena.tscn" id="1_sm485"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://djocoyt5s36bk" path="res://images/sniperADS.png" id="6_51bju"]
 [ext_resource type="Texture2D" uid="uid://bgcguukvfpf5u" path="res://images/HOST_NONhighlighted.jpeg" id="6_d4nsd"]
 [ext_resource type="Texture2D" uid="uid://da31vlhqumxfe" path="res://images/HOST_pressed.jpeg" id="7_4twsw"]
+[ext_resource type="Texture2D" uid="uid://bt00f4guyerxd" path="res://images/join1.svg" id="8_3ioy5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uc3qh"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -44,6 +45,9 @@ texture = ExtResource("7_4twsw")
 
 [sub_resource type="Theme" id="Theme_4sr3w"]
 default_font_size = 24
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y8u7w"]
+texture = ExtResource("8_3ioy5")
 
 [sub_resource type="Theme" id="Theme_f4rxh"]
 default_font_size = 24
@@ -226,7 +230,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_p1ksh")
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 theme = SubResource("Theme_4sr3w")
-text = "Join"
+theme_override_styles/normal = SubResource("StyleBoxTexture_y8u7w")
 
 [node name="NameEntry" type="LineEdit" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
 custom_minimum_size = Vector2(400, 50)
@@ -253,7 +257,6 @@ text = "Quit Game"
 libraries = {
 "": SubResource("AnimationLibrary_6v2in")
 }
-autoplay = "flicker"
 
 [node name="TeamChooser" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
 visible = false
@@ -543,7 +546,6 @@ spawn_path = NodePath("..")
 [connection signal="add_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_add_player"]
 [connection signal="remove_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_remove_player"]
 [connection signal="mouse_entered" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Host" to="MultiplayerMenu/MainMenuScreen" method="_on_host_mouse_entered"]
-[connection signal="mouse_exited" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Host" to="MultiplayerMenu/MainMenuScreen" method="_on_host_mouse_exited"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Host" to="MultiplayerMenu" method="_on_host_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Join" to="MultiplayerMenu" method="_on_join_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Quit Game" to="MultiplayerMenu" method="_on_quit_game_pressed"]
@@ -558,7 +560,6 @@ spawn_path = NodePath("..")
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Stake" to="MultiplayerMenu" method="_on_stake_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Sniper" to="MultiplayerMenu" method="_on_sniper_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Coin Gun" to="MultiplayerMenu" method="_on_coin_gun_pressed"]
-[connection signal="changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_h_slider_changed"]
 [connection signal="value_changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_sens_slider_value_changed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Leave Match" to="MultiplayerMenu" method="_on_leave_match_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt/HBoxContainer/Yes" to="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt" method="_on_yes_pressed"]

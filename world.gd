@@ -203,7 +203,7 @@ func _add_score_label(given_name, score, id):
 @rpc("any_peer", "call_local", "reliable")
 func _add_to_group():
 	var current_id = multiplayer.get_unique_id()
-	print (Global.players)
+	
 	for i in Global.players:
 		var player_in_tree = get_node_or_null(str(Global.players[i].ID))
 		if Global.players[i].Team != Global.players[current_id].Team:

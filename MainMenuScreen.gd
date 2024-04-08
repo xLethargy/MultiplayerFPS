@@ -4,7 +4,3 @@ extends Control
 
 func _on_host_mouse_entered():
 	server_joiner_animation_player.play("hover")
-
-
-func _on_host_mouse_exited():
-	server_joiner_animation_player.play("flicker")

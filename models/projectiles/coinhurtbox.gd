@@ -2,7 +2,7 @@ extends Area3D
 
 var players_array = []
 var closest_player = null
-var closest_distance = 1000
+var closest_distance : float = 1000
 
 var position_to_look_at = Vector3.ZERO
 
@@ -16,7 +16,7 @@ func _ready():
 		for player in players:
 			players_array.append(player)
 
-func _process(delta):
+func _process(_delta):
 	if coin_shot:
 		raycast.look_at(position_to_look_at)
 		if raycast.is_colliding():
