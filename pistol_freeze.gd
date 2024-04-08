@@ -36,24 +36,22 @@ func _unhandled_input(_event):
 		
 		if raycast.is_colliding():
 			var collider = raycast.get_collider()
+			handle_collision(collider)
+			
 			if collider.is_in_group("Hurtbox"):
 				if collider.owner.is_in_group("Enemy"):
-					if collider.has_method("handle_damage_collision"):
-						on_hit_effect()
-						collider.handle_damage_collision(current_damage)
-				
-				current_health = collider.owner.health_component.current_health - current_damage
-				
-				if !hit_player.has(collider):
-					hit_player[collider] = {
-						"ID": collider.multiplayer.get_unique_id(),
-						"HitsTaken": 0
-					}
-				
-				if current_health > 0 and !frozen:
-					store_freeze_information(collider)
-				else:
-					hit_player[collider].HitsTaken = 0
+					current_health = collider.owner.health_component.current_health - current_damage
+					
+					if !hit_player.has(collider):
+						hit_player[collider] = {
+							"ID": collider.multiplayer.get_unique_id(),
+							"HitsTaken": 0
+						}
+					
+					if current_health > 0 and !frozen:
+						store_freeze_information(collider)
+					else:
+						hit_player[collider].HitsTaken = 0
 		
 		recoil = true
 		await get_tree().create_timer(0.1).timeout

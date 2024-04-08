@@ -126,8 +126,11 @@ func play_shoot_effects():
 
 
 @rpc ("call_local", "any_peer", "unreliable")
-func _play_animation(animation_string):
-	animation_player.play(animation_string)
+func _play_animation(animation_string, given_player_path = animation_player.get_path()):
+	var given_player = get_node_or_null(given_player_path)
+	
+	if given_player != null:
+		given_player.play(animation_string)
 
 
 @rpc ("any_peer", "reliable")
@@ -191,3 +194,21 @@ func reset_stat_gun(reset_ammo = true):
 		current_ammo = max_ammo
 		ammo_counter.text = str(current_ammo)
 		ammo_bar.value = ammo_bar.max_value
+
+
+@rpc("any_peer", "call_local")
+func make_coin_invisible(coin_path):
+	var coin = get_node(coin_path)
+	coin.mesh.visible = false
+	coin.muzzle_flash.visible = false
+
+func handle_collision(collider, given_damage = current_damage):
+	if collider.is_in_group("Hurtbox"):
+		if collider.owner.is_in_group("Enemy"):
+			if collider.has_method("handle_damage_collision"):
+				on_hit_effect()
+				collider.handle_damage_collision(given_damage)
+		elif collider.has_method("handle_coin_collision"):
+			on_hit_effect()
+			collider.handle_coin_collision()
+			make_coin_invisible.rpc(collider.owner.get_path())

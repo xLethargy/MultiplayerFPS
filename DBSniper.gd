@@ -64,9 +64,6 @@ func handle_raycast(given_raycast):
 		var distance = raycast.global_position.distance_to(collider_collision_point) / 50
 		get_tree().current_scene.spawn_tracer_pivot.rpc("black", tracer_spawn.global_position, tracer_spawn.global_rotation, distance, collider_collision_point)
 		
-		if collider.is_in_group("Hurtbox"):
-			if collider.owner.is_in_group("Enemy"):
-				on_hit_effect()
-				collider.handle_damage_collision(current_damage)
+		handle_collision(collider)
 	else:
 		get_tree().current_scene.spawn_tracer_pivot.rpc("black", tracer_spawn.global_position, tracer_spawn.global_rotation)

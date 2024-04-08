@@ -15,12 +15,10 @@ func _unhandled_input(_event):
 		
 		if raycast.is_colliding():
 			var collider = raycast.get_collider()
+			
+			handle_collision(collider)
+			
 			if collider.is_in_group("Hurtbox"):
-				if collider.owner.is_in_group("Enemy"):
-					if collider.has_method("handle_damage_collision"):
-						on_hit_effect()
-						collider.handle_damage_collision(current_damage)
-				
 				handle_speed_gun_variables.rpc()
 			else:
 				_half_stat_variables.rpc()

@@ -6,6 +6,7 @@ var count = 0
 
 @onready var mesh = $MeshInstance3D
 @onready var muzzle_flash = $MuzzleFlash
+@onready var clang_audio = $ClangAudio
 
 func _on_body_entered(_body):
 	self.position = Vector3(0, -100, 0)
@@ -28,7 +29,6 @@ func apply_velocity():
 			linear_velocity = boost_z
 			count += 0.1
 
-
-@rpc ("any_peer", "call_local")
-func remove_coin_for_all():
-	queue_free()
+@rpc ("call_local", "any_peer", "reliable")
+func play_spatial_audio():
+	clang_audio.play()

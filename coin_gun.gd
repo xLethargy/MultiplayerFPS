@@ -4,6 +4,8 @@ extends Weapon
 @onready var coin_scene = preload("res://models/projectiles/coin.tscn")
 @onready var coin_cooldown_timer = $CoinCooldown
 
+@onready var animation_player_2 = $AnimationPlayer2
+
 var can_use_coin = true
 
 func _unhandled_input(_event):
@@ -11,7 +13,7 @@ func _unhandled_input(_event):
 		return
 	
 	if Input.is_action_just_pressed("right_click") and current_ammo > 0 and can_use_coin:
-		_play_animation.rpc("flick")
+		_play_animation.rpc("flick", animation_player_2.get_path())
 		
 		can_use_coin = false
 		
@@ -49,15 +51,7 @@ func handle_raycast(given_raycast):
 	if given_raycast.is_colliding():
 		var collider = given_raycast.get_collider()
 		
-		if collider.is_in_group("Hurtbox"):
-			if collider.owner.is_in_group("Enemy"):
-				if collider.has_method("handle_damage_collision"):
-					on_hit_effect()
-					collider.handle_damage_collision(current_damage)
-			elif collider.has_method("handle_coin_collision"):
-				on_hit_effect()
-				collider.handle_coin_collision()
-				make_coin_invisible.rpc(collider.owner.get_path())
+		handle_collision(collider)
 
 
 @rpc ("call_local", "any_peer", "reliable")
@@ -71,13 +65,6 @@ func _spawn_coin(boost):
 	
 	coin.change_values(-boost, "forward")
 	get_tree().current_scene.add_child(coin, true)
-
-
-@rpc("any_peer", "call_local")
-func make_coin_invisible(coin_path):
-	var coin = get_node(coin_path)
-	coin.mesh.visible = false
-	coin.muzzle_flash.visible = false
 
 
 func _on_coin_cooldown_timeout():
