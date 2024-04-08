@@ -5,8 +5,8 @@ extends Weapon
 var can_shoot = true
 
 
-func _unhandled_input(_event):
-	if Input.is_action_just_pressed("reload") and animation_player.current_animation != "reload" and current_ammo != max_ammo:
+func _unhandled_input(event):
+	if event.is_action_pressed("reload") and animation_player.current_animation != "reload" and current_ammo != max_ammo:
 		reload_weapon.rpc()
 
 func _process(_delta):

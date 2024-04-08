@@ -19,11 +19,11 @@ var freeze_regen = false
 
 var frozen = false
 
-func _unhandled_input(_event):
+func _unhandled_input(event):
 	if !player.is_multiplayer_authority():
 		return
 	
-	if Input.is_action_just_pressed("shoot") and animation_player.current_animation != "shoot" and ammo_bar.value > 0:
+	if event.is_action_pressed("shoot") and animation_player.current_animation != "shoot" and ammo_bar.value > 0:
 		play_shoot_effects()
 		ammo_bar.value -= 10
 		

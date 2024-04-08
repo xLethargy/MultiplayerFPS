@@ -5,11 +5,11 @@ extends Weapon
 @onready var gun = $WeaponSway/AllMesh/Gun
 @export var bullet_tracer_scene : PackedScene
 
-func _unhandled_input(_event):
+func _unhandled_input(event):
 	if !player.is_multiplayer_authority():
 		return
 	
-	if Input.is_action_just_pressed("right_click") and current_ammo > 0 and !aiming:
+	if event.is_action_pressed("right_click") and current_ammo > 0 and !aiming:
 		aiming = true
 		hud.sniper_ads.show()
 		hud.healthbar.hide()
@@ -19,7 +19,9 @@ func _unhandled_input(_event):
 		player.camera.fov = 20
 		
 		player.change_speed_and_jump(2)
-	if (Input.is_action_just_released("right_click") or current_ammo == 0) and aiming:
+		
+		
+	if (event.is_action_released("right_click") or current_ammo == 0) and aiming:
 		aiming = false
 		hud.sniper_ads.hide()
 		hud.healthbar.show()
@@ -33,7 +35,7 @@ func _unhandled_input(_event):
 		player.change_speed_and_jump()
 	
 	
-	if Input.is_action_just_pressed("shoot") and animation_player.current_animation != "shoot" and current_ammo >= 1:
+	if event.is_action_pressed("shoot") and animation_player.current_animation != "shoot" and current_ammo >= 1:
 		play_shoot_effects()
 		play_spatial_audio.rpc()
 		
@@ -52,7 +54,7 @@ func _unhandled_input(_event):
 		await get_tree().create_timer(0.1).timeout
 		recoil = false
 	
-	if Input.is_action_just_pressed("reload") and animation_player.current_animation != "reload" and current_ammo < max_ammo:
+	if event.is_action_pressed("reload") and animation_player.current_animation != "reload" and current_ammo < max_ammo:
 		reload_weapon.rpc()
 
 
