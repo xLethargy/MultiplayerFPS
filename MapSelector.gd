@@ -61,7 +61,7 @@ func _on_arena_texture_pressed():
 		return
 	
 	if current_vote != "arena" and current_vote != "":
-		_remove_vote.rpc(current_hbox.get_path(), tick_box.get_path())
+		_remove_vote.rpc(tick_box.get_path())
 		if current_vote == "db_box":
 			_add_vote.rpc("db", false)
 	
@@ -76,7 +76,7 @@ func _on_double_building_texture_pressed():
 		return
 	
 	if current_vote != "db_box" and current_vote != "":
-		_remove_vote.rpc(current_hbox.get_path(), tick_box.get_path())
+		_remove_vote.rpc(tick_box.get_path())
 		if current_vote == "arena":
 			_add_vote.rpc("arena", false)
 	
@@ -94,8 +94,7 @@ func _display_vote(hbox_path):
 
 
 @rpc("any_peer", "call_local", "reliable")
-func _remove_vote(hbox_path, peer_tick_box_path):
-	var hbox = get_node(hbox_path)
+func _remove_vote(peer_tick_box_path):
 	var peer_tick_box = get_node_or_null(peer_tick_box_path)
 	if peer_tick_box != null:
 		peer_tick_box.queue_free()

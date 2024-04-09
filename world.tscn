@@ -166,6 +166,7 @@ size_flags_vertical = 4
 script = ExtResource("4_ntbcx")
 
 [node name="ColorRect" type="ColorRect" parent="MultiplayerMenu/MainMenuScreen"]
+z_index = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -176,6 +177,7 @@ color = Color(0.203922, 0.266667, 0.733333, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="MainMenu" type="PanelContainer" parent="MultiplayerMenu/MainMenuScreen"]
+z_index = 2
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -527,6 +529,7 @@ grow_vertical = 2
 script = ExtResource("14_ag51l")
 
 [node name="ColorRect" type="ColorRect" parent="MultiplayerMenu/MapSelector"]
+z_index = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -536,6 +539,7 @@ grow_vertical = 2
 color = Color(0.203922, 0.266667, 0.733333, 1)
 
 [node name="PanelContainer" type="PanelContainer" parent="MultiplayerMenu/MapSelector"]
+z_index = 2
 custom_minimum_size = Vector2(1200, 750)
 layout_mode = 1
 anchors_preset = 8
@@ -602,6 +606,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="TimerLabel" type="Label" parent="MultiplayerMenu/MapSelector"]
+z_index = 2
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 1
 offset_right = 74.0

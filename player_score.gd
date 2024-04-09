@@ -4,14 +4,16 @@ var score = 0
 @onready var id = name.to_int()
 
 func _ready():
-	#_update_colour()
-	pass
-
-func _process(_delta):
-	_update_score()
+	_update_colour()
+	for player in get_tree().get_nodes_in_group("Player"):
+		player.hurtbox.connect("change_score", _update_score_rpc)
 
 
-#@rpc ("any_peer", "call_local")
+func _update_score_rpc():
+	_update_score.rpc()
+
+
+@rpc ("any_peer", "call_local")
 func _update_score():
 	if Global.players != {}:
 		if Global.players.has(id):
@@ -19,16 +21,17 @@ func _update_score():
 				self.text = Global.players[id].Name + ": " + str(Global.players[id].Score)
 
 
-@rpc("any_peer", "call_local", "reliable")
 func _update_colour():
-	if Global.players.has(id):
-		if Global.players != {}:
+	if Global.players != {}:
+		if Global.players.has(id):
 			match Global.players[id].Team:
 				1:
-					label_settings.font_color = Color("2273e0")
+					add_theme_color_override("font_color", Color("2273e0"))
 				2:
-					label_settings.font_color = Color("8e000e")
+					add_theme_color_override("font_color", Color("a90013"))
 				3:
-					label_settings.font_color = Color("439158")
+					add_theme_color_override("font_color", Color("439158"))
 				4:
-					label_settings.font_color = Color("e3bf42")
+					add_theme_color_override("font_color", Color("e3bf42"))
+				_:
+					add_theme_color_override("font_color", Color("c2a3cf"))
