@@ -7,7 +7,7 @@ extends Control
 @onready var map_timer = $MapTimer
 @onready var timer_label = $TimerLabel
 
-var timer_length = 10
+var timer_length = 15
 
 var timer_label_value = timer_length
 var tick_box

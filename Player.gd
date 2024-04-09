@@ -5,9 +5,10 @@ extends CharacterBody3D
 @onready var shoot_component = $ShootComponent
 @onready var camera = $View/Camera3D
 @onready var view = $View
-@onready var mesh = $MeshInstance3D
+@onready var mesh = $Meshes/MeshInstance3D
 @onready var hurtbox = $HurtboxComponent
 @onready var in_air_timer = Timer.new()
+@onready var mesh_eyes = $Meshes/Eyes
 
 var default_speed = 6.5
 var current_speed = default_speed
@@ -67,6 +68,8 @@ func _ready():
 	add_child(in_air_timer, true)
 	
 	health_component.connect("flinch", _begin_flinch)
+	
+	change_layers.rpc()
 
 
 func _begin_flinch(damage):
@@ -178,14 +181,13 @@ func change_material(material, want_timer = true):
 			if weapon.arm_two != null:
 				weapon.arm_two.set_surface_override_material(0, BLUE)
 		current_colour = "Blue"
-		change_layers.rpc()
+		
 	elif material == "Red":
 		mesh.set_surface_override_material(0, RED)
 		if weapon != null:
 			weapon.arm.set_surface_override_material(0, RED)
 			if weapon.arm_two != null:
 				weapon.arm_two.set_surface_override_material(0, RED)
-		change_layers.rpc()
 		current_colour = "Red"
 	elif material == "Green":
 		mesh.set_surface_override_material(0, GREEN)
@@ -193,7 +195,6 @@ func change_material(material, want_timer = true):
 			weapon.arm.set_surface_override_material(0, GREEN)
 			if weapon.arm_two != null:
 				weapon.arm_two.set_surface_override_material(0, GREEN)
-		change_layers.rpc()
 		current_colour = "Green"
 	elif material == "Yellow":
 		mesh.set_surface_override_material(0, YELLOW)
@@ -201,7 +202,6 @@ func change_material(material, want_timer = true):
 			weapon.arm.set_surface_override_material(0, YELLOW)
 			if weapon.arm_two != null:
 				weapon.arm_two.set_surface_override_material(0, YELLOW)
-		change_layers.rpc()
 		current_colour = "Yellow"
 	else:
 		mesh.set_surface_override_material(0, PINK)
@@ -209,7 +209,6 @@ func change_material(material, want_timer = true):
 			weapon.arm.set_surface_override_material(0, PINK)
 			if weapon.arm_two != null:
 				weapon.arm_two.set_surface_override_material(0, PINK)
-		change_layers.rpc()
 		current_colour = "Pink"
 
 
@@ -217,6 +216,7 @@ func change_material(material, want_timer = true):
 func change_layers():
 	if is_multiplayer_authority():
 		mesh.visible = false
+		mesh_eyes.visible = false
 
 
 @rpc ("call_local", "any_peer", "unreliable")

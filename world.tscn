@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=51 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_rxlvp"]
 [ext_resource type="Script" path="res://MultiplayerMenu.gd" id="3_asb1u"]
@@ -135,6 +135,9 @@ bg_color = Color(0.384314, 0.384314, 0.384314, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adxas"]
 bg_color = Color(0.486275, 0.854902, 0.992157, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ssq30"]
+bg_color = Color(0.87451, 0.478431, 0.313726, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_qdirn"]
 font_size = 32
@@ -530,7 +533,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.862745, 0.643137, 0.309804, 1)
+color = Color(0.203922, 0.266667, 0.733333, 1)
 
 [node name="PanelContainer" type="PanelContainer" parent="MultiplayerMenu/MapSelector"]
 custom_minimum_size = Vector2(1200, 750)
@@ -546,6 +549,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ssq30")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer"]
 layout_mode = 2
@@ -598,11 +602,14 @@ layout_mode = 2
 alignment = 1
 
 [node name="TimerLabel" type="Label" parent="MultiplayerMenu/MapSelector"]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 1
 offset_right = 74.0
 offset_bottom = 88.0
 text = "15"
 label_settings = SubResource("LabelSettings_powxa")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="MapTimer" type="Timer" parent="MultiplayerMenu/MapSelector"]
 one_shot = true
