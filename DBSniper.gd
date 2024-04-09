@@ -2,7 +2,7 @@ extends Weapon
 
 @onready var no_scope_raycast = $WeaponSway/NoScopeRaycast
 @onready var tracer_spawn = $WeaponSway/TracerSpawn
-@onready var gun = $WeaponSway/AllMesh/Gun
+@onready var gun = $WeaponSway/AllMesh/Elements/Gun
 @export var bullet_tracer_scene : PackedScene
 
 func _unhandled_input(event):

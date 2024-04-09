@@ -231,7 +231,7 @@ tracks/6/keys = {
 
 [sub_resource type="Animation" id="Animation_4vl0y"]
 resource_name = "flick"
-length = 0.2
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -239,7 +239,7 @@ tracks/0/path = NodePath("WeaponSway/AllMesh/Pivot2:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
+"times": PackedFloat32Array(0, 0.2, 0.4),
 "transitions": PackedFloat32Array(0.2, 0.5, 1),
 "update": 0,
 "values": [Vector3(-1.5708, 0, 0), Vector3(0.698132, 0, 0), Vector3(-1.5708, 0, 0)]
@@ -251,7 +251,7 @@ tracks/1/path = NodePath("WeaponSway/AllMesh/Pivot2:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
+"times": PackedFloat32Array(0, 0.2, 0.4),
 "transitions": PackedFloat32Array(0.2, 0.5, 1),
 "update": 0,
 "values": [Vector3(-1, -0.268, 0.307), Vector3(-1, -0.268, 0), Vector3(-1, -0.268, 0.307)]
@@ -302,10 +302,27 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(-0.062, -0.03, 0), Vector3(0, 0, 0), Vector3(0.09, -0.03, 0)]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.15, 0.65),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"play_footstep"
+}, {
+"args": [],
+"method": &"play_footstep"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_xu2h4"]
 resource_name = "reload_two"
-length = 0.1
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -313,7 +330,7 @@ tracks/0/path = NodePath("WeaponSway/AllMesh/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, 0)]
@@ -325,7 +342,7 @@ tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1),
+"times": PackedFloat32Array(0, 0.2, 0.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(-0.261799, 0, 0), Vector3(0, 0, 0)]
@@ -333,7 +350,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
-length = 0.6
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -341,7 +358,7 @@ tracks/0/path = NodePath("WeaponSway/AllMesh/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6),
+"times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0, 0.127152, 0.115371), Vector3(0, 0, 0)]
@@ -353,7 +370,7 @@ tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.6),
+"times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(-6.28319, 0, 0), Vector3(0, 0, 0)]
@@ -365,7 +382,7 @@ tracks/2/path = NodePath("WeaponSway/AllMesh/Pivot:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.6),
+"times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0.349066, 0, 0), Vector3(0, 0, 0)]
@@ -398,6 +415,7 @@ muzzle_flash = NodePath("WeaponSway/AllMesh/Gun/MuzzleFlash")
 gun_audio = NodePath("RevolverAudio")
 local_gun_audio = NodePath("LocalRevolverAudio")
 weapon_sway_node = NodePath("WeaponSway")
+default_damage = 15
 max_ammo = 6
 default_player_speed = 7.5
 current_ammo = 6
@@ -443,6 +461,7 @@ mesh = SubResource("ArrayMesh_sno4x")
 transform = Transform3D(1, 0, 0, 0, -3.61999e-06, 1, 0, -1, -3.61999e-06, -1, -0.268, 0.307)
 
 [node name="Arm2" type="MeshInstance3D" parent="WeaponSway/AllMesh/Pivot2"]
+unique_name_in_owner = true
 transform = Transform3D(0.996195, -0.0871557, 0, -0.0488629, -0.558506, -0.82806, 0.0721702, 0.824909, -0.560639, -0.0182688, 0.120736, -0.167182)
 mesh = SubResource("CapsuleMesh_lwpcb")
 skeleton = NodePath("../../../..")
@@ -482,7 +501,6 @@ libraries = {
 }
 autoplay = "idle"
 playback_default_blend_time = 0.05
-speed_scale = 0.5
 
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="."]
 libraries = {
@@ -490,7 +508,13 @@ libraries = {
 }
 autoplay = "idle"
 playback_default_blend_time = 0.05
-speed_scale = 0.5
+
+[node name="AnimationPlayer3" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_cthlp")
+}
+autoplay = "idle"
+playback_default_blend_time = 0.05
 
 [node name="RevolverAudio" type="AudioStreamPlayer3D" parent="."]
 stream = SubResource("AudioStreamWAV_5o7tp")

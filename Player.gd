@@ -1,14 +1,23 @@
 extends CharacterBody3D
 
-@onready var animation_player = $AnimationPlayer
 @onready var health_component = $HealthComponent
 @onready var shoot_component = $ShootComponent
 @onready var camera = $View/Camera3D
 @onready var view = $View
 @onready var mesh = $Meshes/MeshInstance3D
+@onready var mesh_outline = $Meshes/MeshInstance3D/Outline
 @onready var hurtbox = $HurtboxComponent
 @onready var in_air_timer = Timer.new()
 @onready var mesh_eyes = $Meshes/Eyes
+@onready var footstep_audio = $FootstepAudio
+
+@onready var footsteps = [
+	preload("res://sounds/footsteps/footstep1.wav"), 
+preload("res://sounds/footsteps/footstep2.wav"), 
+preload("res://sounds/footsteps/footstep3.wav"), 
+preload("res://sounds/footsteps/footstep4.wav"), 
+preload("res://sounds/footsteps/footstep5.wav")
+]
 
 var default_speed = 6.5
 var current_speed = default_speed
@@ -215,8 +224,11 @@ func change_material(material, want_timer = true):
 @rpc ("call_local", "any_peer", "reliable")
 func change_layers():
 	if is_multiplayer_authority():
-		mesh.visible = false
-		mesh_eyes.visible = false
+		mesh.cast_shadow = 3
+		mesh_outline.cast_shadow = 3
+		
+		for eye in mesh_eyes.get_children():
+			eye.cast_shadow = 3
 
 
 @rpc ("call_local", "any_peer", "unreliable")
@@ -242,3 +254,11 @@ func weapon_sway(delta):
 
 func _on_in_air_timer_timeout():
 	in_air = false
+
+
+@rpc("any_peer", "call_local")
+func play_footstep_audio():
+	footstep_audio.stream = footsteps.pick_random()
+	
+	footstep_audio.pitch_scale = randf_range(0.8, 1.2)
+	footstep_audio.play()

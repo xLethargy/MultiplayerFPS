@@ -3,7 +3,7 @@ extends Weapon
 @onready var coin_scene = preload("res://models/projectiles/coin.tscn")
 @onready var coin_marker = $CoinMarker
 @onready var coin_cooldown_timer = $CoinCooldown
-@onready var animation_player_2 = $AnimationPlayer2
+@onready var animation_player_3 = $AnimationPlayer3
 
 @onready var finger_snap = $LocalFingerSnap
 
@@ -14,7 +14,7 @@ func _unhandled_input(event):
 		return
 	
 	if event.is_action_pressed("right_click") and current_ammo > 0 and can_use_coin:
-		_play_animation.rpc("flick", animation_player_2.get_path())
+		_play_animation.rpc("flick", animation_player_3.get_path())
 		finger_snap.play()
 		
 		can_use_coin = false

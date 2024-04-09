@@ -61,7 +61,7 @@ func _on_multiplayer_menu_add_player():
 				player.name = str(Global.players[i].ID)
 				
 				add_child(player, true)
-				player.position = current_map.spawn_points.get_child(randi_range(0, 4)).position
+				player.position = current_map.pick_random_spawn().position
 				
 				match Global.players[i].Class:
 					"PistolOne":
@@ -259,4 +259,4 @@ func load_map(given_map):
 	player = get_node_or_null(str(multiplayer.get_unique_id()))
 	
 	if player != null:
-		player.position = current_map.spawn_points.get_child(randi_range(0, 4)).position
+		player.position = current_map.pick_random_spawn().position

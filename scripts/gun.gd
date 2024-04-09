@@ -3,12 +3,14 @@ extends Node3D
 
 @onready var audio_player : AudioStreamPlayer = $AudioStreamPlayer
 
+
 @onready var animation_player = $AnimationPlayer
+@onready var animation_player_2 = $AnimationPlayer2
 @export var muzzle_flash : GPUParticles3D
 @onready var hitmarker = $Hitmarker
 @onready var hitmarker_timer = $Hitmarkerlength
 @onready var arm = %Arm
-@onready var arm_two = get_node_or_null("WeaponSway/AllMesh/Pivot2/Arm2")
+@onready var arm_two = %Arm2
 @export var gun_audio : AudioStreamPlayer3D
 @export var local_gun_audio : AudioStreamPlayer
 
@@ -85,12 +87,10 @@ func _physics_process(delta):
 	if !player.is_multiplayer_authority():
 		return
 	
-	if !animation_player.current_animation == "shoot" and !animation_player.current_animation == "reload" and !animation_player.current_animation == "aiming" and !animation_player.current_animation == "flick":
-		
-		if player.input_dir != Vector2.ZERO and player.is_on_floor() and !aiming:
-			_play_animation.rpc("move")
-		elif player.input_dir == Vector2.ZERO and !aiming:
-			_play_animation.rpc("idle")
+	if player.input_dir != Vector2.ZERO and player.is_on_floor() and !aiming:
+		_play_animation.rpc("move", animation_player_2.get_path())
+	elif (player.input_dir == Vector2.ZERO or !player.is_on_floor()) and !aiming:
+		_play_animation.rpc("idle", animation_player_2.get_path())
 	
 	if recoil:
 		var recoil_adjustment = view.rotation.x + recoil_amount * delta
@@ -115,6 +115,7 @@ func play_shoot_effects():
 	
 	if animation_player.current_animation != "aiming":
 		animation_player.stop()
+	"play shoot"
 	animation_player.play("shoot")
 	
 	if is_in_group("Ranged"):
@@ -214,3 +215,7 @@ func handle_collision(collider, given_damage = current_damage):
 			on_hit_effect(false)
 			collider.handle_coin_collision()
 			make_coin_invisible.rpc(collider.owner.get_path())
+
+
+func play_footstep():
+	player.play_footstep_audio.rpc()
