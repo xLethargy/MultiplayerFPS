@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dpp36leb612fw"]
+[gd_scene load_steps=12 format=3 uid="uid://dpp36leb612fw"]
 
 [ext_resource type="PackedScene" uid="uid://vp87qdf4rx67" path="res://arena.glb" id="1_6227c"]
 [ext_resource type="Material" uid="uid://drxfp3qp8acgn" path="res://materials/orange.tres" id="2_b7d0w"]
@@ -13,6 +13,19 @@ uv1_triplanar = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7480v"]
 size = Vector3(0.2, 10, 60)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_twd6y"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_m6tua"]
+sky_material = SubResource("ProceduralSkyMaterial_twd6y")
+
+[sub_resource type="Environment" id="Environment_2tsg0"]
+background_mode = 2
+sky = SubResource("Sky_m6tua")
+tonemap_mode = 2
+glow_enabled = true
 
 [node name="arena" instance=ExtResource("1_6227c")]
 script = ExtResource("2_m6ksy")
@@ -67,3 +80,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2, 0)
 [node name="5" type="Marker3D" parent="SpawnPoints" index="4"]
 
 [node name="OutOfBoundsDetector" parent="." index="3" instance=ExtResource("5_7lgy7")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="4"]
+environment = SubResource("Environment_2tsg0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." index="5"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." index="6"]
+transform = Transform3D(-0.887, -0.239555, 0.394771, 0, 0.85491, 0.518776, -0.461769, 0.460154, -0.758305, 7.46947, 7.68647, -17.5874)
+visible = false
+fov = 60.0

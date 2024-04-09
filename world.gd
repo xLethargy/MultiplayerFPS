@@ -29,7 +29,11 @@ var added_label = false
 @onready var gold = preload("res://materials/gold.tres")
 @onready var black = preload("res://materials/black.tres")
 
+@onready var current_map_parent = $CurrentMap
 @onready var current_map = $CurrentMap.get_child(0)
+
+@onready var arena = preload("res://arena.tscn")
+@onready var db_building = preload("res://models/levels/double_building.tscn")
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
@@ -235,3 +239,24 @@ func spawn_tracer_pivot(tracer_colour, tracer_spawn_pos, tracer_spawn_rot, dista
 		bullet_tracer.look_at(collider)
 	await get_tree().create_timer(2).timeout
 	bullet_tracer.queue_free()
+
+
+@rpc ("any_peer", "call_local", "reliable")
+func load_map(given_map):
+	current_map_parent.remove_child(current_map)
+	
+	var map_to_load
+	match given_map:
+		"arena":
+			map_to_load = arena
+		"db_building":
+			map_to_load = db_building
+	
+	var map = map_to_load.instantiate()
+	current_map_parent.add_child(map, true)
+	current_map = map
+	
+	player = get_node_or_null(str(multiplayer.get_unique_id()))
+	
+	if player != null:
+		player.position = current_map.spawn_points.get_child(randi_range(0, 4)).position

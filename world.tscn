@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=50 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_rxlvp"]
 [ext_resource type="Script" path="res://MultiplayerMenu.gd" id="3_asb1u"]
@@ -13,20 +13,10 @@
 [ext_resource type="Texture2D" uid="uid://bgcguukvfpf5u" path="res://images/HOST_NONhighlighted.jpeg" id="6_d4nsd"]
 [ext_resource type="Texture2D" uid="uid://da31vlhqumxfe" path="res://images/HOST_pressed.jpeg" id="7_4twsw"]
 [ext_resource type="Texture2D" uid="uid://bt00f4guyerxd" path="res://images/join1.svg" id="8_3ioy5"]
+[ext_resource type="Script" path="res://MapSelector.gd" id="14_ag51l"]
 [ext_resource type="PackedScene" uid="uid://cqasao7l288a" path="res://models/levels/double_building.tscn" id="14_mbwj7"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uc3qh"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-
-[sub_resource type="Sky" id="Sky_m6tua"]
-sky_material = SubResource("ProceduralSkyMaterial_uc3qh")
-
-[sub_resource type="Environment" id="Environment_khruk"]
-background_mode = 2
-sky = SubResource("Sky_m6tua")
-tonemap_mode = 2
-glow_enabled = true
+[ext_resource type="Texture2D" uid="uid://cxqwq4rgwk2j2" path="res://images/arena.png" id="15_weac0"]
+[ext_resource type="Texture2D" uid="uid://q6fpkkrsigjq" path="res://images/dbl_building.png" id="16_5jucf"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0se3p"]
 font_size = 24
@@ -146,15 +136,17 @@ bg_color = Color(0.384314, 0.384314, 0.384314, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adxas"]
 bg_color = Color(0.486275, 0.854902, 0.992157, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_qdirn"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_15l0v"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_powxa"]
+font_size = 128
+
 [node name="World" type="Node3D"]
 script = ExtResource("1_rxlvp")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_khruk")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
-shadow_enabled = true
 
 [node name="MultiplayerMenu" type="CanvasLayer" parent="."]
 script = ExtResource("3_asb1u")
@@ -521,6 +513,100 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
+[node name="MapSelector" type="Control" parent="MultiplayerMenu"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("14_ag51l")
+
+[node name="ColorRect" type="ColorRect" parent="MultiplayerMenu/MapSelector"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.862745, 0.643137, 0.309804, 1)
+
+[node name="PanelContainer" type="PanelContainer" parent="MultiplayerMenu/MapSelector"]
+custom_minimum_size = Vector2(1200, 750)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Arena"
+label_settings = SubResource("LabelSettings_qdirn")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ArenaTexture" type="TextureButton" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+texture_normal = ExtResource("15_weac0")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ArenaHBox" type="HBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Double Building"
+label_settings = SubResource("LabelSettings_15l0v")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DoubleBuildingTexture" type="TextureButton" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+texture_normal = ExtResource("16_5jucf")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="DBHBox" type="HBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="TimerLabel" type="Label" parent="MultiplayerMenu/MapSelector"]
+layout_mode = 1
+offset_right = 74.0
+offset_bottom = 88.0
+text = "15"
+label_settings = SubResource("LabelSettings_powxa")
+
+[node name="MapTimer" type="Timer" parent="MultiplayerMenu/MapSelector"]
+one_shot = true
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
 spawn_path = NodePath("..")
@@ -550,4 +636,7 @@ spawn_path = NodePath("..")
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Leave Match" to="MultiplayerMenu" method="_on_leave_match_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt/HBoxContainer/Yes" to="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt" method="_on_yes_pressed"]
 [connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt/HBoxContainer/No" to="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt" method="_on_no_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer/ArenaTexture" to="MultiplayerMenu/MapSelector" method="_on_arena_texture_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer2/DoubleBuildingTexture" to="MultiplayerMenu/MapSelector" method="_on_double_building_texture_pressed"]
+[connection signal="timeout" from="MultiplayerMenu/MapSelector/MapTimer" to="MultiplayerMenu/MapSelector" method="_on_map_timer_timeout"]
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

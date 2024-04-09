@@ -7,7 +7,6 @@ extends CharacterBody3D
 @onready var view = $View
 @onready var mesh = $MeshInstance3D
 @onready var hurtbox = $HurtboxComponent
-@onready var collision_detector = $CollisionDetector.get_child(0)
 @onready var in_air_timer = Timer.new()
 
 var default_speed = 6.5
@@ -243,24 +242,3 @@ func weapon_sway(delta):
 
 func _on_in_air_timer_timeout():
 	in_air = false
-	#collision_detector.disabled = false
-
-
-func _on_collision_detector_area_entered(area):
-	print (area)
-	velocity = Vector3.ZERO
-	
-	collided = true
-	#call_deferred("change_collision_detector")
-
-
-func change_collision_detector():
-	collision_detector.disabled = true
-
-
-func _on_collision_detector_body_entered(body):
-	print (body)
-	#velocity = Vector3.ZERO
-	
-	collided = true
-	#call_deferred("change_collision_detector")
