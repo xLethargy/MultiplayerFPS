@@ -39,7 +39,6 @@ func _unhandled_input(event):
 			boost_z.y = -15
 			
 			player.charging_dash = false
-			player.in_air = true
 			player.in_dash = true
 			player.current_gravity *= 2
 			player.in_air_timer.start()

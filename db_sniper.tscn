@@ -731,7 +731,6 @@ collide_with_areas = true
 [node name="Elements" type="Node3D" parent="WeaponSway/AllMesh"]
 
 [node name="Gun" type="Node3D" parent="WeaponSway/AllMesh/Elements"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Cube" type="MeshInstance3D" parent="WeaponSway/AllMesh/Elements/Gun"]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)

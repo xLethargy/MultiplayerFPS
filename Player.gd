@@ -7,9 +7,9 @@ extends CharacterBody3D
 @onready var mesh = $Meshes/MeshInstance3D
 @onready var mesh_outline = $Meshes/MeshInstance3D/Outline
 @onready var hurtbox = $HurtboxComponent
-@onready var in_air_timer = Timer.new()
 @onready var mesh_eyes = $Meshes/Eyes
 @onready var footstep_audio = $FootstepAudio
+@onready var in_air_timer = $InAirTimer
 
 @onready var footsteps = [
 	preload("res://sounds/footsteps/footstep1.wav"), 
@@ -72,10 +72,6 @@ func _ready():
 	if Global.players.has(id):
 		sensitivity = Global.players[id].Sensitivity
 	
-	in_air_timer.wait_time = 0.3
-	in_air_timer.connect("timeout", _on_in_air_timer_timeout)
-	add_child(in_air_timer, true)
-	
 	health_component.connect("flinch", _begin_flinch)
 	
 	change_layers.rpc()
@@ -122,9 +118,18 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_pressed("jump") and is_on_floor() and !charging_dash:
 		velocity.y = current_jump_velocity
+		in_air_timer.start()
+		print("jump")
 	
 	input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	
+	if !in_dash and in_air and is_on_floor():
+		in_air = false
+		current_gravity = default_gravity
+		play_footstep_audio.rpc()
+	
+	
 	if !in_dash:
 		if direction and !charging_dash:
 			velocity.x = direction.x * current_speed
@@ -132,9 +137,13 @@ func _physics_process(delta):
 		else:
 			velocity.x = move_toward(velocity.x, 0, current_speed)
 			velocity.z = move_toward(velocity.z, 0, current_speed)
-	elif in_dash and !in_air and is_on_floor():
+	elif in_dash and in_air and is_on_floor():
 		in_dash = false
+		in_air = false
 		current_gravity = default_gravity
+		play_footstep_audio.rpc()
+		print ("landed")
+	
 	
 	if !frozen:
 		move_and_slide()
@@ -253,7 +262,7 @@ func weapon_sway(delta):
 
 
 func _on_in_air_timer_timeout():
-	in_air = false
+	in_air = true
 
 
 @rpc("any_peer", "call_local")

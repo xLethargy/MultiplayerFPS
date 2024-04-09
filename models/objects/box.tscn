@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://1qx3r3cx6sg1"]
+[gd_scene load_steps=7 format=3 uid="uid://1qx3r3cx6sg1"]
 
 [ext_resource type="Script" path="res://models/objects/box.gd" id="1_1858n"]
 [ext_resource type="Texture2D" uid="uid://be2hf1w5617ro" path="res://models/objects/box_box_cover.png" id="1_q5d8n"]
-[ext_resource type="AudioStream" uid="uid://fyfdassd0j7c" path="res://sounds/tiki.mp3" id="2_5fh3n"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lq862"]
 
@@ -55,11 +54,3 @@ shape = SubResource("BoxShape3D_lq862")
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 mesh = SubResource("ArrayMesh_blnf2")
 skeleton = NodePath("")
-
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("2_5fh3n")
-volume_db = -20.0
-max_db = -15.0
-max_distance = 10.0
-
-[connection signal="finished" from="AudioStreamPlayer3D" to="." method="_on_audio_stream_player_3d_finished"]
