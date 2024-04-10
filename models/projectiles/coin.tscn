@@ -1,8 +1,8 @@
 [gd_scene load_steps=16 format=3 uid="uid://b4ncbxm3wmm7c"]
 
-[ext_resource type="Script" path="res://models/projectiles/coinhurtbox.gd" id="1_jdkf4"]
-[ext_resource type="Script" path="res://models/projectiles/coin.gd" id="1_s2jxo"]
+[ext_resource type="Script" path="res://scripts/coin.gd" id="1_3yha1"]
 [ext_resource type="Material" uid="uid://2qga2owh6n3d" path="res://materials/gold.tres" id="2_m0j10"]
+[ext_resource type="Script" path="res://scripts/coinhurtbox.gd" id="3_irvvo"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="3_wtro8"]
 [ext_resource type="AudioStream" uid="uid://bomt5pjsum1bc" path="res://sounds/clang.wav" id="5_x8hwc"]
 
@@ -85,7 +85,7 @@ gravity_scale = 0.5
 continuous_cd = true
 max_contacts_reported = 1
 contact_monitor = true
-script = ExtResource("1_s2jxo")
+script = ExtResource("1_3yha1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
@@ -98,7 +98,7 @@ shape = SubResource("ConvexPolygonShape3D_yggu8")
 [node name="HurtboxComponent" type="Area3D" parent="." groups=["Hurtbox"]]
 collision_layer = 4
 collision_mask = 4
-script = ExtResource("1_jdkf4")
+script = ExtResource("3_irvvo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent"]
 shape = SubResource("SphereShape3D_4aw83")

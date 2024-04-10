@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="Multiplayer FPS"
-run/main_scene="res://world.tscn"
+run/main_scene="res://models/levels/world.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 run/max_fps=244
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
 
 [autoload]
 
-Global="*res://global.gd"
+Global="*res://scripts/global.gd"
 
 [display]
 

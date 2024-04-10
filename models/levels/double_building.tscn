@@ -1,6 +1,6 @@
 [gd_scene load_steps=24 format=3 uid="uid://cqasao7l288a"]
 
-[ext_resource type="Script" path="res://arena.gd" id="1_1ivy8"]
+[ext_resource type="Script" path="res://scripts/arena.gd" id="1_1ivy8"]
 [ext_resource type="PackedScene" uid="uid://cqic11uh1ybd6" path="res://components/out_of_bounds_detector.tscn" id="1_h1665"]
 [ext_resource type="PackedScene" uid="uid://1qx3r3cx6sg1" path="res://models/objects/box.tscn" id="3_upnuo"]
 [ext_resource type="PackedScene" uid="uid://b1oltjcbnuebx" path="res://models/objects/campfire.tscn" id="4_ikxt6"]

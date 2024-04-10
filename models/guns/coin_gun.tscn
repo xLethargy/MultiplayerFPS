@@ -1,6 +1,6 @@
 [gd_scene load_steps=29 format=3 uid="uid://bi1q33khvg02m"]
 
-[ext_resource type="Script" path="res://coin_gun.gd" id="1_cqrq7"]
+[ext_resource type="Script" path="res://scripts/coin_gun.gd" id="1_cqrq7"]
 [ext_resource type="Material" uid="uid://2qga2owh6n3d" path="res://materials/gold.tres" id="2_6krx6"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_se3w2"]
 [ext_resource type="AudioStream" uid="uid://cu662sujy0wrn" path="res://sounds/finger_snap.wav" id="4_bjy7p"]

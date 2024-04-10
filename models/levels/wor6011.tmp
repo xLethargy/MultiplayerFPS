@@ -1,0 +1,664 @@
+[gd_scene load_steps=53 format=3 uid="uid://cvegbuu7wxika"]
+
+[ext_resource type="Script" path="res://scripts/world.gd" id="1_rxlvp"]
+[ext_resource type="Script" path="res://scripts/MultiplayerMenu.gd" id="3_asb1u"]
+[ext_resource type="Script" path="res://scripts/HUD.gd" id="4_3loky"]
+[ext_resource type="StyleBox" uid="uid://d0b38dfc76hfy" path="res://ui/redwarning.tres" id="4_h4lil"]
+[ext_resource type="Texture2D" uid="uid://cbsmflq8gs6xe" path="res://images/HOST_highlighted.jpeg" id="4_lae6t"]
+[ext_resource type="Script" path="res://scripts/MainMenuScreen.gd" id="4_ntbcx"]
+[ext_resource type="Script" path="res://scripts/TeamChooser.gd" id="5_ett3o"]
+[ext_resource type="Script" path="res://scripts/WarningPrompt.gd" id="5_hhjua"]
+[ext_resource type="Texture2D" uid="uid://belxpkhe22pnq" path="res://addons/kenney_particle_pack/circle_05.png" id="5_osqmr"]
+[ext_resource type="Texture2D" uid="uid://djocoyt5s36bk" path="res://images/sniperADS.png" id="6_51bju"]
+[ext_resource type="Texture2D" uid="uid://bgcguukvfpf5u" path="res://images/HOST_NONhighlighted.jpeg" id="6_d4nsd"]
+[ext_resource type="Texture2D" uid="uid://da31vlhqumxfe" path="res://images/HOST_pressed.jpeg" id="7_4twsw"]
+[ext_resource type="Texture2D" uid="uid://bt00f4guyerxd" path="res://images/join1.svg" id="8_3ioy5"]
+[ext_resource type="AudioStream" uid="uid://cx35r1fldd6er" path="res://sounds/click1.wav" id="11_w341s"]
+[ext_resource type="Script" path="res://scripts/MapSelector.gd" id="14_ag51l"]
+[ext_resource type="PackedScene" uid="uid://cqasao7l288a" path="res://models/levels/double_building.tscn" id="14_mbwj7"]
+[ext_resource type="Texture2D" uid="uid://cxqwq4rgwk2j2" path="res://images/arena.png" id="15_weac0"]
+[ext_resource type="Texture2D" uid="uid://q6fpkkrsigjq" path="res://images/dbl_building.png" id="16_5jucf"]
+[ext_resource type="AudioStream" uid="uid://cxi2epivfj5yv" path="res://sounds/vote_select.wav" id="18_8sc6e"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_0se3p"]
+font_size = 24
+
+[sub_resource type="Theme" id="Theme_lb84u"]
+default_font_size = 24
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n8i0k"]
+texture = ExtResource("6_d4nsd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o3x32"]
+texture = ExtResource("4_lae6t")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p1ksh"]
+texture = ExtResource("7_4twsw")
+
+[sub_resource type="Theme" id="Theme_4sr3w"]
+default_font_size = 24
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y8u7w"]
+texture = ExtResource("8_3ioy5")
+
+[sub_resource type="Theme" id="Theme_f4rxh"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_1p5i3"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_5nfux"]
+default_font_size = 24
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_prt06"]
+texture = ExtResource("4_lae6t")
+
+[sub_resource type="Animation" id="Animation_uo1xs"]
+resource_name = "flicker"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Host:theme_override_styles/normal")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [SubResource("StyleBoxTexture_n8i0k"), SubResource("StyleBoxTexture_prt06"), SubResource("StyleBoxTexture_prt06")]
+}
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uin7q"]
+texture = ExtResource("6_d4nsd")
+
+[sub_resource type="Animation" id="Animation_a1bg6"]
+resource_name = "hover"
+length = 0.3
+loop_mode = 1
+step = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Host:theme_override_styles/hover")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [SubResource("StyleBoxTexture_o3x32"), SubResource("StyleBoxTexture_uin7q"), SubResource("StyleBoxTexture_uin7q")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6v2in"]
+_data = {
+"flicker": SubResource("Animation_uo1xs"),
+"hover": SubResource("Animation_a1bg6")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_538o8"]
+font_size = 24
+
+[sub_resource type="Theme" id="Theme_u28t4"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_qxm7d"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_7aniu"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_nsjv6"]
+default_font_size = 24
+
+[sub_resource type="Theme" id="Theme_n1aia"]
+default_font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_ewm0o"]
+font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_3ki6q"]
+font_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e8jmi"]
+bg_color = Color(0.231373, 0.509804, 0.207843, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f6uqw"]
+bg_color = Color(0.639216, 0.117647, 0.172549, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cuny2"]
+bg_color = Color(0.223529, 0.709804, 0.27451, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mv5p7"]
+font_size = 36
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_54oud"]
+bg_color = Color(0.384314, 0.384314, 0.384314, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adxas"]
+bg_color = Color(0.486275, 0.854902, 0.992157, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ssq30"]
+bg_color = Color(0.87451, 0.478431, 0.313726, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_qdirn"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_15l0v"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_powxa"]
+font_size = 128
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_rxlvp")
+
+[node name="MultiplayerMenu" type="CanvasLayer" parent="."]
+script = ExtResource("3_asb1u")
+
+[node name="MainMenuScreen" type="Control" parent="MultiplayerMenu"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("4_ntbcx")
+
+[node name="ColorRect" type="ColorRect" parent="MultiplayerMenu/MainMenuScreen"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.203922, 0.266667, 0.733333, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="MainMenu" type="PanelContainer" parent="MultiplayerMenu/MainMenuScreen"]
+z_index = 2
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="ServerJoiner" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Label" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+layout_mode = 2
+text = "Main Menu"
+label_settings = SubResource("LabelSettings_0se3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Host" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_lb84u")
+theme_override_styles/normal = SubResource("StyleBoxTexture_n8i0k")
+theme_override_styles/hover = SubResource("StyleBoxTexture_o3x32")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_p1ksh")
+
+[node name="Join" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_4sr3w")
+theme_override_styles/normal = SubResource("StyleBoxTexture_y8u7w")
+
+[node name="NameEntry" type="LineEdit" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_f4rxh")
+placeholder_text = "Enter Name"
+alignment = 1
+
+[node name="AddressEntry" type="LineEdit" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_1p5i3")
+placeholder_text = "Enter Address to Join"
+alignment = 1
+
+[node name="Quit Game" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_5nfux")
+theme_override_styles/normal = ExtResource("4_h4lil")
+text = "Quit Game"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner"]
+libraries = {
+"": SubResource("AnimationLibrary_6v2in")
+}
+
+[node name="TeamChooser" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+script = ExtResource("5_ett3o")
+
+[node name="ChooseTeam" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser"]
+layout_mode = 2
+text = "Choose Team Number"
+label_settings = SubResource("LabelSettings_0se3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Two" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_4sr3w")
+text = "2"
+
+[node name="Three" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_4sr3w")
+text = "3"
+
+[node name="Four" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_4sr3w")
+text = "4"
+
+[node name="NoTeam" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_4sr3w")
+text = "No Teams"
+
+[node name="ChooseClass" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Choose Class" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+text = "Choose a Class"
+label_settings = SubResource("LabelSettings_538o8")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Deagle" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_u28t4")
+text = "Deagle"
+
+[node name="SMG" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_qxm7d")
+text = "SMG"
+
+[node name="Freeze Ray" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_7aniu")
+text = "Freeze Ray"
+
+[node name="Speed Gun" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_nsjv6")
+text = "Speed Gun"
+
+[node name="Stake" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_n1aia")
+text = "Stake"
+
+[node name="Sniper" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_5nfux")
+text = "Sniper"
+
+[node name="Coin Gun" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_5nfux")
+text = "Coin Gun"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer"]
+layout_mode = 2
+text = "Sensitivity:"
+label_settings = SubResource("LabelSettings_ewm0o")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="Sensitivity" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "11"
+label_settings = SubResource("LabelSettings_3ki6q")
+vertical_alignment = 1
+
+[node name="SensSlider" type="HSlider" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(370, 30)
+layout_mode = 2
+value = 11.0
+
+[node name="Leave Match" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass"]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme = SubResource("Theme_5nfux")
+theme_override_styles/normal = ExtResource("4_h4lil")
+text = "Leave Match"
+
+[node name="WarningPrompt" type="VBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+script = ExtResource("5_hhjua")
+
+[node name="WarningLabel" type="Label" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt"]
+layout_mode = 2
+text = "Are you sure you 
+want to leave the match?"
+label_settings = SubResource("LabelSettings_0se3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt"]
+layout_mode = 2
+alignment = 1
+
+[node name="Yes" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt/HBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme = SubResource("Theme_lb84u")
+theme_override_styles/normal = SubResource("StyleBoxFlat_e8jmi")
+text = "Yes"
+
+[node name="No" type="Button" parent="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt/HBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme = SubResource("Theme_4sr3w")
+theme_override_styles/normal = ExtResource("4_h4lil")
+text = "No"
+
+[node name="ClickAudio" type="AudioStreamPlayer" parent="MultiplayerMenu/MainMenuScreen"]
+stream = ExtResource("11_w341s")
+volume_db = -7.0
+
+[node name="HUD" type="Control" parent="MultiplayerMenu"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_3loky")
+
+[node name="Crosshair" type="TextureRect" parent="MultiplayerMenu/HUD"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -7.99994
+offset_top = -7.99997
+offset_right = 504.0
+offset_bottom = 504.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.03, 0.03)
+mouse_filter = 2
+texture = ExtResource("5_osqmr")
+stretch_mode = 5
+
+[node name="Healthbar" type="ProgressBar" parent="MultiplayerMenu/HUD"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.352
+anchor_top = 0.035
+anchor_right = 0.648
+anchor_bottom = 0.077
+offset_left = 0.495972
+offset_top = 0.32
+offset_right = -0.495972
+offset_bottom = 0.103996
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_f6uqw")
+theme_override_styles/fill = SubResource("StyleBoxFlat_cuny2")
+value = 100.0
+show_percentage = false
+
+[node name="Ammo" type="Label" parent="MultiplayerMenu/HUD"]
+custom_minimum_size = Vector2(60, 35)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -75.0
+offset_top = -45.0
+offset_right = -15.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "9999"
+label_settings = SubResource("LabelSettings_mv5p7")
+horizontal_alignment = 2
+
+[node name="AmmoBar" type="ProgressBar" parent="MultiplayerMenu/HUD"]
+visible = false
+custom_minimum_size = Vector2(250, 30)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.864
+anchor_top = 0.956
+anchor_right = 0.994
+anchor_bottom = 0.983
+offset_left = 124.12
+offset_top = 14.52
+offset_right = -0.47998
+offset_bottom = 0.359985
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_54oud")
+theme_override_styles/fill = SubResource("StyleBoxFlat_adxas")
+value = 100.0
+show_percentage = false
+
+[node name="SniperADS" type="TextureRect" parent="MultiplayerMenu/HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_51bju")
+expand_mode = 2
+
+[node name="Score" type="Control" parent="MultiplayerMenu"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayerLabels" type="VBoxContainer" parent="MultiplayerMenu/Score"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MapSelector" type="Control" parent="MultiplayerMenu"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("14_ag51l")
+
+[node name="ColorRect" type="ColorRect" parent="MultiplayerMenu/MapSelector"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.203922, 0.266667, 0.733333, 1)
+
+[node name="PanelContainer" type="PanelContainer" parent="MultiplayerMenu/MapSelector"]
+z_index = 2
+custom_minimum_size = Vector2(1200, 750)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ssq30")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Arena"
+label_settings = SubResource("LabelSettings_qdirn")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ArenaTexture" type="TextureButton" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+texture_normal = ExtResource("15_weac0")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ArenaHBox" type="HBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Double Building"
+label_settings = SubResource("LabelSettings_15l0v")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DoubleBuildingTexture" type="TextureButton" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+texture_normal = ExtResource("16_5jucf")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="DBHBox" type="HBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="TimerLabel" type="Label" parent="MultiplayerMenu/MapSelector"]
+z_index = 2
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 1
+offset_right = 74.0
+offset_bottom = 88.0
+text = "15"
+label_settings = SubResource("LabelSettings_powxa")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MapTimer" type="Timer" parent="MultiplayerMenu/MapSelector"]
+one_shot = true
+
+[node name="VoteAudio" type="AudioStreamPlayer" parent="MultiplayerMenu/MapSelector"]
+stream = ExtResource("18_8sc6e")
+volume_db = -5.0
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://player.tscn")
+spawn_path = NodePath("..")
+
+[node name="CurrentMap" type="Node3D" parent="."]
+
+[node name="double_building" parent="CurrentMap" instance=ExtResource("14_mbwj7")]
+
+[connection signal="add_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_add_player"]
+[connection signal="remove_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_remove_player"]
+[connection signal="mouse_entered" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Host" to="MultiplayerMenu/MainMenuScreen" method="_on_host_mouse_entered"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Host" to="MultiplayerMenu" method="_on_host_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Join" to="MultiplayerMenu" method="_on_join_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/Quit Game" to="MultiplayerMenu" method="_on_quit_game_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser/Two" to="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser" method="_on_two_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser/Three" to="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser" method="_on_three_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser/Four" to="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser" method="_on_four_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser/NoTeam" to="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/TeamChooser" method="_on_no_team_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Deagle" to="MultiplayerMenu" method="_on_pistol_one_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/SMG" to="MultiplayerMenu" method="_on_pistol_two_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Freeze Ray" to="MultiplayerMenu" method="_on_freeze_gun_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Speed Gun" to="MultiplayerMenu" method="_on_speed_gun_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Stake" to="MultiplayerMenu" method="_on_stake_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Sniper" to="MultiplayerMenu" method="_on_sniper_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Coin Gun" to="MultiplayerMenu" method="_on_coin_gun_pressed"]
+[connection signal="value_changed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/SensSlider" to="MultiplayerMenu" method="_on_sens_slider_value_changed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/ChooseClass/Leave Match" to="MultiplayerMenu" method="_on_leave_match_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt/HBoxContainer/Yes" to="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt" method="_on_yes_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt/HBoxContainer/No" to="MultiplayerMenu/MainMenuScreen/MainMenu/MarginContainer/WarningPrompt" method="_on_no_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer/ArenaTexture" to="MultiplayerMenu/MapSelector" method="_on_arena_texture_pressed"]
+[connection signal="pressed" from="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer2/DoubleBuildingTexture" to="MultiplayerMenu/MapSelector" method="_on_double_building_texture_pressed"]
+[connection signal="timeout" from="MultiplayerMenu/MapSelector/MapTimer" to="MultiplayerMenu/MapSelector" method="_on_map_timer_timeout"]
+[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

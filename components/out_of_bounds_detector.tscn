@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cqic11uh1ybd6"]
 
-[ext_resource type="Script" path="res://OutOfBoundsDetector.gd" id="1_jio4b"]
+[ext_resource type="Script" path="res://scripts/OutOfBoundsDetector.gd" id="1_jio4b"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_72xao"]
 size = Vector3(300, 2, 300)

@@ -1,0 +1,86 @@
+[gd_scene load_steps=10 format=3 uid="uid://dpp36leb612fw"]
+
+[ext_resource type="PackedScene" uid="uid://vp87qdf4rx67" path="res://models/glb/arena.glb" id="1_6227c"]
+[ext_resource type="Material" uid="uid://drxfp3qp8acgn" path="res://materials/orange.tres" id="2_b7d0w"]
+[ext_resource type="Script" path="res://scripts/arena.gd" id="2_m6ksy"]
+[ext_resource type="Material" uid="uid://ddhp333twrowe" path="res://materials/checkered_black.tres" id="4_8ktba"]
+[ext_resource type="PackedScene" uid="uid://cqic11uh1ybd6" path="res://components/out_of_bounds_detector.tscn" id="5_7lgy7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7480v"]
+size = Vector3(0.2, 10, 60)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_twd6y"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_m6tua"]
+sky_material = SubResource("ProceduralSkyMaterial_twd6y")
+
+[sub_resource type="Environment" id="Environment_2tsg0"]
+background_mode = 2
+sky = SubResource("Sky_m6tua")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="arena" instance=ExtResource("1_6227c")]
+script = ExtResource("2_m6ksy")
+
+[node name="Arena" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_b7d0w")
+surface_material_override/1 = ExtResource("2_b7d0w")
+surface_material_override/2 = ExtResource("4_8ktba")
+surface_material_override/3 = ExtResource("2_b7d0w")
+surface_material_override/4 = ExtResource("2_b7d0w")
+surface_material_override/5 = ExtResource("2_b7d0w")
+surface_material_override/6 = ExtResource("2_b7d0w")
+surface_material_override/7 = ExtResource("2_b7d0w")
+surface_material_override/8 = ExtResource("2_b7d0w")
+surface_material_override/9 = ExtResource("2_b7d0w")
+surface_material_override/10 = ExtResource("2_b7d0w")
+surface_material_override/11 = ExtResource("2_b7d0w")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Arena/StaticBody3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.1, 9, 6)
+shape = SubResource("BoxShape3D_7480v")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Arena/StaticBody3D" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.1, 9, 6)
+shape = SubResource("BoxShape3D_7480v")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Arena/StaticBody3D" index="3"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6, 9, 36.1)
+shape = SubResource("BoxShape3D_7480v")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Arena/StaticBody3D" index="4"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6, 9, -24.1)
+shape = SubResource("BoxShape3D_7480v")
+
+[node name="SpawnPoints" type="Node3D" parent="." index="1"]
+
+[node name="1" type="Marker3D" parent="SpawnPoints" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 20)
+
+[node name="2" type="Marker3D" parent="SpawnPoints" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -20)
+
+[node name="3" type="Marker3D" parent="SpawnPoints" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 2, 0)
+
+[node name="4" type="Marker3D" parent="SpawnPoints" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2, 0)
+
+[node name="5" type="Marker3D" parent="SpawnPoints" index="4"]
+
+[node name="OutOfBoundsDetector" parent="." index="2" instance=ExtResource("5_7lgy7")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="3"]
+environment = SubResource("Environment_2tsg0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." index="4"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." index="5"]
+transform = Transform3D(-0.887, -0.239555, 0.394771, 0, 0.85491, 0.518776, -0.461769, 0.460154, -0.758305, 7.46947, 7.68647, -17.5874)
+visible = false
+fov = 60.0

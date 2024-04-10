@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://1qx3r3cx6sg1"]
 
-[ext_resource type="Script" path="res://models/objects/box.gd" id="1_1858n"]
+[ext_resource type="Script" path="res://scripts/box.gd" id="1_1858n"]
 [ext_resource type="Texture2D" uid="uid://be2hf1w5617ro" path="res://models/objects/box_box_cover.png" id="1_q5d8n"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lq862"]
