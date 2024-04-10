@@ -121,46 +121,22 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath("WeaponSway/AllMesh/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.435, 0.148, -0.356)]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
+tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("WeaponSway/AllMesh/Gun:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -200,27 +176,15 @@ tracks/1/keys = {
 resource_name = "move"
 length = 1.6
 loop_mode = 1
-step = 0.2
-tracks/0/type = "value"
+step = 0.15
+tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.8, 1.2),
-"transitions": PackedFloat32Array(0.5, 2, 0.5, 2),
-"update": 0,
-"values": [Vector3(0.435, 0.148, -0.356), Vector3(0.373, 0.108, -0.356), Vector3(0.435, 0.148, -0.356), Vector3(0.525, 0.108, -0.356)]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.2, 1),
+"times": PackedFloat32Array(0.15, 0.95),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -229,6 +193,18 @@ tracks/1/keys = {
 "args": [],
 "method": &"play_footstep"
 }]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSway/AllMesh:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.8, 1.2),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 2),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.062, -0.04, 0), Vector3(0, 0, 0), Vector3(0.09, -0.04, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_ba5ka"]
@@ -258,30 +234,6 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, 0.872665), Vector3(0, 0, -0.349066), Vector3(0, 0, 0), Vector3(0.261799, 0, 0), Vector3(0, 0, 0)]
 }
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(2.5),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0.435, 0.148, -0.356)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath(".:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(2.5),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
@@ -309,7 +261,7 @@ _data = {
 }
 
 [node name="SMG" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "weapon_sway_node") groups=["AmmoCounter", "Ranged"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, 0.108, -0.356)
 script = ExtResource("1_24sbh")
 muzzle_flash = NodePath("WeaponSway/AllMesh/Gun/MuzzleFlash")
 weapon_sway_node = NodePath("WeaponSway")
@@ -323,6 +275,7 @@ recoil_amount = 1.5
 [node name="WeaponSway" type="Node3D" parent="."]
 
 [node name="AllMesh" type="Node3D" parent="WeaponSway"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0377812, -0.024375, 0)
 
 [node name="Gun" type="Node3D" parent="WeaponSway/AllMesh"]
 

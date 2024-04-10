@@ -48,6 +48,7 @@ func handle_speed_gun_variables():
 	if animation_player.speed_scale < 5:
 		current_animation_speed += animation_increase
 		animation_player.speed_scale = current_animation_speed
+		animation_player_2.speed_scale = current_animation_speed
 		if animation_player.speed_scale > 5:
 			current_animation_speed = 5
 	
@@ -76,5 +77,6 @@ func _half_stat_variables():
 	player.change_speed_and_jump(halved_speed)
 	current_animation_speed = halved_animation_speed
 	animation_player.speed_scale = current_animation_speed
+	animation_player_2.speed_scale = current_animation_speed
 	current_damage = halved_damage
 	player.camera.fov = halved_fov

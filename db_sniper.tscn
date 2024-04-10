@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://clb40ee8wur3p"]
+[gd_scene load_steps=41 format=3 uid="uid://clb40ee8wur3p"]
 
 [ext_resource type="Script" path="res://DBSniper.gd" id="1_unx4c"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_0d1f6"]
@@ -285,19 +285,19 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath("WeaponSway/AllMesh/Elements/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.435, 0.148, -0.356)]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("WeaponSway/AllMesh/Elements/Gun:position")
+tracks/1/path = NodePath("WeaponSway/AllMesh/Elements/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -309,7 +309,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("WeaponSway/AllMesh/Elements/Gun:rotation")
+tracks/2/path = NodePath("WeaponSway/AllMesh:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -321,7 +321,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("WeaponSway/AllMesh:rotation")
+tracks/3/path = NodePath("WeaponSway/AllMesh:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -333,67 +333,67 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("WeaponSway/AllMesh:position")
+tracks/4/path = NodePath("WeaponSway/AllMesh/Elements/Pivot:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0, 0)]
+"values": [Vector3(-0.0182688, -0.296764, 0.329613)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("WeaponSway/AllMesh/Elements/Pivot:position")
+tracks/5/path = NodePath("WeaponSway/AllMesh/Elements/Pivot:rotation")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-0.0182688, -0.296764, 0.329613)]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("WeaponSway/AllMesh/Elements/Pivot:rotation")
+tracks/6/path = NodePath("WeaponSway/TracerSpawn:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0, 0)]
+"values": [Vector3(0, 0.162021, -1.19931)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("WeaponSway/TracerSpawn:position")
+tracks/7/path = NodePath("WeaponSway/AllMesh/Elements/Pivot2:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0.162021, -1.19931)]
+"values": [Vector3(-0.861784, -0.297, 0.33)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("WeaponSway/AllMesh/Elements/Pivot2:position")
+tracks/8/path = NodePath("WeaponSway/AllMesh/Elements/Pivot2:rotation")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-0.861784, -0.297, 0.33)]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("WeaponSway/AllMesh/Elements/Pivot2:rotation")
+tracks/9/path = NodePath("WeaponSway/AllMesh/Elements:position")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -405,22 +405,10 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("WeaponSway/AllMesh/Elements:position")
+tracks/10/path = NodePath("WeaponSway/AllMesh/Elements:rotation")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("WeaponSway/AllMesh/Elements:rotation")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -464,7 +452,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(-0.018, -0.2556, 0.314791), Vector3(-0.060531, -0.2556, 0.0433025)]
+"values": [Vector3(-0.0182688, -0.296764, 0.329613), Vector3(-0.060531, -0.2556, 0.0433025)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -515,58 +503,6 @@ tracks/6/keys = {
 "values": [Vector3(0, 0, 0), Vector3(0.0174533, 0.349066, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_2v6hx"]
-resource_name = "aimout"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("WeaponSway/AllMesh/Elements/Gun:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector3(-0.298948, 0, -0.200572), Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("WeaponSway/AllMesh/Elements/Pivot:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector3(-0.060531, -0.2556, 0.0433025), Vector3(-0.0182688, -0.296764, 0.329613)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("WeaponSway/AllMesh/Elements/Pivot:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector3(0, 0.785398, 0), Vector3(0, 0, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("WeaponSway/AllMesh/Elements/Gun:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_p8xlp"]
 resource_name = "idle"
 length = 3.0
@@ -601,26 +537,14 @@ resource_name = "move"
 length = 2.5
 loop_mode = 1
 step = 0.2
-tracks/0/type = "value"
+tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.625, 1.25, 1.875),
-"transitions": PackedFloat32Array(0.5, 2, 0.5, 2),
-"update": 0,
-"values": [Vector3(0.435, 0.148, -0.356), Vector3(0.373, 0.108, -0.356), Vector3(0.435, 0.148, -0.356), Vector3(0.525, 0.108, -0.356)]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.2, 1.45),
+"times": PackedFloat32Array(0.15, 1.4),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -629,6 +553,18 @@ tracks/1/keys = {
 "args": [],
 "method": &"play_footstep"
 }]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSway/AllMesh:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.625, 1.25, 1.875),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 2),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.062, -0.04, 0), Vector3(0, 0, 0), Vector3(-0.09, -0.04, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_foak2"]
@@ -691,7 +627,6 @@ tracks/1/keys = {
 _data = {
 "RESET": SubResource("Animation_anl2s"),
 "aiming": SubResource("Animation_vjbv8"),
-"aimout": SubResource("Animation_2v6hx"),
 "idle": SubResource("Animation_p8xlp"),
 "move": SubResource("Animation_yijs0"),
 "reload": SubResource("Animation_foak2"),

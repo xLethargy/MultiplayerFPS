@@ -6,6 +6,7 @@ extends Control
 @onready var db_hbox = $PanelContainer/HBoxContainer/VBoxContainer2/DBHBox
 @onready var map_timer = $MapTimer
 @onready var timer_label = $TimerLabel
+@onready var vote_audio = $VoteAudio
 
 var timer_length = 15
 
@@ -21,6 +22,8 @@ var total_votes = 0
 
 var maps = ["arena", "db_building"]
 
+var player_team = 0
+
 func _ready():
 	timer_label.text = str(timer_label_value)
 
@@ -28,12 +31,17 @@ func _unhandled_input(event):
 	if multiplayer.is_server():
 		if event.is_action_pressed("testing_input"):
 			if !self.visible:
+				
 				_show_maps.rpc()
 			else:
 				_hide_maps.rpc()
 
 @rpc ("call_local", "any_peer", "reliable")
 func _show_maps():
+	if Global.players.has(multiplayer.get_unique_id()):
+		var id = multiplayer.get_unique_id()
+		player_team = Global.players[id].Team
+	
 	show()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	
@@ -65,7 +73,7 @@ func _on_arena_texture_pressed():
 		if current_vote == "db_box":
 			_add_vote.rpc("db", false)
 	
-	_display_vote.rpc(arena_hbox.get_path())
+	_display_vote.rpc(arena_hbox.get_path(), player_team)
 	current_hbox = arena_hbox
 	current_vote = "arena"
 	_add_vote.rpc("arena", true)
@@ -80,15 +88,29 @@ func _on_double_building_texture_pressed():
 		if current_vote == "arena":
 			_add_vote.rpc("arena", false)
 	
-	_display_vote.rpc(db_hbox.get_path())
+	_display_vote.rpc(db_hbox.get_path(), player_team)
 	current_hbox = db_hbox
 	current_vote = "db_box"
 	_add_vote.rpc("db", true)
 
 
 @rpc("any_peer", "call_local", "reliable")
-func _display_vote(hbox_path):
+func _display_vote(hbox_path, team):
+	_play_vote_audio.rpc()
+	
 	tick_box = tick_box_scene.instantiate()
+	
+	print (team)
+	match team:
+		1:
+			tick_box.texture = load("res://images/dogs/retriever.png")
+		2:
+			tick_box.texture = load("res://images/dogs/shiba.png")
+		3:
+			tick_box.texture = load("res://images/dogs/thing.png")
+		4:
+			tick_box.texture = load("res://images/dogs/labrador.png")
+	
 	var hbox = get_node(hbox_path)
 	hbox.add_child(tick_box, true)
 
@@ -105,9 +127,6 @@ func _on_map_timer_timeout():
 	timer_label.text = str(timer_label_value)
 	
 	total_votes = db_votes + arena_votes
-	
-	print ("total votes: ", total_votes)
-	print ("players: ", Global.players.size())
 	
 	if timer_label_value == 0 or total_votes == Global.players.size():
 		var map_to_load
@@ -126,11 +145,9 @@ func _on_map_timer_timeout():
 func _remove_all_votes():
 	current_vote = ""
 	for i in arena_hbox.get_children():
-		print (i)
 		arena_hbox.remove_child(i)
 	
 	for i in db_hbox.get_children():
-		print (i)
 		db_hbox.remove_child(i)
 
 
@@ -146,3 +163,8 @@ func _add_vote(map, add):
 			arena_votes += 1
 		else:
 			arena_votes -= 1
+
+
+@rpc("any_peer", "call_local", "reliable")
+func _play_vote_audio():
+	vote_audio.play()

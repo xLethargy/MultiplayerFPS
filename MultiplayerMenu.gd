@@ -8,6 +8,7 @@ extends CanvasLayer
 @onready var sensitivity = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/Sensitivity
 @onready var sensitivity_slider = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/SensSlider
 @onready var team_chooser = $MainMenuScreen/MainMenu/MarginContainer/TeamChooser
+@onready var click_audio = $MainMenuScreen/ClickAudio
 
 @onready var hud = $HUD
 @onready var level_scene = get_tree().current_scene
@@ -33,6 +34,9 @@ var upnp
 var check_for_player
 var weapon_class_node
 
+var min_click_audio_pitch = 0.8
+var max_click_audio_pitch = 1.1
+
 signal add_player
 signal remove_player
 
@@ -46,6 +50,8 @@ func _ready():
 
 
 func _on_host_pressed():
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	
 	server_joiner.hide()
 	team_chooser.show()
 
@@ -72,6 +78,8 @@ func setup_server():
 	choose_class.show()
 
 func _on_join_pressed():
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	
 	enet_peer = ENetMultiplayerPeer.new()
 	server_joiner.hide()
 	choose_class.show()
@@ -149,35 +157,49 @@ func _server_add_player():
 
 
 func _on_pistol_one_pressed():
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	
 	_class_selected("PistolOne")
 	weapon_class_node = pistol_one
 
 
 func _on_pistol_two_pressed():
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	
 	_class_selected("SMG")
 	weapon_class_node = smg_gun
 
 
 func _on_freeze_gun_pressed():
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	
 	_class_selected("FreezeGun")
 	weapon_class_node = freeze_gun
 
 
 func _on_speed_gun_pressed():
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	
 	_class_selected("SpeedGun")
 	weapon_class_node = speed_gun
 
 
 func _on_stake_pressed():
-	weapon_class_node = stake
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	
 	_class_selected("Stake")
+	weapon_class_node = stake
 
 
 func _on_sniper_pressed():
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	
 	weapon_class_node = sniper
 	_class_selected("Sniper")
 
 func _on_coin_gun_pressed():
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	
 	weapon_class_node = coin_gun
 	_class_selected("CoinGun")
 
@@ -235,10 +257,19 @@ func _on_sens_slider_value_changed(value):
 
 
 func _on_quit_game_pressed():
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	
 	server_joiner.hide()
 	warning_signal.emit("ServerJoiner")
 
 
 func _on_leave_match_pressed():
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	
 	choose_class.hide()
 	warning_signal.emit("ChooseClass")
+
+
+func _play_ui_audio(audio_stream, min_pitch_scale = 1, max_pitch_scale = 1):
+	audio_stream.pitch_scale = randf_range(min_pitch_scale, max_pitch_scale)
+	audio_stream.play()

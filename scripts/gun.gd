@@ -2,8 +2,6 @@ class_name Weapon
 extends Node3D
 
 @onready var audio_player : AudioStreamPlayer = $AudioStreamPlayer
-
-
 @onready var animation_player = $AnimationPlayer
 @onready var animation_player_2 = $AnimationPlayer2
 @export var muzzle_flash : GPUParticles3D
@@ -49,6 +47,7 @@ var recoil = false
 
 var tracer_timer : Timer
 var aiming = false
+var charging = false
 
 func _ready():
 	await get_tree().create_timer(0.1).timeout
@@ -80,6 +79,11 @@ func _ready():
 		else:
 			crosshair.show()
 		
+		if is_in_group("Melee"):
+			raycast.target_position.z = -2
+		else:
+			raycast.target_position.z = -50
+		
 		player.health_component.connect("death", reset_stat_gun)
 
 
@@ -87,7 +91,7 @@ func _physics_process(delta):
 	if !player.is_multiplayer_authority():
 		return
 	
-	if player.input_dir != Vector2.ZERO and player.is_on_floor() and !aiming:
+	if player.input_dir != Vector2.ZERO and player.is_on_floor() and !aiming and !charging:
 		_play_animation.rpc("move", animation_player_2.get_path())
 	elif (player.input_dir == Vector2.ZERO or !player.is_on_floor()) and !aiming:
 		_play_animation.rpc("idle", animation_player_2.get_path())
@@ -115,7 +119,6 @@ func play_shoot_effects():
 	
 	if animation_player.current_animation != "aiming":
 		animation_player.stop()
-	"play shoot"
 	animation_player.play("shoot")
 	
 	if is_in_group("Ranged"):
@@ -181,6 +184,10 @@ func _on_animation_player_animation_finished(anim_name):
 
 func reset_stat_gun(reset_ammo = true):
 	animation_player.stop()
+	animation_player_2.stop()
+	animation_player.play("RESET")
+	animation_player_2.play("RESET")
+	
 	player.change_speed_and_jump()
 	current_animation_speed = default_animation_speed
 	animation_player.speed_scale = current_animation_speed
@@ -219,3 +226,12 @@ func handle_collision(collider, given_damage = current_damage):
 
 func play_footstep():
 	player.play_footstep_audio.rpc()
+
+
+@rpc ("any_peer", "call_local", "reliable")
+func _play_spatial_for_all(given_audio_path, stream, min_pitch_scale_range = 1, max_pitch_scale_range = 1):
+	var given_audio = get_node_or_null(given_audio_path)
+	if given_audio != null:
+		given_audio.stream = load(stream)
+		given_audio.pitch_scale = randf_range(min_pitch_scale_range, max_pitch_scale_range)
+		given_audio.play()

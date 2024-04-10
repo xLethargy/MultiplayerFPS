@@ -32,6 +32,8 @@ func warning_prompt_menu(menu):
 
 
 func _on_yes_pressed():
+	multiplayer_menu._play_ui_audio(multiplayer_menu.click_audio, multiplayer_menu.min_click_audio_pitch, multiplayer_menu.max_click_audio_pitch)
+	
 	if last_menu == server_joiner:
 		get_tree().quit()
 	elif last_menu == choose_class:
@@ -56,5 +58,7 @@ func _on_yes_pressed():
 
 
 func _on_no_pressed():
+	multiplayer_menu._play_ui_audio(multiplayer_menu.click_audio, multiplayer_menu.min_click_audio_pitch, multiplayer_menu.max_click_audio_pitch)
+	
 	self.hide()
 	last_menu.show()

@@ -113,18 +113,19 @@ func _physics_process(delta):
 	if !is_multiplayer_authority():
 		return
 	
-	if not is_on_floor():
+	if !is_on_floor():
 		velocity.y -= current_gravity * delta
+		in_air = true
 	
 	if Input.is_action_just_pressed("jump") and is_on_floor() and !charging_dash:
 		velocity.y = current_jump_velocity
 		in_air_timer.start()
-		print("jump")
+	
 	
 	input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
-	if !in_dash and in_air and is_on_floor():
+	if (in_air and is_on_floor() and !in_dash):
 		in_air = false
 		current_gravity = default_gravity
 		play_footstep_audio.rpc()
@@ -142,7 +143,6 @@ func _physics_process(delta):
 		in_air = false
 		current_gravity = default_gravity
 		play_footstep_audio.rpc()
-		print ("landed")
 	
 	
 	if !frozen:
@@ -188,7 +188,6 @@ func update_current_class(new_weapon):
 
 @rpc ("any_peer", "call_local", "reliable")
 func change_material(material, want_timer = true):
-	#need to connect signal for when player loads
 	if want_timer:
 		await get_tree().create_timer(0.1).timeout
 	weapon = view.get_child(1)
@@ -249,7 +248,8 @@ func camera_tilt(input_x, delta):
 func weapon_tilt(input_x, delta):
 	if weapon:
 		if weapon.weapon_sway_node:
-			weapon.weapon_sway_node.rotation.z = lerp(weapon.weapon_sway_node.rotation.z, -input_x * weapon_rotation_amount, sens_to_sway / 2 * delta)
+			if input_x != null:
+				weapon.weapon_sway_node.rotation.z = lerp(weapon.weapon_sway_node.rotation.z, -input_x * weapon_rotation_amount, sens_to_sway / 2 * delta)
 
 
 @rpc ("call_local", "any_peer", "unreliable")

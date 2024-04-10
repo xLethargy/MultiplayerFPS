@@ -1,8 +1,9 @@
-[gd_scene load_steps=23 format=3 uid="uid://cqasao7l288a"]
+[gd_scene load_steps=24 format=3 uid="uid://cqasao7l288a"]
 
 [ext_resource type="Script" path="res://arena.gd" id="1_1ivy8"]
 [ext_resource type="PackedScene" uid="uid://cqic11uh1ybd6" path="res://components/out_of_bounds_detector.tscn" id="1_h1665"]
 [ext_resource type="PackedScene" uid="uid://1qx3r3cx6sg1" path="res://models/objects/box.tscn" id="3_upnuo"]
+[ext_resource type="PackedScene" uid="uid://b1oltjcbnuebx" path="res://models/objects/campfire.tscn" id="4_ikxt6"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kldcg"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -19,11 +20,11 @@ ambient_light_color = Color(0.847059, 0.203922, 0.372549, 1)
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_njqby"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_12svf"]
 resource_name = "Material.003"
 cull_mode = 2
 albedo_color = Color(0.279145, 0.313266, 0.188658, 1)
-roughness = 0.5
+metallic_specular = 0.25
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_7p3jj"]
 _surfaces = [{
@@ -47,7 +48,7 @@ _surfaces = [{
 "format": 34896613399,
 "index_count": 36,
 "index_data": PackedByteArray(1, 0, 20, 0, 14, 0, 1, 0, 7, 0, 20, 0, 10, 0, 19, 0, 6, 0, 10, 0, 23, 0, 19, 0, 21, 0, 12, 0, 18, 0, 21, 0, 15, 0, 12, 0, 16, 0, 9, 0, 3, 0, 16, 0, 22, 0, 9, 0, 5, 0, 8, 0, 2, 0, 5, 0, 11, 0, 8, 0, 17, 0, 0, 0, 13, 0, 17, 0, 4, 0, 0, 0),
-"material": SubResource("StandardMaterial3D_njqby"),
+"material": SubResource("StandardMaterial3D_12svf"),
 "name": "Material.003",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -324,14 +325,19 @@ skeleton = NodePath("")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="double_building2/House2 /StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_npmnc")
 
-[node name="Box" parent="." instance=ExtResource("3_upnuo")]
+[node name="Objects" type="Node3D" parent="."]
+
+[node name="Box" parent="Objects" instance=ExtResource("3_upnuo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.594, 0.5, -10.942)
 
-[node name="Box2" parent="." instance=ExtResource("3_upnuo")]
+[node name="Box2" parent="Objects" instance=ExtResource("3_upnuo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.594, 1.5, -10.942)
 
-[node name="Box3" parent="." instance=ExtResource("3_upnuo")]
+[node name="Box3" parent="Objects" instance=ExtResource("3_upnuo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.594, 0.5, 10.942)
 
-[node name="Box4" parent="." instance=ExtResource("3_upnuo")]
+[node name="Box4" parent="Objects" instance=ExtResource("3_upnuo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.594, 1.5, 10.942)
+
+[node name="Campfire" parent="Objects" instance=ExtResource("4_ikxt6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.60834, 0, 12.6271)

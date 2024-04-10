@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=53 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_rxlvp"]
 [ext_resource type="Script" path="res://MultiplayerMenu.gd" id="3_asb1u"]
@@ -13,10 +13,12 @@
 [ext_resource type="Texture2D" uid="uid://bgcguukvfpf5u" path="res://images/HOST_NONhighlighted.jpeg" id="6_d4nsd"]
 [ext_resource type="Texture2D" uid="uid://da31vlhqumxfe" path="res://images/HOST_pressed.jpeg" id="7_4twsw"]
 [ext_resource type="Texture2D" uid="uid://bt00f4guyerxd" path="res://images/join1.svg" id="8_3ioy5"]
+[ext_resource type="AudioStream" uid="uid://cx35r1fldd6er" path="res://sounds/click1.wav" id="11_w341s"]
 [ext_resource type="Script" path="res://MapSelector.gd" id="14_ag51l"]
 [ext_resource type="PackedScene" uid="uid://cqasao7l288a" path="res://models/levels/double_building.tscn" id="14_mbwj7"]
 [ext_resource type="Texture2D" uid="uid://cxqwq4rgwk2j2" path="res://images/arena.png" id="15_weac0"]
 [ext_resource type="Texture2D" uid="uid://q6fpkkrsigjq" path="res://images/dbl_building.png" id="16_5jucf"]
+[ext_resource type="AudioStream" uid="uid://cxi2epivfj5yv" path="res://sounds/vote_select.wav" id="18_8sc6e"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0se3p"]
 font_size = 24
@@ -410,6 +412,10 @@ theme = SubResource("Theme_4sr3w")
 theme_override_styles/normal = ExtResource("4_h4lil")
 text = "No"
 
+[node name="ClickAudio" type="AudioStreamPlayer" parent="MultiplayerMenu/MainMenuScreen"]
+stream = ExtResource("11_w341s")
+volume_db = -7.0
+
 [node name="HUD" type="Control" parent="MultiplayerMenu"]
 visible = false
 layout_mode = 3
@@ -618,6 +624,10 @@ vertical_alignment = 1
 
 [node name="MapTimer" type="Timer" parent="MultiplayerMenu/MapSelector"]
 one_shot = true
+
+[node name="VoteAudio" type="AudioStreamPlayer" parent="MultiplayerMenu/MapSelector"]
+stream = ExtResource("18_8sc6e")
+volume_db = -5.0
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
