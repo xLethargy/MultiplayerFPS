@@ -19,6 +19,9 @@ var freeze_regen = false
 
 var frozen = false
 
+var old_collider_speed
+var frozen_collider
+
 func _unhandled_input(event):
 	if !player.is_multiplayer_authority():
 		return
@@ -29,6 +32,8 @@ func _unhandled_input(event):
 		
 		gun_audio.pitch_scale = 1.5 + (ammo_bar.value / 200)
 		local_gun_audio.pitch_scale = 1.5 + (ammo_bar.value / 200)
+		
+		play_spatial_audio.rpc(gun_audio.pitch_scale)
 		
 		freeze_regen = false
 		freeze_regen_timer.stop()
@@ -51,6 +56,8 @@ func _unhandled_input(event):
 					if current_health > 0 and !frozen:
 						store_freeze_information(collider)
 					else:
+						collider.owner.slow_timer.stop()
+						frozen = false
 						hit_player[collider].HitsTaken = 0
 		
 		recoil = true
@@ -72,19 +79,20 @@ func store_freeze_information(collider):
 		
 		hit_player[collider].HitsTaken = 0
 		
+		frozen_collider = collider
 		frozen = true
 		
-		var old_collider_speed = collider.player.current_speed
+		old_collider_speed = collider.player.current_speed
+		collider.player.old_speed = old_collider_speed
 		
 		collider.handle_damage_collision(freeze_damage)
 		current_health = collider.owner.health_component.current_health - freeze_damage
 		
 		if current_health - current_damage > 0:
 			collider.handle_speed_collision(slow_speed, jump_height)
-			if !collider == null:
-				collider.handle_speed_collision(old_collider_speed, collider.player.default_jump_velocity, true)
-				frozen = false
+			collider.owner.slow_timer.start()
 		else:
+			collider.owner.slow_timer.stop()
 			frozen = false
 
 

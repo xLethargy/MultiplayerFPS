@@ -1,9 +1,7 @@
-[gd_scene load_steps=25 format=3 uid="uid://dt1pjkebmyuvs"]
+[gd_scene load_steps=23 format=3 uid="uid://dt1pjkebmyuvs"]
 
 [ext_resource type="Script" path="res://scripts/pistol_2.gd" id="1_24sbh"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_q35a7"]
-[ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://ui/hitmarker.png" id="3_st0ml"]
-[ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://sounds/hitmarker.wav" id="4_6fnrq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0lqtv"]
 resource_name = "Material"
@@ -329,33 +327,7 @@ libraries = {
 autoplay = "idle"
 playback_default_blend_time = 0.05
 
-[node name="Hitmarker" type="TextureRect" parent="."]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -560.0
-offset_top = -321.0
-offset_right = -48.0001
-offset_bottom = 191.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.05, 0.05)
-pivot_offset = Vector2(576, 324)
-texture = ExtResource("3_st0ml")
-stretch_mode = 5
-
-[node name="Hitmarkerlength" type="Timer" parent="."]
-wait_time = 0.21
-one_shot = true
-
 [node name="FiringRate" type="Timer" parent="."]
 wait_time = 0.15
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_6fnrq")
-volume_db = -10.0
 
 [connection signal="timeout" from="FiringRate" to="." method="_on_firing_rate_timeout"]

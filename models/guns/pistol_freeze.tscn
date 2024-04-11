@@ -1,9 +1,7 @@
-[gd_scene load_steps=31 format=3 uid="uid://bs0tqd6ktvagl"]
+[gd_scene load_steps=29 format=3 uid="uid://bs0tqd6ktvagl"]
 
 [ext_resource type="Script" path="res://scripts/pistol_freeze.gd" id="1_ikep0"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_8g6ke"]
-[ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://ui/hitmarker.png" id="3_5uiqe"]
-[ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://sounds/hitmarker.wav" id="4_in4s8"]
 [ext_resource type="AudioStream" uid="uid://dsoqro5ad7lsm" path="res://sounds/snow.wav" id="5_ppoav"]
 [ext_resource type="AudioStream" uid="uid://cada3v715lp8l" path="res://sounds/ice_shatter.wav" id="6_r2nuy"]
 
@@ -407,7 +405,7 @@ local_gun_audio = NodePath("LocalWeaponAudio")
 weapon_sway_node = NodePath("WeaponSway")
 default_damage = 15
 max_ammo = 10
-default_player_speed = 6.0
+default_player_speed = 5.0
 current_ammo = 10
 mag_type = "Laser"
 weapon_rotation_amount = 0.2
@@ -471,32 +469,6 @@ libraries = {
 autoplay = "idle"
 playback_default_blend_time = 0.05
 
-[node name="Hitmarker" type="TextureRect" parent="."]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -560.0
-offset_top = -321.0
-offset_right = -48.0001
-offset_bottom = 191.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.05, 0.05)
-pivot_offset = Vector2(576, 324)
-texture = ExtResource("3_5uiqe")
-stretch_mode = 5
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_in4s8")
-volume_db = -10.0
-
-[node name="Hitmarkerlength" type="Timer" parent="."]
-wait_time = 0.1
-one_shot = true
-
 [node name="FreezeRegenTimer" type="Timer" parent="."]
 wait_time = 2.0
 
@@ -517,8 +489,5 @@ max_polyphony = 4
 [node name="IceShatterLocal" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_r2nuy")
 volume_db = -5.0
-
-[node name="freezgun" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52708, -0.0744, -0.644)
 
 [connection signal="timeout" from="FreezeRegenTimer" to="." method="_on_freeze_regen_timer_timeout"]

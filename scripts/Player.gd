@@ -10,6 +10,7 @@ extends CharacterBody3D
 @onready var mesh_eyes = $Meshes/Eyes
 @onready var footstep_audio = $FootstepAudio
 @onready var in_air_timer = $InAirTimer
+@onready var slow_timer = $SlowTimer
 
 @onready var footsteps = [
 	preload("res://sounds/footsteps/footstep1.wav"), 
@@ -21,6 +22,7 @@ preload("res://sounds/footsteps/footstep5.wav")
 
 var default_speed = 6.5
 var current_speed = default_speed
+var old_speed = current_speed
 var default_jump_velocity = 6.5
 var current_jump_velocity = default_jump_velocity
 
@@ -234,6 +236,7 @@ func change_layers():
 	if is_multiplayer_authority():
 		mesh.cast_shadow = 3
 		mesh_outline.cast_shadow = 3
+		hurtbox.get_child(0).disabled = true
 		
 		for eye in mesh_eyes.get_children():
 			eye.cast_shadow = 3
@@ -296,3 +299,9 @@ func add_hat_for_all(given_hat):
 func remove_hat():
 	if hat != null:
 		hat.queue_free()
+
+
+func _on_slow_timer_timeout():
+	print ("be normal")
+	hurtbox.handle_speed_collision(old_speed, default_jump_velocity)
+	frozen = false

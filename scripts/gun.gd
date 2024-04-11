@@ -1,12 +1,9 @@
 class_name Weapon
 extends Node3D
 
-@onready var audio_player : AudioStreamPlayer = $AudioStreamPlayer
 @onready var animation_player = $AnimationPlayer
 @onready var animation_player_2 = $AnimationPlayer2
 @export var muzzle_flash : GPUParticles3D
-@onready var hitmarker = $Hitmarker
-@onready var hitmarker_timer = $Hitmarkerlength
 @onready var arm = %Arm
 @onready var arm_two = %Arm2
 @export var gun_audio : AudioStreamPlayer3D
@@ -42,6 +39,9 @@ var queued_reload = false
 
 @onready var crosshair = level_scene.get_node("MultiplayerMenu/HUD/Crosshair")
 @onready var hud = level_scene.get_node("MultiplayerMenu/HUD")
+@onready var hitmarker = level_scene.get_node("MultiplayerMenu/HUD/Hitmarker")
+@onready var hitmarker_timer = level_scene.get_node("MultiplayerMenu/HUD/Hitmarker/Hitmarkerlength")
+@onready var audio_player : AudioStreamPlayer = level_scene.get_node("MultiplayerMenu/HUD/Hitmarker/HitmarkerAudio")
 
 var recoil = false
 @export var recoil_amount : float = 1
@@ -166,8 +166,9 @@ func _play_ads_animation(animation_string):
 	animation_player.play(animation_string)
 
 @rpc ("any_peer", "reliable")
-func play_spatial_audio():
+func play_spatial_audio(given_pitch_scale = 1):
 	if gun_audio != null:
+		gun_audio.pitch_scale = given_pitch_scale
 		gun_audio.play()
 	
 	animation_player.stop()
@@ -212,16 +213,19 @@ func reset_stat_gun_rpc():
 func reset_stat_gun(reset_ammo = true):
 	animation_player.stop()
 	animation_player_2.stop()
-	animation_player.play("RESET")
-	animation_player_2.play("RESET")
 	
 	player.change_speed_and_jump()
 	current_animation_speed = default_animation_speed
-	animation_player.speed_scale = current_animation_speed
-	animation_player_2.speed_scale = current_animation_speed
+	animation_player.speed_scale = default_animation_speed
+	animation_player_2.speed_scale = default_animation_speed
 	current_damage = default_damage
 	
+	animation_player.play("RESET")
+	animation_player_2.play("RESET")
+	
 	player.camera.fov = 90
+	
+	player.old_speed = default_player_speed
 	
 	current_ragdoll_force = default_ragdoll_force
 	
@@ -252,7 +256,7 @@ func handle_collision(collider, given_damage = current_damage):
 				if collider.health_component.current_health - given_damage <= 0:
 					var test_boost = get_global_transform().basis.z * current_ragdoll_force
 					
-					print (collider.owner.hat)
+					#print (collider.owner.hat)
 					get_tree().current_scene.spawn_player_ragdoll.rpc(collider.global_position, collider.global_rotation, -test_boost, collider.owner.current_colour)
 		elif collider.has_method("handle_coin_collision"):
 			on_hit_effect(false)

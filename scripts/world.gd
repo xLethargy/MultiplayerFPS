@@ -142,6 +142,8 @@ func _on_multiplayer_spawner_spawned(node):
 	if node.is_multiplayer_authority():
 		node.health_component.connect("change_health", update_health_bar)
 		
+		node.position = current_map.pick_random_spawn().position
+		
 		update_health_bar(node.health_component.current_health)
 		
 		_add_to_group.rpc()
@@ -284,6 +286,8 @@ func load_map(given_map):
 func spawn_player_ragdoll(given_position, given_rotation, given_force, ragdoll_colour):
 	var player_ragdoll = player_ragdoll_scene.instantiate()
 	
+	player_ragdoll.name = "Ragdoll"
+	
 	#if given_hat.get_child(0) != null:
 	#	var ragdoll_hat
 	#	if given_hat.get_child(0).is_in_group("Cowboy"):
@@ -298,7 +302,7 @@ func spawn_player_ragdoll(given_position, given_rotation, given_force, ragdoll_c
 	#	hat.global_rotation = given_rotation
 		
 	
-	ragdoll_node.add_child(player_ragdoll)
+	ragdoll_node.add_child(player_ragdoll, true)
 	
 	player_ragdoll.global_position = given_position
 	player_ragdoll.global_position.y += 1

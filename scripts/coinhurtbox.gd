@@ -13,7 +13,7 @@ var coin_shot = false
 
 var damage = 50
 
-var ragdoll_force = 15
+var ragdoll_force = 25
 
 func _ready():
 	var players = get_tree().get_nodes_in_group("Enemy")

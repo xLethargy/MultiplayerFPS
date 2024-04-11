@@ -4,6 +4,7 @@ var animation_increase = 0.1
 var damage_increase = 0.5
 var player_speed_increase = 0.5
 
+
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():
 		return
@@ -32,7 +33,6 @@ func _unhandled_input(_event):
 		reload_weapon.rpc()
 
 
-
 @rpc ("any_peer", "call_local", "reliable")
 func handle_speed_gun_variables():
 	if player.current_speed < 25:
@@ -48,8 +48,13 @@ func handle_speed_gun_variables():
 	if animation_player.speed_scale < 5:
 		current_animation_speed += animation_increase
 		animation_player.speed_scale = current_animation_speed
-		animation_player_2.speed_scale = current_animation_speed
 		if animation_player.speed_scale > 5:
+			current_animation_speed = 5
+	
+	if animation_player_2.speed_scale < 5:
+		current_animation_speed += animation_increase
+		animation_player_2.speed_scale = current_animation_speed
+		if animation_player_2.speed_scale > 5:
 			current_animation_speed = 5
 	
 	if player.camera.fov < 140:

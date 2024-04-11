@@ -2,6 +2,7 @@ extends Node3D
 
 @onready var spawn_points = $SpawnPoints
 
+@rpc ("any_peer", "call_local", "reliable")
 func pick_random_spawn():
 	var spawn_points_children = spawn_points.get_children()
 	var spawn_points_checks = spawn_points_children.duplicate()

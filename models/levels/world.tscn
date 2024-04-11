@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=59 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://scripts/world.gd" id="1_rxlvp"]
 [ext_resource type="Script" path="res://scripts/MultiplayerMenu.gd" id="3_asb1u"]
@@ -20,7 +20,9 @@
 [ext_resource type="Texture2D" uid="uid://0igd6uxjar83" path="res://images/abilities/coin_disabled.png" id="15_yl75i"]
 [ext_resource type="Texture2D" uid="uid://q6fpkkrsigjq" path="res://images/dbl_building.png" id="16_5jucf"]
 [ext_resource type="Texture2D" uid="uid://dmr0c6be7htcc" path="res://images/wounded_screen.png" id="16_kabna"]
+[ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://ui/hitmarker.png" id="17_guns4"]
 [ext_resource type="AudioStream" uid="uid://cxi2epivfj5yv" path="res://sounds/vote_select.wav" id="18_8sc6e"]
+[ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://sounds/hitmarker.wav" id="18_i2ky5"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0se3p"]
 font_size = 24
@@ -566,6 +568,38 @@ texture = ExtResource("16_kabna")
 libraries = {
 "": SubResource("AnimationLibrary_81425")
 }
+
+[node name="TextureRect" type="TextureRect" parent="MultiplayerMenu/HUD"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Hitmarker" type="TextureRect" parent="MultiplayerMenu/HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -560.0
+offset_top = -321.0
+offset_right = -48.0001
+offset_bottom = 191.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.05, 0.05)
+pivot_offset = Vector2(576, 324)
+texture = ExtResource("17_guns4")
+stretch_mode = 5
+
+[node name="Hitmarkerlength" type="Timer" parent="MultiplayerMenu/HUD/Hitmarker"]
+wait_time = 0.1
+one_shot = true
+
+[node name="HitmarkerAudio" type="AudioStreamPlayer" parent="MultiplayerMenu/HUD/Hitmarker"]
+stream = ExtResource("18_i2ky5")
+volume_db = -10.0
 
 [node name="Score" type="Control" parent="MultiplayerMenu"]
 layout_mode = 3

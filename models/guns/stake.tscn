@@ -1,9 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://dydne2kqobdmc"]
+[gd_scene load_steps=22 format=3 uid="uid://dydne2kqobdmc"]
 
 [ext_resource type="Script" path="res://scripts/stake.gd" id="1_6l88e"]
-[ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://ui/hitmarker.png" id="2_8bttn"]
 [ext_resource type="Texture2D" uid="uid://bytfflf41khi8" path="res://images/abilities/dash_enabled.png" id="2_icy78"]
-[ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://sounds/hitmarker.wav" id="3_5vb0e"]
 [ext_resource type="Script" path="res://scripts/hitbox.gd" id="4_2p83n"]
 [ext_resource type="AudioStream" uid="uid://c5ywgaxw6qiph" path="res://sounds/swoosh.wav" id="5_s8c05"]
 
@@ -307,7 +305,7 @@ local_gun_audio = NodePath("LocalAttackAudio")
 weapon_sway_node = NodePath("WeaponSway")
 default_damage = 34
 max_ammo = 1
-default_player_speed = 9.0
+default_player_speed = 7.0
 current_ammo = 1
 ability_icon_enabled = ExtResource("2_icy78")
 default_ragdoll_force = 5.0
@@ -345,32 +343,6 @@ skeleton = NodePath("../../../..")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="WeaponSway/AllMesh/Pivot2/Arm2"]
 mesh = SubResource("ArrayMesh_gip1u")
 
-[node name="Hitmarker" type="TextureRect" parent="."]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -560.0
-offset_top = -321.0
-offset_right = -48.0001
-offset_bottom = 191.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.05, 0.05)
-pivot_offset = Vector2(576, 324)
-texture = ExtResource("2_8bttn")
-stretch_mode = 5
-
-[node name="Hitmarkerlength" type="Timer" parent="."]
-wait_time = 0.1
-one_shot = true
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_5vb0e")
-volume_db = -10.0
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_cthlp")
@@ -397,7 +369,7 @@ shape = SubResource("BoxShape3D_da14s")
 disabled = true
 
 [node name="DashCooldown" type="Timer" parent="."]
-wait_time = 3.0
+wait_time = 5.0
 one_shot = true
 
 [node name="AttackAudio" type="AudioStreamPlayer3D" parent="."]

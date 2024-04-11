@@ -17,7 +17,7 @@ func handle_damage_collision(damage):
 
 func handle_speed_collision(speed_effect = player.default_speed, jump_height = player.default_jump_velocity, timer = false):
 	if timer:
-		await get_tree().create_timer(2.5).timeout
+		#await get_tree().create_timer(2.5).timeout
 		player.change_speed_and_jump.rpc_id(player.get_multiplayer_authority(), speed_effect, jump_height)
 	else:
 		player.change_speed_and_jump.rpc_id(player.get_multiplayer_authority(), speed_effect, jump_height)
