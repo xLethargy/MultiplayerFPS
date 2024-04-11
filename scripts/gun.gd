@@ -22,6 +22,7 @@ extends Node3D
 
 @onready var ammo_counter = get_tree().current_scene.get_node("MultiplayerMenu/HUD/Ammo")
 @onready var ammo_bar = get_tree().current_scene.get_node("MultiplayerMenu/HUD/AmmoBar")
+@onready var ability_icon = get_tree().current_scene.get_node("MultiplayerMenu/HUD/Ability")
 
 @export var default_damage = 20
 @onready var current_damage = default_damage
@@ -48,6 +49,8 @@ var recoil = false
 var tracer_timer : Timer
 var aiming = false
 var charging = false
+
+@export var ability_icon_enabled : CompressedTexture2D
 
 func _ready():
 	await get_tree().create_timer(0.1).timeout
@@ -83,6 +86,12 @@ func _ready():
 			raycast.target_position.z = -2
 		else:
 			raycast.target_position.z = -50
+		
+		if is_in_group("Ability"):
+			ability_icon.texture = ability_icon_enabled
+			ability_icon.show()
+		else:
+			ability_icon.hide()
 		
 		player.health_component.connect("death", reset_stat_gun)
 

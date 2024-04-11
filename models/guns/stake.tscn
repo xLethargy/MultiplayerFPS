@@ -1,10 +1,11 @@
-[gd_scene load_steps=23 format=3 uid="uid://dydne2kqobdmc"]
+[gd_scene load_steps=24 format=3 uid="uid://dydne2kqobdmc"]
 
-[ext_resource type="Script" path="res://scripts/stake.gd" id="1_2cfut"]
-[ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://ui/hitmarker.png" id="3_xmgdn"]
-[ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://sounds/hitmarker.wav" id="4_h4vjt"]
-[ext_resource type="AudioStream" uid="uid://c5ywgaxw6qiph" path="res://sounds/swoosh.wav" id="5_06548"]
-[ext_resource type="Script" path="res://scripts/hitbox.gd" id="5_irixa"]
+[ext_resource type="Script" path="res://scripts/stake.gd" id="1_6l88e"]
+[ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://ui/hitmarker.png" id="2_8bttn"]
+[ext_resource type="Texture2D" uid="uid://bytfflf41khi8" path="res://images/abilities/dash_enabled.png" id="2_icy78"]
+[ext_resource type="AudioStream" uid="uid://dpdlu3vk32qbu" path="res://sounds/hitmarker.wav" id="3_5vb0e"]
+[ext_resource type="Script" path="res://scripts/hitbox.gd" id="4_2p83n"]
+[ext_resource type="AudioStream" uid="uid://c5ywgaxw6qiph" path="res://sounds/swoosh.wav" id="5_s8c05"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mcrxm"]
 resource_name = "Material"
@@ -127,6 +128,62 @@ tracks/2/keys = {
 "values": [Vector3(0, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_jrfl0"]
+resource_name = "charging"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponSway/AllMesh/StakeElements:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [Vector3(-0.0769791, -0.271451, 0.363084), Vector3(-0.0769791, -0.138481, 0.363084)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSway/AllMesh/StakeElements:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.523599, 0, -0.523599)]
+}
+
+[sub_resource type="Animation" id="Animation_88j5v"]
+resource_name = "dash"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponSway/AllMesh/StakeElements:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [Vector3(0.523599, 0, -0.523599), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSway/AllMesh/StakeElements:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [Vector3(-0.0769791, -0.138481, 0.363084), Vector3(-0.0769791, -0.271451, 0.363084)]
+}
+
 [sub_resource type="Animation" id="Animation_p8xlp"]
 resource_name = "idle"
 length = 3.0
@@ -229,62 +286,6 @@ tracks/2/keys = {
 "values": [Vector3(1.0472, 0, 0), Vector3(0, 0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_jrfl0"]
-resource_name = "charging"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("WeaponSway/AllMesh/StakeElements:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.25, 1),
-"update": 0,
-"values": [Vector3(-0.0769791, -0.271451, 0.363084), Vector3(-0.0769791, -0.138481, 0.363084)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("WeaponSway/AllMesh/StakeElements:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.25, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.523599, 0, -0.523599)]
-}
-
-[sub_resource type="Animation" id="Animation_88j5v"]
-resource_name = "dash"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("WeaponSway/AllMesh/StakeElements:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.25, 1),
-"update": 0,
-"values": [Vector3(0.523599, 0, -0.523599), Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("WeaponSway/AllMesh/StakeElements:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.25, 1),
-"update": 0,
-"values": [Vector3(-0.0769791, -0.138481, 0.363084), Vector3(-0.0769791, -0.271451, 0.363084)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cthlp"]
 _data = {
 "RESET": SubResource("Animation_anl2s"),
@@ -298,9 +299,9 @@ _data = {
 [sub_resource type="BoxShape3D" id="BoxShape3D_da14s"]
 size = Vector3(0.5, 0.5, 2.00049)
 
-[node name="Stake" type="Node3D" node_paths=PackedStringArray("gun_audio", "local_gun_audio", "weapon_sway_node") groups=["Melee"]]
+[node name="Stake" type="Node3D" node_paths=PackedStringArray("gun_audio", "local_gun_audio", "weapon_sway_node") groups=["Ability", "Melee"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48532, 0.0824, -0.356)
-script = ExtResource("1_2cfut")
+script = ExtResource("1_6l88e")
 gun_audio = NodePath("AttackAudio")
 local_gun_audio = NodePath("LocalAttackAudio")
 weapon_sway_node = NodePath("WeaponSway")
@@ -308,6 +309,7 @@ default_damage = 34
 max_ammo = 1
 default_player_speed = 9.0
 current_ammo = 1
+ability_icon_enabled = ExtResource("2_icy78")
 
 [node name="WeaponSway" type="Node3D" parent="."]
 
@@ -357,7 +359,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.05, 0.05)
 pivot_offset = Vector2(576, 324)
-texture = ExtResource("3_xmgdn")
+texture = ExtResource("2_8bttn")
 stretch_mode = 5
 
 [node name="Hitmarkerlength" type="Timer" parent="."]
@@ -365,7 +367,7 @@ wait_time = 0.1
 one_shot = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_h4vjt")
+stream = ExtResource("3_5vb0e")
 volume_db = -10.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -386,7 +388,7 @@ playback_default_blend_time = 0.05
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.435, 0.407, -0.581164)
 collision_layer = 0
 collision_mask = 3
-script = ExtResource("5_irixa")
+script = ExtResource("4_2p83n")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0924071)
@@ -398,7 +400,7 @@ wait_time = 3.0
 one_shot = true
 
 [node name="AttackAudio" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("5_06548")
+stream = ExtResource("5_s8c05")
 volume_db = -15.0
 unit_size = 5.0
 max_db = -10.0
@@ -406,7 +408,7 @@ max_distance = 7.0
 max_polyphony = 4
 
 [node name="LocalAttackAudio" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("5_06548")
+stream = ExtResource("5_s8c05")
 volume_db = -5.0
 max_polyphony = 4
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=41 format=3 uid="uid://clb40ee8wur3p"]
+[gd_scene load_steps=42 format=3 uid="uid://clb40ee8wur3p"]
 
 [ext_resource type="Script" path="res://scripts/DBSniper.gd" id="1_axef1"]
 [ext_resource type="PackedScene" uid="uid://c4m1k72wuemul" path="res://models/projectiles/bullet_tracer.tscn" id="2_21rar"]
+[ext_resource type="Texture2D" uid="uid://dk1843novhwbb" path="res://images/abilities/aim_enabled.png" id="3_e8vuo"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="3_qamxx"]
 [ext_resource type="Texture2D" uid="uid://clmc36senh06u" path="res://models/guns/john.png" id="4_pkugh"]
 [ext_resource type="Texture2D" uid="uid://ct6jcvy0nhcbm" path="res://ui/hitmarker.png" id="5_oujf8"]
@@ -633,7 +634,7 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[node name="DBSniper" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoCounter", "NoCrosshair", "Ranged", "Sniper"]]
+[node name="DBSniper" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["Ability", "AmmoCounter", "NoCrosshair", "Ranged", "Sniper"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
 script = ExtResource("1_axef1")
 bullet_tracer_scene = ExtResource("2_21rar")
@@ -648,6 +649,7 @@ current_ammo = 2
 mag_type = "Revolver"
 weapon_rotation_amount = 0.05
 recoil_amount = 2.5
+ability_icon_enabled = ExtResource("3_e8vuo")
 
 [node name="WeaponSway" type="Node3D" parent="."]
 

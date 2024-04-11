@@ -7,6 +7,9 @@ extends Weapon
 
 @onready var finger_snap = $LocalFingerSnap
 
+@onready var ability_coin_enabled = preload("res://images/abilities/coin_enabled.png")
+@onready var ability_coin_disabled = preload("res://images/abilities/coin_disabled.png")
+
 var can_use_coin = true
 
 func _unhandled_input(event):
@@ -16,6 +19,7 @@ func _unhandled_input(event):
 	if event.is_action_pressed("right_click") and current_ammo > 0 and can_use_coin:
 		_play_animation.rpc("flick", animation_player_3.get_path())
 		finger_snap.play()
+		ability_icon.texture = ability_coin_disabled
 		
 		can_use_coin = false
 		
@@ -70,3 +74,4 @@ func _spawn_coin(boost):
 
 func _on_coin_cooldown_timeout():
 	can_use_coin = true
+	ability_icon.texture = ability_coin_enabled

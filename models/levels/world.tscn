@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=54 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://scripts/world.gd" id="1_rxlvp"]
 [ext_resource type="Script" path="res://scripts/MultiplayerMenu.gd" id="3_asb1u"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://scripts/MapSelector.gd" id="14_ag51l"]
 [ext_resource type="PackedScene" uid="uid://cqasao7l288a" path="res://models/levels/double_building.tscn" id="14_mbwj7"]
 [ext_resource type="Texture2D" uid="uid://cxqwq4rgwk2j2" path="res://images/arena.png" id="15_weac0"]
+[ext_resource type="Texture2D" uid="uid://0igd6uxjar83" path="res://images/abilities/coin_disabled.png" id="15_yl75i"]
 [ext_resource type="Texture2D" uid="uid://q6fpkkrsigjq" path="res://images/dbl_building.png" id="16_5jucf"]
 [ext_resource type="AudioStream" uid="uid://cxi2epivfj5yv" path="res://sounds/vote_select.wav" id="18_8sc6e"]
 
@@ -512,6 +513,21 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("6_51bju")
 expand_mode = 2
+
+[node name="Ability" type="TextureRect" parent="MultiplayerMenu/HUD"]
+visible = false
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -120.0
+offset_right = 120.0
+offset_bottom = -19.9998
+grow_vertical = 0
+texture = ExtResource("15_yl75i")
+expand_mode = 1
 
 [node name="Score" type="Control" parent="MultiplayerMenu"]
 layout_mode = 3

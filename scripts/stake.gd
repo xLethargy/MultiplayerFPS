@@ -3,6 +3,9 @@ extends Weapon
 @onready var dash_cooldown_timer = $DashCooldown
 @onready var hit_audio = $HitAudio
 
+@onready var ability_dash_enabled = preload("res://images/abilities/dash_enabled.png")
+@onready var ability_dash_disabled = preload("res://images/abilities/dash_disabled.png")
+
 var thud_dir_path = "res://sounds/thud.wav"
 var stab_dir_path = "res://sounds/stab.wav"
 
@@ -47,6 +50,7 @@ func _unhandled_input(event):
 		
 		elif event.is_action_released("right_click") and !player.in_dash and charging:
 			_play_animation.rpc("dash")
+			ability_icon.texture = ability_dash_disabled
 			
 			can_dash = false
 			charging = false
@@ -65,6 +69,7 @@ func _unhandled_input(event):
 
 func _on_dash_cooldown_timeout():
 	can_dash = true
+	ability_icon.texture = ability_dash_enabled
 
 
 func _on_hitbox_area_entered(area):

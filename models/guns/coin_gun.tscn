@@ -1,7 +1,8 @@
-[gd_scene load_steps=29 format=3 uid="uid://bi1q33khvg02m"]
+[gd_scene load_steps=30 format=3 uid="uid://bi1q33khvg02m"]
 
 [ext_resource type="Script" path="res://scripts/coin_gun.gd" id="1_cqrq7"]
 [ext_resource type="Material" uid="uid://2qga2owh6n3d" path="res://materials/gold.tres" id="2_6krx6"]
+[ext_resource type="Texture2D" uid="uid://kybotijh2a1m" path="res://images/abilities/coin_enabled.png" id="2_ixrn2"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_se3w2"]
 [ext_resource type="AudioStream" uid="uid://cu662sujy0wrn" path="res://sounds/finger_snap.wav" id="4_bjy7p"]
 
@@ -408,7 +409,7 @@ data = PackedByteArray(24, 0, 5, 0, 252, 255, 0, 0, 226, 255, 242, 255, 208, 255
 format = 1
 stereo = true
 
-[node name="CoinGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoCounter", "Ranged"]]
+[node name="CoinGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["Ability", "AmmoCounter", "Ranged"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, 0.108, -0.356)
 script = ExtResource("1_cqrq7")
 muzzle_flash = NodePath("WeaponSway/AllMesh/Gun/MuzzleFlash")
@@ -420,6 +421,7 @@ max_ammo = 6
 default_player_speed = 7.5
 current_ammo = 6
 mag_type = "Revolver"
+ability_icon_enabled = ExtResource("2_ixrn2")
 
 [node name="CoinMarker" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.994453, 0.198632, -0.140367)

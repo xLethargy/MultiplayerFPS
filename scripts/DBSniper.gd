@@ -13,6 +13,7 @@ func _unhandled_input(event):
 		aiming = true
 		hud.sniper_ads.show()
 		hud.healthbar.hide()
+		ability_icon.hide()
 		_play_ads_animation.rpc("aiming")
 		self.hide()
 		tracer_spawn.position = Vector3(-0.435, 0.162, -0.394)
@@ -25,6 +26,7 @@ func _unhandled_input(event):
 		aiming = false
 		hud.sniper_ads.hide()
 		hud.healthbar.show()
+		ability_icon.show()
 		
 		tracer_spawn.position = Vector3(0, 0.162, -0.394)
 		
