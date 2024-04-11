@@ -11,7 +11,6 @@ func pick_random_spawn():
 		
 		if !random_spawn.check_for_players():
 			return random_spawn
-			break
 		else:
 			spawn_points_checks.erase(random_spawn)
 	

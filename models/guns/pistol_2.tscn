@@ -276,7 +276,6 @@ default_ragdoll_force = 5.0
 [node name="WeaponSway" type="Node3D" parent="."]
 
 [node name="AllMesh" type="Node3D" parent="WeaponSway"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0377812, -0.024375, 0)
 
 [node name="Gun" type="Node3D" parent="WeaponSway/AllMesh"]
 

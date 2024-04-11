@@ -127,7 +127,13 @@ func _open_choose_class(_peer_id):
 
 func update_health_bar(health_value):
 	var healthbar = hud.healthbar
+	
+	if health_value < healthbar.value:
+		hud.animation_player.play("wounded")
+	
 	healthbar.value = health_value
+	
+	
 
 
 func _on_multiplayer_spawner_spawned(node):
@@ -239,6 +245,9 @@ func spawn_tracer_pivot(tracer_colour, tracer_spawn_pos, tracer_spawn_rot, dista
 		bullet_tracer.mesh.set_surface_override_material(0, black)
 	
 	if collider != null:
+		if bullet_tracer.global_transform.origin.is_equal_approx(collider):
+			return
+		
 		bullet_tracer.look_at(collider)
 	await get_tree().create_timer(2).timeout
 	bullet_tracer.queue_free()

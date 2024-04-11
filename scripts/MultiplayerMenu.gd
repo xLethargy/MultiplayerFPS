@@ -34,7 +34,7 @@ var upnp
 var check_for_player
 var weapon_class_node
 
-var min_click_audio_pitch = 0.8
+var min_click_audio_pitch = 0.9
 var max_click_audio_pitch = 1.1
 
 signal add_player

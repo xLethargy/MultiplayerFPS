@@ -1,6 +1,9 @@
 extends Node3D
 
-@onready var heartbeat_audio = $"../HeartbeatAudio"
+@onready var hurt_sounds = ["res://sounds/hurt/hurt1.wav", "res://sounds/hurt/hurt2.wav"]
+
+@onready var heartbeat_audio = $HeartbeatAudio
+@onready var hurt_audio = $HurtAudio
 
 @onready var player = owner
 @onready var heal_timer = $HealTimer
@@ -40,11 +43,15 @@ func receive_damage(damage):
 	else:
 		heal_timer.stop()
 		heal_timer.start()
+		
+		if !hurt_audio.playing:
+			var hurt_sound = hurt_sounds.pick_random()
+			_play_hurt_audio.rpc(hurt_sound)
 	
 	change_health.emit(current_health)
 	flinch.emit(damage)
 	
-	if heartbeat_audio.playing != true and current_health <= 50:
+	if !heartbeat_audio.playing and current_health <= 50:
 		heartbeat_audio.play()
 	
 	if current_health <= 50 and heartbeat_audio.volume_db != -10:
@@ -57,3 +64,9 @@ func _on_heal_timer_timeout():
 
 func _on_heartbeat_audio_finished():
 	heartbeat_audio.play()
+
+
+@rpc ("any_peer", "call_local")
+func _play_hurt_audio(given_sound):
+	hurt_audio.stream = load(given_sound)
+	hurt_audio.play()

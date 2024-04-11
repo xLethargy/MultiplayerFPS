@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://cvegbuu7wxika"]
+[gd_scene load_steps=57 format=3 uid="uid://cvegbuu7wxika"]
 
 [ext_resource type="Script" path="res://scripts/world.gd" id="1_rxlvp"]
 [ext_resource type="Script" path="res://scripts/MultiplayerMenu.gd" id="3_asb1u"]
@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://cxqwq4rgwk2j2" path="res://images/arena.png" id="15_weac0"]
 [ext_resource type="Texture2D" uid="uid://0igd6uxjar83" path="res://images/abilities/coin_disabled.png" id="15_yl75i"]
 [ext_resource type="Texture2D" uid="uid://q6fpkkrsigjq" path="res://images/dbl_building.png" id="16_5jucf"]
+[ext_resource type="Texture2D" uid="uid://dmr0c6be7htcc" path="res://images/wounded_screen.png" id="16_kabna"]
 [ext_resource type="AudioStream" uid="uid://cxi2epivfj5yv" path="res://sounds/vote_select.wav" id="18_8sc6e"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0se3p"]
@@ -138,6 +139,27 @@ bg_color = Color(0.384314, 0.384314, 0.384314, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adxas"]
 bg_color = Color(0.486275, 0.854902, 0.992157, 1)
+
+[sub_resource type="Animation" id="Animation_1v6lh"]
+resource_name = "wounded"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WoundedScreen:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_81425"]
+_data = {
+"wounded": SubResource("Animation_1v6lh")
+}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ssq30"]
 bg_color = Color(0.87451, 0.478431, 0.313726, 1)
@@ -529,6 +551,21 @@ grow_vertical = 0
 texture = ExtResource("15_yl75i")
 expand_mode = 1
 
+[node name="WoundedScreen" type="TextureRect" parent="MultiplayerMenu/HUD"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_kabna")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MultiplayerMenu/HUD"]
+libraries = {
+"": SubResource("AnimationLibrary_81425")
+}
+
 [node name="Score" type="Control" parent="MultiplayerMenu"]
 layout_mode = 3
 anchors_preset = 0
@@ -645,13 +682,13 @@ one_shot = true
 stream = ExtResource("18_8sc6e")
 volume_db = -5.0
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://models/players/player.tscn")
-spawn_path = NodePath("..")
-
 [node name="CurrentMap" type="Node3D" parent="."]
 
 [node name="double_building" parent="CurrentMap" instance=ExtResource("14_mbwj7")]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://models/players/player.tscn")
+spawn_path = NodePath("..")
 
 [connection signal="add_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_add_player"]
 [connection signal="remove_player" from="MultiplayerMenu" to="." method="_on_multiplayer_menu_remove_player"]
