@@ -1,11 +1,19 @@
 extends RigidBody3D
 
+
+@export var target_color : Color
+@onready var meshes = $Meshes
 @onready var mesh = $Meshes/MeshInstance3D
 @onready var despawn_timer = $DespawnTimer
 @onready var freeze_timer = $FreezeTimer
 @onready var death_audio = $DeathAudio
+@onready var animation_player = $AnimationPlayer
 
 @onready var death_sounds = ["res://sounds/hurt/death1.wav", "res://sounds/hurt/death2.wav"]
+
+var tween
+
+var base_mesh_material
 
 func _ready():
 	var death_sound = death_sounds.pick_random()
@@ -19,8 +27,7 @@ func add_force_to_test(given_force):
 
 
 func _on_despawn_timer_timeout():
-	queue_free()
-
+	animation_player.play("death")
 
 func _on_freeze_timer_timeout():
 	freeze = true
@@ -30,3 +37,7 @@ func _on_freeze_timer_timeout():
 func _play_death_sound(given_sound):
 	death_audio.stream = load(given_sound)
 	death_audio.play()
+
+
+func _on_animation_player_animation_finished(_anim_name):
+	queue_free()

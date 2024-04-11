@@ -74,7 +74,7 @@ func store_freeze_information(collider):
 		
 		frozen = true
 		
-		var old_collider_speed = collider.player.default_speed
+		var old_collider_speed = collider.player.current_speed
 		
 		collider.handle_damage_collision(freeze_damage)
 		current_health = collider.owner.health_component.current_health - freeze_damage

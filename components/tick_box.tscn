@@ -1,8 +1,15 @@
 [gd_scene load_steps=2 format=3 uid="uid://cf6g75do7e7e3"]
 
-[ext_resource type="Texture2D" uid="uid://b2k7eucyuykdw" path="res://images/tick.webp" id="1_x2e44"]
+[ext_resource type="Texture2D" uid="uid://4aen218asuwd" path="res://images/dogs/tick.png" id="1_2u5or"]
 
-[node name="TickBox" type="TextureRect"]
+[node name="TickBox" type="Control"]
 custom_minimum_size = Vector2(50, 50)
-texture = ExtResource("1_x2e44")
-expand_mode = 1
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TickBoxTexture" type="Sprite2D" parent="."]
+position = Vector2(25, 25)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_2u5or")

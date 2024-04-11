@@ -1,12 +1,12 @@
 [gd_scene load_steps=3 format=3 uid="uid://v0kq5btg0h2i"]
 
-[ext_resource type="Script" path="res://components/spawn_point.gd" id="1_q1syw"]
+[ext_resource type="Script" path="res://scripts/spawn_point.gd" id="1_d00k0"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_7lqht"]
 radius = 5.0
 
 [node name="1" type="Marker3D"]
-script = ExtResource("1_q1syw")
+script = ExtResource("1_d00k0")
 
 [node name="PlayerDetector" type="Area3D" parent="."]
 collision_layer = 0

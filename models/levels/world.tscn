@@ -132,7 +132,7 @@ bg_color = Color(0.639216, 0.117647, 0.172549, 1)
 bg_color = Color(0.223529, 0.709804, 0.27451, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_mv5p7"]
-font_size = 36
+font_size = 48
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_54oud"]
 bg_color = Color(0.384314, 0.384314, 0.384314, 1)
@@ -504,6 +504,7 @@ grow_vertical = 0
 text = "9999"
 label_settings = SubResource("LabelSettings_mv5p7")
 horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="AmmoBar" type="ProgressBar" parent="MultiplayerMenu/HUD"]
 visible = false
@@ -579,6 +580,7 @@ offset_bottom = 40.0
 
 [node name="MapSelector" type="Control" parent="MultiplayerMenu"]
 visible = false
+layout_direction = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -600,21 +602,23 @@ color = Color(0.203922, 0.266667, 0.733333, 1)
 [node name="PanelContainer" type="PanelContainer" parent="MultiplayerMenu/MapSelector"]
 z_index = 2
 custom_minimum_size = Vector2(1200, 750)
+layout_direction = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -600.0
+offset_top = -375.0
+offset_right = 600.0
+offset_bottom = 375.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ssq30")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer"]
+layout_direction = 1
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -643,6 +647,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer"]
+layout_direction = 1
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer2"]
@@ -661,6 +666,7 @@ stretch_mode = 0
 
 [node name="DBHBox" type="HBoxContainer" parent="MultiplayerMenu/MapSelector/PanelContainer/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(50, 50)
+layout_direction = 1
 layout_mode = 2
 alignment = 1
 
@@ -685,6 +691,8 @@ volume_db = -5.0
 [node name="CurrentMap" type="Node3D" parent="."]
 
 [node name="double_building" parent="CurrentMap" instance=ExtResource("14_mbwj7")]
+
+[node name="Ragdolls" type="Node3D" parent="."]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://models/players/player.tscn")

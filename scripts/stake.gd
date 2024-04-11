@@ -86,5 +86,4 @@ func _on_hitbox_area_entered(area):
 				
 				if area.health_component.current_health - current_damage <= 0:
 					var test_boost = raycast.get_global_transform().basis.z * current_ragdoll_force
-					test_boost.y = 0
 					get_tree().current_scene.spawn_player_ragdoll.rpc(area.global_position, area.global_rotation, -test_boost, area.owner.current_colour)

@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://dpp36leb612fw"]
+[gd_scene load_steps=11 format=3 uid="uid://dpp36leb612fw"]
 
 [ext_resource type="PackedScene" uid="uid://vp87qdf4rx67" path="res://models/glb/arena.glb" id="1_6227c"]
 [ext_resource type="Material" uid="uid://drxfp3qp8acgn" path="res://materials/orange.tres" id="2_b7d0w"]
 [ext_resource type="Script" path="res://scripts/arena.gd" id="2_m6ksy"]
 [ext_resource type="Material" uid="uid://ddhp333twrowe" path="res://materials/checkered_black.tres" id="4_8ktba"]
 [ext_resource type="PackedScene" uid="uid://cqic11uh1ybd6" path="res://components/out_of_bounds_detector.tscn" id="5_7lgy7"]
+[ext_resource type="PackedScene" uid="uid://v0kq5btg0h2i" path="res://components/spawn_point.tscn" id="5_qxpts"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7480v"]
 size = Vector3(0.2, 10, 60)
@@ -57,30 +58,33 @@ shape = SubResource("BoxShape3D_7480v")
 
 [node name="SpawnPoints" type="Node3D" parent="." index="1"]
 
-[node name="1" type="Marker3D" parent="SpawnPoints" index="0"]
+[node name="1" parent="SpawnPoints" index="0" instance=ExtResource("5_qxpts")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 20)
 
-[node name="2" type="Marker3D" parent="SpawnPoints" index="1"]
+[node name="2" parent="SpawnPoints" index="1" instance=ExtResource("5_qxpts")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -20)
 
-[node name="3" type="Marker3D" parent="SpawnPoints" index="2"]
+[node name="3" parent="SpawnPoints" index="2" instance=ExtResource("5_qxpts")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 2, 0)
 
-[node name="4" type="Marker3D" parent="SpawnPoints" index="3"]
+[node name="4" parent="SpawnPoints" index="3" instance=ExtResource("5_qxpts")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2, 0)
 
-[node name="5" type="Marker3D" parent="SpawnPoints" index="4"]
+[node name="5" parent="SpawnPoints" index="4" instance=ExtResource("5_qxpts")]
 
 [node name="OutOfBoundsDetector" parent="." index="2" instance=ExtResource("5_7lgy7")]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="3"]
+[node name="OutOfBoundsDetector2" parent="." index="3" instance=ExtResource("5_7lgy7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 113.261, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="4"]
 environment = SubResource("Environment_2tsg0")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." index="4"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." index="5"]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Camera3D" type="Camera3D" parent="." index="5"]
+[node name="Camera3D" type="Camera3D" parent="." index="6"]
 transform = Transform3D(-0.887, -0.239555, 0.394771, 0, 0.85491, 0.518776, -0.461769, 0.460154, -0.758305, 7.46947, 7.68647, -17.5874)
 visible = false
 fov = 60.0

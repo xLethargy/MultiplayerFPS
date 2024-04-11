@@ -394,7 +394,7 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[node name="SpeedGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoCounter", "DeathReset", "Ranged"]]
+[node name="SpeedGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoCounter", "DeathReset", "Hat", "Ranged"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, 0.108, -0.356)
 script = ExtResource("1_sou6r")
 muzzle_flash = NodePath("WeaponSway/AllMesh/Gun/MuzzleFlash")
@@ -409,6 +409,7 @@ mag_type = "Revolver"
 weapon_rotation_amount = 0.3
 recoil_amount = 0.6
 default_ragdoll_force = 4.0
+hat = "Cowboy"
 
 [node name="WeaponSway" type="Node3D" parent="."]
 

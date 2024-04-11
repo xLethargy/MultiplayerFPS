@@ -73,7 +73,8 @@ func _on_arena_texture_pressed():
 		if current_vote == "db_box":
 			_add_vote.rpc("db", false)
 	
-	_display_vote.rpc(arena_hbox.get_path(), player_team)
+	var random_rotation = randi_range(-20, 20)
+	_display_vote.rpc(arena_hbox.get_path(), player_team, random_rotation)
 	current_hbox = arena_hbox
 	current_vote = "arena"
 	_add_vote.rpc("arena", true)
@@ -88,31 +89,37 @@ func _on_double_building_texture_pressed():
 		if current_vote == "arena":
 			_add_vote.rpc("arena", false)
 	
-	_display_vote.rpc(db_hbox.get_path(), player_team)
+	var random_rotation = randi_range(-15, 15)
+	_display_vote.rpc(db_hbox.get_path(), player_team, random_rotation)
 	current_hbox = db_hbox
 	current_vote = "db_box"
 	_add_vote.rpc("db", true)
 
 
 @rpc("any_peer", "call_local", "reliable")
-func _display_vote(hbox_path, team):
+func _display_vote(hbox_path, team, icon_rotation):
 	_play_vote_audio.rpc()
 	
 	tick_box = tick_box_scene.instantiate()
 	
-	print (team)
+	var tick_box_texture = tick_box.get_child(0)
+	
 	match team:
 		1:
-			tick_box.texture = load("res://images/dogs/retriever.png")
+			tick_box_texture.texture = load("res://images/dogs/retriever.png")
 		2:
-			tick_box.texture = load("res://images/dogs/shiba.png")
+			tick_box_texture.texture = load("res://images/dogs/shiba.png")
 		3:
-			tick_box.texture = load("res://images/dogs/thing.png")
+			tick_box_texture.texture = load("res://images/dogs/thing.png")
 		4:
-			tick_box.texture = load("res://images/dogs/labrador.png")
+			tick_box_texture.texture = load("res://images/dogs/labrador.png")
+	
+	tick_box_texture.rotation_degrees = icon_rotation
 	
 	var hbox = get_node(hbox_path)
 	hbox.add_child(tick_box, true)
+	
+	
 
 
 @rpc("any_peer", "call_local", "reliable")

@@ -8,7 +8,6 @@ func pick_random_spawn():
 	
 	for spawn_point in spawn_points_children:
 		var random_spawn = spawn_points_children.pick_random()
-		
 		if !random_spawn.check_for_players():
 			return random_spawn
 		else:

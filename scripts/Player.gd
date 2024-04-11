@@ -3,6 +3,7 @@ extends CharacterBody3D
 @onready var health_component = $HealthComponent
 @onready var camera = $View/Camera3D
 @onready var view = $View
+@onready var hat_node = $Meshes/Hat
 @onready var mesh = $Meshes/MeshInstance3D
 @onready var mesh_outline = $Meshes/MeshInstance3D/Outline
 @onready var hurtbox = $HurtboxComponent
@@ -53,6 +54,7 @@ var flinch_amount
 
 var collided = false
 
+var hat : Node3D = null
 
 func _ready():
 	if !is_multiplayer_authority():
@@ -235,6 +237,10 @@ func change_layers():
 		
 		for eye in mesh_eyes.get_children():
 			eye.cast_shadow = 3
+		
+		if hat != null:
+			hat.get_child(0).cast_shadow = 3
+			hat.get_child(0).get_child(0).cast_shadow = 3
 
 
 @rpc ("call_local", "any_peer", "unreliable")
@@ -269,3 +275,24 @@ func play_footstep_audio():
 	
 	footstep_audio.pitch_scale = randf_range(0.8, 1.2)
 	footstep_audio.play()
+
+
+@rpc ("any_peer", "call_local", "reliable")
+func add_hat(given_given_hat):
+	add_hat_for_all(given_given_hat)
+	
+	hat_node.add_child(hat, true)
+	change_layers.rpc()
+
+
+@rpc ("any_peer", "call_local", "reliable")
+func add_hat_for_all(given_hat):
+	match given_hat:
+		"Cowboy":
+			hat = load(Global.COWBOY_HAT).instantiate()
+
+
+@rpc ("any_peer", "call_local", "reliable")
+func remove_hat():
+	if hat != null:
+		hat.queue_free()

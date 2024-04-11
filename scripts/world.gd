@@ -37,6 +37,8 @@ var added_label = false
 @onready var arena = preload("res://models/levels/arena.tscn")
 @onready var db_building = preload("res://models/levels/double_building.tscn")
 
+@onready var ragdoll_node = $Ragdolls
+
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
 		if !main_menu.visible:
@@ -272,18 +274,36 @@ func load_map(given_map):
 	
 	if player != null:
 		player.position = current_map.pick_random_spawn().position
+	
+	for ragdoll in ragdoll_node.get_children():
+		if ragdoll:
+			ragdoll.queue_free()
 
 
 @rpc("any_peer", "call_local")
 func spawn_player_ragdoll(given_position, given_rotation, given_force, ragdoll_colour):
 	var player_ragdoll = player_ragdoll_scene.instantiate()
-	add_child(player_ragdoll)
+	
+	#if given_hat.get_child(0) != null:
+	#	var ragdoll_hat
+	#	if given_hat.get_child(0).is_in_group("Cowboy"):
+	#		ragdoll_hat = load(Global.COWBOY_HAT)
+	#	
+	#	print (ragdoll_hat)
+	#	var hat = ragdoll_hat.instantiate()
+	#	add_child(hat)
+	#	
+	#	hat.global_position = given_position
+	#	hat.global_position.y += 1
+	#	hat.global_rotation = given_rotation
+		
+	
+	ragdoll_node.add_child(player_ragdoll)
 	
 	player_ragdoll.global_position = given_position
 	player_ragdoll.global_position.y += 1
 	player_ragdoll.global_rotation = given_rotation
 	
-	
-	player_ragdoll.mesh.set_surface_override_material(0, load(ragdoll_colour))
+	player_ragdoll.mesh.set_surface_override_material(0, load(ragdoll_colour).duplicate())
 	
 	player_ragdoll.add_force_to_test(given_force)

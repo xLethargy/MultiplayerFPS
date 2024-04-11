@@ -55,9 +55,21 @@ var charging = false
 @export var default_ragdoll_force : float
 @onready var current_ragdoll_force : float = default_ragdoll_force
 
+@export var hat : String
+
 func _ready():
 	await get_tree().create_timer(0.1).timeout
 	if player.is_multiplayer_authority():
+		
+		if is_in_group("Hat"):
+			if player.hat != null:
+				player.remove_hat.rpc()
+			player.add_hat(hat)
+		else:
+			if player.hat != null:
+				player.remove_hat.rpc()
+			player.hat = null
+		
 		
 		raycast.target_position = Vector3(0, 0, -50)
 		
@@ -239,7 +251,8 @@ func handle_collision(collider, given_damage = current_damage):
 				
 				if collider.health_component.current_health - given_damage <= 0:
 					var test_boost = get_global_transform().basis.z * current_ragdoll_force
-					test_boost.y = 0
+					
+					print (collider.owner.hat)
 					get_tree().current_scene.spawn_player_ragdoll.rpc(collider.global_position, collider.global_rotation, -test_boost, collider.owner.current_colour)
 		elif collider.has_method("handle_coin_collision"):
 			on_hit_effect(false)
