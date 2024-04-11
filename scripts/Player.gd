@@ -1,7 +1,6 @@
 extends CharacterBody3D
 
 @onready var health_component = $HealthComponent
-@onready var shoot_component = $ShootComponent
 @onready var camera = $View/Camera3D
 @onready var view = $View
 @onready var mesh = $Meshes/MeshInstance3D
@@ -40,7 +39,7 @@ var weapon
 
 var frozen = false
 
-var current_colour = "Red"
+var current_colour
 
 var sensitivity : float = 11
 var sens_to_sway : float = 10
@@ -54,13 +53,6 @@ var flinch_amount
 
 var collided = false
 
-#COLOURS
-
-const BLUE = preload("res://materials/blue.tres")
-const RED = preload("res://materials/red.tres")
-const GREEN = preload("res://materials/green.tres")
-const YELLOW = preload("res://materials/yellow.tres")
-const PINK = preload("res://materials/pink.tres")
 
 func _ready():
 	if !is_multiplayer_authority():
@@ -191,42 +183,48 @@ func change_material(material, want_timer = true):
 	if want_timer:
 		await get_tree().create_timer(0.1).timeout
 	weapon = view.get_child(1)
-	if material == "Blue":
-		mesh.set_surface_override_material(0, BLUE)
+	
+	if material == Global.BLUE:
+		var blue = load(Global.BLUE)
+		mesh.set_surface_override_material(0, blue)
 		if weapon != null:
-			weapon.arm.set_surface_override_material(0, BLUE)
+			weapon.arm.set_surface_override_material(0, blue)
 			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, BLUE)
-		current_colour = "Blue"
+				weapon.arm_two.set_surface_override_material(0, blue)
+		current_colour = Global.BLUE
 		
-	elif material == "Red":
-		mesh.set_surface_override_material(0, RED)
+	elif material == Global.RED:
+		var red = load(Global.RED)
+		mesh.set_surface_override_material(0, red)
 		if weapon != null:
-			weapon.arm.set_surface_override_material(0, RED)
+			weapon.arm.set_surface_override_material(0, red)
 			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, RED)
-		current_colour = "Red"
-	elif material == "Green":
-		mesh.set_surface_override_material(0, GREEN)
+				weapon.arm_two.set_surface_override_material(0, red)
+		current_colour = Global.RED
+	elif material == Global.GREEN:
+		var green = load(Global.GREEN)
+		mesh.set_surface_override_material(0, green)
 		if weapon != null:
-			weapon.arm.set_surface_override_material(0, GREEN)
+			weapon.arm.set_surface_override_material(0, green)
 			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, GREEN)
-		current_colour = "Green"
-	elif material == "Yellow":
-		mesh.set_surface_override_material(0, YELLOW)
+				weapon.arm_two.set_surface_override_material(0, green)
+		current_colour = Global.GREEN
+	elif material == Global.YELLOW:
+		var yellow = load(Global.YELLOW)
+		mesh.set_surface_override_material(0, yellow)
 		if weapon != null:
-			weapon.arm.set_surface_override_material(0, YELLOW)
+			weapon.arm.set_surface_override_material(0, yellow)
 			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, YELLOW)
-		current_colour = "Yellow"
+				weapon.arm_two.set_surface_override_material(0, yellow)
+		current_colour = Global.YELLOW
 	else:
-		mesh.set_surface_override_material(0, PINK)
+		var pink = load(Global.PINK)
+		mesh.set_surface_override_material(0, pink)
 		if weapon != null:
-			weapon.arm.set_surface_override_material(0, PINK)
+			weapon.arm.set_surface_override_material(0, pink)
 			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, PINK)
-		current_colour = "Pink"
+				weapon.arm_two.set_surface_override_material(0, pink)
+		current_colour = Global.PINK
 
 
 @rpc ("call_local", "any_peer", "reliable")

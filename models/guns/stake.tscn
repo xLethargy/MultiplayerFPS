@@ -310,6 +310,7 @@ max_ammo = 1
 default_player_speed = 9.0
 current_ammo = 1
 ability_icon_enabled = ExtResource("2_icy78")
+default_ragdoll_force = 5.0
 
 [node name="WeaponSway" type="Node3D" parent="."]
 

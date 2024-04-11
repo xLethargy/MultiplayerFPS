@@ -13,6 +13,8 @@ var coin_shot = false
 
 var damage = 50
 
+var ragdoll_force = 15
+
 func _ready():
 	var players = get_tree().get_nodes_in_group("Enemy")
 	if players != null:
@@ -44,6 +46,11 @@ func handle_coin_collision():
 		if closest_player != null:
 			get_tree().current_scene.spawn_tracer_pivot.rpc("gold", owner.global_position, owner.global_rotation, closest_distance / 50, position_to_look_at)
 			closest_collider.handle_damage_collision(damage)
+			
+			if closest_collider.health_component.current_health - damage <= 0:
+				var test_boost = raycast.get_global_transform().basis.z * ragdoll_force
+				test_boost.y = 0
+				get_tree().current_scene.spawn_player_ragdoll.rpc(closest_collider.global_position, closest_collider.global_rotation, -test_boost, closest_collider.owner.current_colour)
 	
 	owner.play_spatial_audio.rpc()
 	coin_shot = true

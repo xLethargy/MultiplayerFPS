@@ -52,6 +52,9 @@ var charging = false
 
 @export var ability_icon_enabled : CompressedTexture2D
 
+@export var default_ragdoll_force : float
+@onready var current_ragdoll_force : float = default_ragdoll_force
+
 func _ready():
 	await get_tree().create_timer(0.1).timeout
 	if player.is_multiplayer_authority():
@@ -59,7 +62,7 @@ func _ready():
 		raycast.target_position = Vector3(0, 0, -50)
 		
 		player.default_speed = default_player_speed
-		player.change_speed_and_jump()
+		player.change_speed_and_jump(default_player_speed)
 		current_ammo = max_ammo
 		player.weapon_rotation_amount = weapon_rotation_amount
 		
@@ -93,7 +96,7 @@ func _ready():
 		else:
 			ability_icon.hide()
 		
-		player.health_component.connect("death", reset_stat_gun)
+		player.health_component.connect("death", reset_stat_gun_rpc)
 
 
 func _physics_process(delta):
@@ -190,7 +193,10 @@ func _on_animation_player_animation_finished(anim_name):
 	elif current_ammo == 0 and !queued_reload:
 		_play_animation.rpc("reload")
 
+func reset_stat_gun_rpc():
+	call_deferred("reset_stat_gun")
 
+@rpc ("any_peer", "call_local", "reliable")
 func reset_stat_gun(reset_ammo = true):
 	animation_player.stop()
 	animation_player_2.stop()
@@ -200,9 +206,12 @@ func reset_stat_gun(reset_ammo = true):
 	player.change_speed_and_jump()
 	current_animation_speed = default_animation_speed
 	animation_player.speed_scale = current_animation_speed
+	animation_player_2.speed_scale = current_animation_speed
 	current_damage = default_damage
 	
 	player.camera.fov = 90
+	
+	current_ragdoll_force = default_ragdoll_force
 	
 	aiming = false
 	hud.sniper_ads.hide()
@@ -227,6 +236,11 @@ func handle_collision(collider, given_damage = current_damage):
 			if collider.has_method("handle_damage_collision"):
 				on_hit_effect()
 				collider.handle_damage_collision(given_damage)
+				
+				if collider.health_component.current_health - given_damage <= 0:
+					var test_boost = get_global_transform().basis.z * current_ragdoll_force
+					test_boost.y = 0
+					get_tree().current_scene.spawn_player_ragdoll.rpc(collider.global_position, collider.global_rotation, -test_boost, collider.owner.current_colour)
 		elif collider.has_method("handle_coin_collision"):
 			on_hit_effect(false)
 			collider.handle_coin_collision()

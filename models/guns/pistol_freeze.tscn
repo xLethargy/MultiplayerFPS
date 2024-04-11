@@ -411,6 +411,7 @@ current_ammo = 10
 mag_type = "Laser"
 weapon_rotation_amount = 0.2
 recoil_amount = 0.5
+default_ragdoll_force = 7.0
 
 [node name="WeaponSway" type="Node3D" parent="."]
 

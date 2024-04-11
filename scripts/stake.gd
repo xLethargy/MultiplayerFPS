@@ -26,7 +26,7 @@ func _unhandled_input(event):
 	
 	if event.is_action_pressed("shoot") and animation_player.current_animation != "shoot":
 		if raycast.is_colliding():
-			if !raycast.get_collider().is_in_group("Hurtbox"):
+			if !raycast.get_collider().is_in_group("Hurtbox") and !raycast.get_collider().is_in_group("Player"):
 				collider_in_way = true
 				_play_spatial_for_all.rpc(hit_audio.get_path(), thud_dir_path, 0.8, 1.2)
 			else:
@@ -83,3 +83,8 @@ func _on_hitbox_area_entered(area):
 				area.handle_damage_collision(current_damage)
 				on_hit_effect()
 				_play_spatial_for_all.rpc(hit_audio.get_path(), stab_dir_path, 0.8, 1.2)
+				
+				if area.health_component.current_health - current_damage <= 0:
+					var test_boost = raycast.get_global_transform().basis.z * current_ragdoll_force
+					test_boost.y = 0
+					get_tree().current_scene.spawn_player_ragdoll.rpc(area.global_position, area.global_rotation, -test_boost, area.owner.current_colour)

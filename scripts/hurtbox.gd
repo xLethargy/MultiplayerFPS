@@ -3,7 +3,7 @@ extends Area3D
 @export var health_component : Node3D
 
 @onready var player = owner
-@onready var raycast = $"../View/Camera3D/RayCast3D"
+@export var raycast : RayCast3D
 
 signal change_score
 

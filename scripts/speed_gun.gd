@@ -4,7 +4,6 @@ var animation_increase = 0.1
 var damage_increase = 0.5
 var player_speed_increase = 0.5
 
-
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():
 		return
@@ -40,6 +39,7 @@ func handle_speed_gun_variables():
 		player.increase_speed(player_speed_increase)
 		if player.current_speed > 25:
 			player.change_speed_and_jump.rpc(25)
+	
 	if current_damage < 100:
 		current_damage += damage_increase
 		if current_damage > 100:
@@ -56,6 +56,11 @@ func handle_speed_gun_variables():
 		player.camera.fov += 1
 		if player.camera.fov > 140:
 			player.camera.fov = 140
+	
+	if current_ragdoll_force < 20:
+		current_ragdoll_force += 0.5
+		if current_ragdoll_force > 20:
+			current_ragdoll_force = 20
 
 
 @rpc ("call_local", "any_peer", "reliable")
@@ -64,6 +69,7 @@ func _half_stat_variables():
 	var halved_animation_speed = current_animation_speed - 0.8
 	var halved_damage = current_damage - 4
 	var halved_fov = player.camera.fov - 8
+	var halved_ragdoll = current_ragdoll_force - 4
 	
 	if halved_speed < player.default_speed:
 		halved_speed = player.default_speed
@@ -73,6 +79,8 @@ func _half_stat_variables():
 		halved_damage = default_damage
 	if halved_fov < 90:
 		halved_fov = 90
+	if halved_ragdoll < 4:
+		halved_ragdoll = 4
 	
 	player.change_speed_and_jump(halved_speed)
 	current_animation_speed = halved_animation_speed
@@ -80,3 +88,4 @@ func _half_stat_variables():
 	animation_player_2.speed_scale = current_animation_speed
 	current_damage = halved_damage
 	player.camera.fov = halved_fov
+	current_ragdoll_force = halved_ragdoll

@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://v0kq5btg0h2i"]
+
+[ext_resource type="Script" path="res://components/spawn_point.gd" id="1_q1syw"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_7lqht"]
+radius = 5.0
+
+[node name="1" type="Marker3D"]
+script = ExtResource("1_q1syw")
+
+[node name="PlayerDetector" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 10
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerDetector"]
+shape = SubResource("SphereShape3D_7lqht")
+
+[connection signal="area_entered" from="PlayerDetector" to="." method="_on_player_detector_area_entered"]
+[connection signal="area_exited" from="PlayerDetector" to="." method="_on_player_detector_area_exited"]

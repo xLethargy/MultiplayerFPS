@@ -17,6 +17,8 @@ var bullet_tracer_scene = preload("res://models/projectiles/bullet_tracer.tscn")
 var player_score_label = preload("res://ui/player_score.tscn")
 @onready var player_labels = $MultiplayerMenu/Score/PlayerLabels
 
+var player_ragdoll_scene = preload("res://models/players/player_ragdoll.tscn")
+
 @onready var multiplayer_menu = $MultiplayerMenu
 @onready var hud = $MultiplayerMenu/HUD
 @onready var main_menu = $MultiplayerMenu/MainMenuScreen
@@ -61,7 +63,6 @@ func _on_multiplayer_menu_add_player():
 				player.name = str(Global.players[i].ID)
 				
 				add_child(player, true)
-				player.position = current_map.pick_random_spawn().position
 				
 				match Global.players[i].Class:
 					"PistolOne":
@@ -81,15 +82,15 @@ func _on_multiplayer_menu_add_player():
 				
 				match Global.players[i].Team:
 					1:
-						player.change_material.rpc("Blue")
+						player.change_material.rpc(Global.BLUE)
 					2:
-						player.change_material.rpc("Red")
+						player.change_material.rpc(Global.RED)
 					3:
-						player.change_material.rpc("Green")
+						player.change_material.rpc(Global.GREEN)
 					4:
-						player.change_material.rpc("Yellow")
+						player.change_material.rpc(Global.YELLOW)
 					_:
-						player.change_material.rpc("Pink")
+						player.change_material.rpc(Global.PINK)
 				
 				if player.is_multiplayer_authority():
 					player.health_component.connect("change_health", update_health_bar)
@@ -99,6 +100,7 @@ func _on_multiplayer_menu_add_player():
 					_add_to_group()
 				update_health_bar(player.health_component.current_health)
 				
+				player.position = current_map.pick_random_spawn().position
 
 
 func _on_multiplayer_menu_remove_player(peer_id):
@@ -160,15 +162,15 @@ func _on_multiplayer_spawner_spawned(node):
 			_add_score_label.rpc(Global.players[id].Name, Global.players[id].Score, Global.players[id].ID)
 			match Global.players[id].Team:
 				1:
-					node.change_material.rpc("Blue")
+					node.change_material.rpc(Global.BLUE)
 				2:
-					node.change_material.rpc("Red")
+					node.change_material.rpc(Global.RED)
 				3:
-					node.change_material.rpc("Green")
+					node.change_material.rpc(Global.GREEN)
 				4:
-					node.change_material.rpc("Yellow")
+					node.change_material.rpc(Global.YELLOW)
 				_:
-					node.change_material.rpc("Pink")
+					node.change_material.rpc(Global.PINK)
 			
 			
 			
@@ -179,15 +181,15 @@ func _on_multiplayer_spawner_spawned(node):
 				
 				match Global.players[i].Team:
 					1:
-						player.change_material("Blue")
+						player.change_material(Global.BLUE)
 					2:
-						player.change_material("Red")
+						player.change_material(Global.RED)
 					3:
-						player.change_material("Green")
+						player.change_material(Global.GREEN)
 					4:
-						player.change_material("Yellow")
+						player.change_material(Global.YELLOW)
 					_:
-						player.change_material("Pink")
+						player.change_material(Global.PINK)
 
 
 func _add_weapon_class(player_node):
@@ -211,10 +213,11 @@ func _add_to_group():
 	
 	for i in Global.players:
 		var player_in_tree = get_node_or_null(str(Global.players[i].ID))
-		if Global.players[i].Team != Global.players[current_id].Team:
-			player_in_tree.add_to_group("Enemy")
-		else:
-			player_in_tree.add_to_group("Team")
+		if player_in_tree != null:
+			if Global.players[i].Team != Global.players[current_id].Team:
+				player_in_tree.add_to_group("Enemy")
+			else:
+				player_in_tree.add_to_group("Team")
 
 
 @rpc ("any_peer", "call_local", "reliable")
@@ -260,3 +263,18 @@ func load_map(given_map):
 	
 	if player != null:
 		player.position = current_map.pick_random_spawn().position
+
+
+@rpc("any_peer", "call_local")
+func spawn_player_ragdoll(given_position, given_rotation, given_force, ragdoll_colour):
+	var player_ragdoll = player_ragdoll_scene.instantiate()
+	add_child(player_ragdoll)
+	
+	player_ragdoll.global_position = given_position
+	player_ragdoll.global_position.y += 1
+	player_ragdoll.global_rotation = given_rotation
+	
+	
+	player_ragdoll.mesh.set_surface_override_material(0, load(ragdoll_colour))
+	
+	player_ragdoll.add_force_to_test(given_force)

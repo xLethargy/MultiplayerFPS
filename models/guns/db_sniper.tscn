@@ -650,6 +650,7 @@ mag_type = "Revolver"
 weapon_rotation_amount = 0.05
 recoil_amount = 2.5
 ability_icon_enabled = ExtResource("3_e8vuo")
+default_ragdoll_force = 15.0
 
 [node name="WeaponSway" type="Node3D" parent="."]
 

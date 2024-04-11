@@ -384,6 +384,7 @@ current_ammo = 8
 mag_type = "Revolver"
 weapon_rotation_amount = 0.3
 recoil_amount = 0.6
+default_ragdoll_force = 4.0
 
 [node name="WeaponSway" type="Node3D" parent="."]
 

@@ -271,6 +271,7 @@ current_ammo = 16
 mag_type = "Single"
 weapon_rotation_amount = 0.25
 recoil_amount = 1.5
+default_ragdoll_force = 5.0
 
 [node name="WeaponSway" type="Node3D" parent="."]
 

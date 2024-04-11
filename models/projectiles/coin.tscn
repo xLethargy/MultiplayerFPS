@@ -132,4 +132,3 @@ unit_size = 25.0
 max_db = -10.0
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="area_entered" from="HurtboxComponent" to="HurtboxComponent" method="_on_area_entered"]

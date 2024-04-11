@@ -4,6 +4,7 @@ var trajectory = "forward"
 var boost_z = null
 var count = 0
 
+@onready var coin_hurtbox = $HurtboxComponent
 @onready var mesh = $MeshInstance3D
 @onready var muzzle_flash = $MuzzleFlash
 @onready var clang_audio = $ClangAudio

@@ -422,6 +422,7 @@ default_player_speed = 7.5
 current_ammo = 6
 mag_type = "Revolver"
 ability_icon_enabled = ExtResource("2_ixrn2")
+default_ragdoll_force = 5.0
 
 [node name="CoinMarker" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.994453, 0.198632, -0.140367)

@@ -19,7 +19,7 @@ func _process(delta):
 		if current_health > max_health:
 			current_health = max_health
 		
-		if current_health >= 50:
+		if current_health > 50:
 			heartbeat_audio.volume_db -= 10 * delta
 		
 		if current_health == max_health:
@@ -44,10 +44,10 @@ func receive_damage(damage):
 	change_health.emit(current_health)
 	flinch.emit(damage)
 	
-	if heartbeat_audio.playing != true and current_health < 50:
+	if heartbeat_audio.playing != true and current_health <= 50:
 		heartbeat_audio.play()
 	
-	if current_health < 50 and heartbeat_audio.volume_db != -10:
+	if current_health <= 50 and heartbeat_audio.volume_db != -10:
 		heartbeat_audio.volume_db = -15
 
 
