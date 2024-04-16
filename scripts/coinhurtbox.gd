@@ -49,7 +49,7 @@ func handle_coin_collision():
 			
 			if closest_collider.health_component.current_health - damage <= 0:
 				var test_boost = raycast.get_global_transform().basis.z * ragdoll_force
-				get_tree().current_scene.spawn_player_ragdoll.rpc(closest_collider.global_position, closest_collider.global_rotation, -test_boost, closest_collider.owner.current_colour)
+				get_tree().current_scene.spawn_player_ragdoll.rpc(closest_collider.global_position, closest_collider.global_rotation, -test_boost, closest_collider.owner.current_colour, closest_collider.owner.hat)
 	
 	owner.play_spatial_audio.rpc()
 	coin_shot = true

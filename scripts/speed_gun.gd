@@ -1,9 +1,10 @@
 extends Weapon
 
-var animation_increase = 0.1
-var damage_increase = 0.5
+var gun_animation_increase = 0.1
+var gun_damage_increase = 0.5
 var player_speed_increase = 0.5
-
+var player_fov_increase = 1
+var player_ragdoll_force_increase = 0.5
 
 func _unhandled_input(_event):
 	if !player.is_multiplayer_authority():
@@ -19,7 +20,10 @@ func _unhandled_input(_event):
 			handle_collision(collider)
 			
 			if collider.is_in_group("Hurtbox"):
-				handle_speed_gun_variables.rpc()
+				if collider.health_component.current_health - current_damage <= 0:
+					handle_speed_gun_variables.rpc(player_speed_increase * 2, gun_damage_increase * 2, gun_animation_increase * 2, player_fov_increase * 2, player_ragdoll_force_increase * 2)
+				else:
+					handle_speed_gun_variables.rpc(player_speed_increase, gun_damage_increase, gun_animation_increase, player_fov_increase, player_ragdoll_force_increase)
 			else:
 				_half_stat_variables.rpc()
 		else:
@@ -34,11 +38,9 @@ func _unhandled_input(_event):
 
 
 @rpc ("any_peer", "call_local", "reliable")
-func handle_speed_gun_variables():
+func handle_speed_gun_variables(speed_increase, damage_increase, animation_increase, fov_increase, ragdoll_force_increase):
 	if player.current_speed < 25:
-		player.increase_speed(player_speed_increase)
-		if player.current_speed > 25:
-			player.change_speed_and_jump.rpc(25)
+		player.increase_speed.rpc(speed_increase)
 	
 	if current_damage < 100:
 		current_damage += damage_increase
@@ -58,12 +60,12 @@ func handle_speed_gun_variables():
 			current_animation_speed = 5
 	
 	if player.camera.fov < 140:
-		player.camera.fov += 1
+		player.camera.fov += fov_increase
 		if player.camera.fov > 140:
 			player.camera.fov = 140
 	
 	if current_ragdoll_force < 20:
-		current_ragdoll_force += 0.5
+		current_ragdoll_force += ragdoll_force_increase
 		if current_ragdoll_force > 20:
 			current_ragdoll_force = 20
 
@@ -87,7 +89,7 @@ func _half_stat_variables():
 	if halved_ragdoll < 4:
 		halved_ragdoll = 4
 	
-	player.change_speed_and_jump(halved_speed)
+	player.change_speed_and_jump.rpc(halved_speed)
 	current_animation_speed = halved_animation_speed
 	animation_player.speed_scale = current_animation_speed
 	animation_player_2.speed_scale = current_animation_speed

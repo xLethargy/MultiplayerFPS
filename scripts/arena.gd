@@ -4,6 +4,7 @@ extends Node3D
 
 @rpc ("any_peer", "call_local", "reliable")
 func pick_random_spawn():
+	print (multiplayer.get_unique_id())
 	var spawn_points_children = spawn_points.get_children()
 	var spawn_points_checks = spawn_points_children.duplicate()
 	

@@ -657,7 +657,7 @@ _data = {
 }
 
 [node name="DBSniper" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["Ability", "AmmoCounter", "NoCrosshair", "Ranged", "Sniper"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, 0.148, -0.356)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.435, -0.407, -0.356)
 script = ExtResource("1_axef1")
 bullet_tracer_scene = ExtResource("2_21rar")
 muzzle_flash = NodePath("WeaponSway/AllMesh/Elements/Gun/MuzzleFlash")
@@ -670,7 +670,7 @@ default_player_speed = 4.5
 current_ammo = 2
 mag_type = "Revolver"
 weapon_rotation_amount = 0.05
-recoil_amount = 2.5
+recoil_amount = 2.0
 ability_icon_enabled = ExtResource("3_e8vuo")
 default_ragdoll_force = 25.0
 hat = "Cowboy"

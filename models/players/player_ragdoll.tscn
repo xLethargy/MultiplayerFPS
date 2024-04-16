@@ -1,8 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://66ynvcvxf740"]
+[gd_scene load_steps=13 format=3 uid="uid://66ynvcvxf740"]
 
 [ext_resource type="Script" path="res://models/testing/test_capsule.gd" id="1_k6lfr"]
 [ext_resource type="Script" path="res://models/players/ragdoll_meshes.gd" id="2_j4tn1"]
-[ext_resource type="Script" path="res://models/testing/TestHurtbox.gd" id="2_pe03i"]
 [ext_resource type="Material" uid="uid://cmq5u1v07wu2u" path="res://materials/ragdoll_outline.tres" id="3_eyh0j"]
 [ext_resource type="Material" uid="uid://brln25qsxrqgv" path="res://materials/ragdoll_black.tres" id="4_j1b88"]
 
@@ -32,8 +31,6 @@ _surfaces = [{
 [sub_resource type="BoxMesh" id="BoxMesh_0vv3a"]
 material = ExtResource("4_j1b88")
 size = Vector3(0.03, 0.2, 0.03)
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_018we"]
 
 [sub_resource type="Animation" id="Animation_w5u24"]
 length = 0.001
@@ -121,7 +118,8 @@ _data = {
 
 [node name="PlayerRagdoll" type="RigidBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-collision_layer = 0
+collision_layer = 16
+collision_mask = 17
 script = ExtResource("1_k6lfr")
 target_color = Color(0, 0, 0, 0)
 
@@ -161,14 +159,6 @@ skeleton = NodePath("../..")
 transform = Transform3D(0.5, 0.5, -0.707107, -0.707107, 0.707107, 0, 0.5, 0.5, 0.707107, 0.35, 0.555, -0.35)
 mesh = SubResource("BoxMesh_0vv3a")
 skeleton = NodePath("../..")
-
-[node name="TestHurtbox" type="Area3D" parent="." groups=["TestBox"]]
-collision_layer = 2
-collision_mask = 2
-script = ExtResource("2_pe03i")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TestHurtbox"]
-shape = SubResource("CapsuleShape3D_018we")
 
 [node name="DespawnTimer" type="Timer" parent="."]
 wait_time = 30.0

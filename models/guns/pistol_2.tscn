@@ -1,7 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://dt1pjkebmyuvs"]
+[gd_scene load_steps=24 format=3 uid="uid://dt1pjkebmyuvs"]
 
 [ext_resource type="Script" path="res://scripts/pistol_2.gd" id="1_24sbh"]
 [ext_resource type="Texture2D" uid="uid://bhklvuwc7vn0b" path="res://addons/kenney_particle_pack/star_06.png" id="2_q35a7"]
+[ext_resource type="AudioStream" uid="uid://jp4kj52x1mmc" path="res://sounds/smg.wav" id="3_jpgsm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0lqtv"]
 resource_name = "Material"
@@ -207,7 +208,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_ba5ka"]
 resource_name = "reload"
-length = 2.5
+length = 3.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -215,7 +216,7 @@ tracks/0/path = NodePath("WeaponSway/AllMesh/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.8, 1.1, 1.5, 2.4, 2.5),
+"times": PackedFloat32Array(0, 1.4, 1.6, 2, 3.4, 3.5),
 "transitions": PackedFloat32Array(0.25, 1, 0.25, 0.5, 0.1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(-0.115524, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
@@ -227,7 +228,7 @@ tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.8, 1.1, 1.5, 2.4, 2.5),
+"times": PackedFloat32Array(0, 1.4, 1.6, 2, 3.4, 3.5),
 "transitions": PackedFloat32Array(0.25, 1, 0.25, 0.5, 0.1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, 0.872665), Vector3(0, 0, -0.349066), Vector3(0, 0, 0), Vector3(0.261799, 0, 0), Vector3(0, 0, 0)]
@@ -235,7 +236,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
-length = 0.15
+length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -243,7 +244,7 @@ tracks/0/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15),
+"times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0.261799, 0, 0), Vector3(0, 0, 0)]
@@ -258,17 +259,20 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
-[node name="SMG" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "weapon_sway_node") groups=["AmmoCounter", "Ranged"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, 0.108, -0.356)
+[node name="SMG" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoCounter", "Ranged"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, -0.447, -0.356)
 script = ExtResource("1_24sbh")
 muzzle_flash = NodePath("WeaponSway/AllMesh/Gun/MuzzleFlash")
+gun_audio = NodePath("SMGAudio")
+local_gun_audio = NodePath("LocalSMGAudio")
 weapon_sway_node = NodePath("WeaponSway")
-max_ammo = 16
-default_player_speed = 5.0
-current_ammo = 16
+default_damage = 15
+max_ammo = 12
+default_player_speed = 4.5
+current_ammo = 12
 mag_type = "Single"
 weapon_rotation_amount = 0.25
-recoil_amount = 1.5
+recoil_amount = 1.75
 default_ragdoll_force = 5.0
 
 [node name="WeaponSway" type="Node3D" parent="."]
@@ -328,6 +332,18 @@ autoplay = "idle"
 playback_default_blend_time = 0.05
 
 [node name="FiringRate" type="Timer" parent="."]
-wait_time = 0.15
+wait_time = 0.1
+
+[node name="SMGAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_jpgsm")
+volume_db = -25.0
+unit_size = 40.0
+max_db = -20.0
+max_polyphony = 10
+
+[node name="LocalSMGAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_jpgsm")
+volume_db = -15.0
+max_polyphony = 10
 
 [connection signal="timeout" from="FiringRate" to="." method="_on_firing_rate_timeout"]

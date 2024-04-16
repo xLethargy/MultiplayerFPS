@@ -3,12 +3,13 @@ extends CanvasLayer
 @onready var main_menu = $MainMenuScreen
 @onready var server_joiner = $MainMenuScreen/MainMenu/MarginContainer/ServerJoiner
 @onready var choose_class = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass
-@onready var address_entry = $MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/AddressEntry
+@onready var address_entry = $MainMenuScreen/MainMenu/MarginContainer/AddressEnter/AddressEntry
 @onready var name_entry = $MainMenuScreen/MainMenu/MarginContainer/ServerJoiner/NameEntry
 @onready var sensitivity = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/Sensitivity
 @onready var sensitivity_slider = $MainMenuScreen/MainMenu/MarginContainer/ChooseClass/VBoxContainer/HBoxContainer/SensSlider
 @onready var team_chooser = $MainMenuScreen/MainMenu/MarginContainer/TeamChooser
 @onready var click_audio = $MainMenuScreen/ClickAudio
+@onready var address_enter_section = $MainMenuScreen/MainMenu/MarginContainer/AddressEnter
 
 @onready var hud = $HUD
 @onready var level_scene = get_tree().current_scene
@@ -74,21 +75,28 @@ func setup_server():
 	team_setter = (team_setter % Global.teams) + 1
 	send_player_information(name_entry.text, multiplayer.get_unique_id())
 	
+	hud.server_address.text = str(upnp.query_external_address())
+	
 	team_chooser.hide()
 	choose_class.show()
 
 func _on_join_pressed():
 	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
 	
-	enet_peer = ENetMultiplayerPeer.new()
-	server_joiner.hide()
-	choose_class.show()
-	
-	enet_peer.create_client(address_entry.text, port)
-	
-	enet_peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
-	
-	multiplayer.set_multiplayer_peer(enet_peer)
+	if address_entry.text == "":
+		enet_peer = ENetMultiplayerPeer.new()
+		
+		var error = enet_peer.create_client(address_entry.text, port)
+		if error != OK:
+			print ("cannot join...")
+			return
+		
+		address_enter_section.hide()
+		choose_class.show()
+		
+		enet_peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
+		
+		multiplayer.set_multiplayer_peer(enet_peer)
 
 
 func peer_connected(peer_id):
@@ -227,7 +235,7 @@ func player_died():
 	#check_for_player.global_position = spawn_points.get_child(0, 4).position
 	check_for_player.update_current_class(player_class)
 	check_for_player.weapon = player_class
-	check_for_player.change_speed_and_jump()
+	check_for_player.change_speed_and_jump.rpc()
 
 
 func save_class(saved_class):
@@ -273,3 +281,10 @@ func _on_leave_match_pressed():
 func _play_ui_audio(audio_stream, min_pitch_scale = 1, max_pitch_scale = 1):
 	audio_stream.pitch_scale = randf_range(min_pitch_scale, max_pitch_scale)
 	audio_stream.play()
+
+
+func _on_join_address_pressed():
+	_play_ui_audio(click_audio, min_click_audio_pitch, max_click_audio_pitch)
+	server_joiner.hide()
+	address_enter_section.show()
+	

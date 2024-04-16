@@ -219,7 +219,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.525, 0.108, -0.356)]
+"values": [Vector3(0.525, -0.447, -0.356)]
 }
 
 [sub_resource type="Animation" id="Animation_p8xlp"]
@@ -362,7 +362,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector3(-6.28319, 0, 0), Vector3(0, 0, 0)]
+"values": [Vector3(0.698132, 0, 0), Vector3(6.28319, 0, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -387,14 +387,14 @@ _data = {
 }
 
 [node name="SpeedGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoCounter", "DeathReset", "Hat", "Ranged"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, 0.108, -0.356)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, -0.447, -0.356)
 script = ExtResource("1_sou6r")
 muzzle_flash = NodePath("WeaponSway/AllMesh/Gun/MuzzleFlash")
 gun_audio = NodePath("RevolverAudio")
 local_gun_audio = NodePath("LocalRevolverAudio")
 weapon_sway_node = NodePath("WeaponSway")
 max_ammo = 8
-default_player_speed = 4.0
+default_player_speed = 4.5
 current_ammo = 8
 mag_type = "Revolver"
 weapon_rotation_amount = 0.3

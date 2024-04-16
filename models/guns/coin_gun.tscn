@@ -390,7 +390,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector3(-6.28319, 0, 0), Vector3(0, 0, 0)]
+"values": [Vector3(0.698132, 0, 0), Vector3(6.28319, 0, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -426,7 +426,7 @@ format = 1
 stereo = true
 
 [node name="CoinGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["Ability", "AmmoCounter", "Ranged"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, 0.108, -0.356)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, -0.447, -0.356)
 script = ExtResource("1_cqrq7")
 muzzle_flash = NodePath("WeaponSway/AllMesh/Gun/MuzzleFlash")
 gun_audio = NodePath("RevolverAudio")

@@ -7,6 +7,7 @@ extends Control
 @onready var map_timer = $MapTimer
 @onready var timer_label = $TimerLabel
 @onready var vote_audio = $VoteAudio
+@onready var multiplayer_menu = $".."
 
 var timer_length = 15
 
@@ -26,12 +27,13 @@ var player_team = 0
 
 func _ready():
 	timer_label.text = str(timer_label_value)
+	get_tree().current_scene.connect("map_loaded", _place_players)
+	get_tree().current_scene.connect("players_loaded", _hide_map)
 
 func _unhandled_input(event):
-	if multiplayer.is_server():
+	if multiplayer.is_server() and multiplayer_menu.hud.visible:
 		if event.is_action_pressed("testing_input"):
 			if !self.visible:
-				
 				_show_maps.rpc()
 			else:
 				_hide_maps.rpc()
@@ -145,7 +147,6 @@ func _on_map_timer_timeout():
 			map_to_load = maps.pick_random()
 		
 		get_tree().current_scene.load_map.rpc(map_to_load)
-		_hide_maps.rpc()
 
 
 @rpc ("any_peer", "call_local", "reliable")
@@ -175,3 +176,11 @@ func _add_vote(map, add):
 @rpc("any_peer", "call_local", "reliable")
 func _play_vote_audio():
 	vote_audio.play()
+
+
+func _place_players():
+	get_tree().current_scene.change_player_position.rpc_id(multiplayer.get_unique_id())
+
+
+func _hide_map():
+	_hide_maps.rpc()

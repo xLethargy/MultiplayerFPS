@@ -39,6 +39,9 @@ var added_label = false
 
 @onready var ragdoll_node = $Ragdolls
 
+signal map_loaded
+signal players_loaded
+
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
 		if !main_menu.visible:
@@ -95,14 +98,13 @@ func _on_multiplayer_menu_add_player():
 						player.change_material.rpc(Global.PINK)
 				
 				if player.is_multiplayer_authority():
+					player.position = current_map.pick_random_spawn().position
 					player.health_component.connect("change_health", update_health_bar)
 					_add_score_label(Global.players[i].Name, Global.players[i].Score, Global.players[i].ID)
 					_add_score_label.rpc(Global.players[i].Name, Global.players[i].Score, Global.players[i].ID)
 					_add_weapon_class(player)
 					_add_to_group()
 				update_health_bar(player.health_component.current_health)
-				
-				player.position = current_map.pick_random_spawn().position
 
 
 func _on_multiplayer_menu_remove_player(peer_id):
@@ -141,8 +143,6 @@ func update_health_bar(health_value):
 func _on_multiplayer_spawner_spawned(node):
 	if node.is_multiplayer_authority():
 		node.health_component.connect("change_health", update_health_bar)
-		
-		node.position = current_map.pick_random_spawn().position
 		
 		update_health_bar(node.health_component.current_health)
 		
@@ -200,11 +200,13 @@ func _on_multiplayer_spawner_spawned(node):
 						player.change_material(Global.YELLOW)
 					_:
 						player.change_material(Global.PINK)
+		
+		node.position = current_map.pick_random_spawn().position
 
 
 func _add_weapon_class(player_node):
 	player_class.name = "item" + str(randf_range(0, 10))
-	player_node.view.add_child(player_class, true)
+	player_node.camera.add_child(player_class, true)
 	player_node.weapon = player_class
 
 
@@ -272,22 +274,35 @@ func load_map(given_map):
 	current_map_parent.add_child(map, true)
 	current_map = map
 	
+	for ragdoll in ragdoll_node.get_children():
+		if ragdoll:
+			ragdoll.queue_free()
+	
+	for i in Global.players:
+		player = get_node_or_null(str(Global.players[i].ID))
+		if player != null:
+			player.health_component.receive_damage.rpc(player.health_component.max_health)
+	
+	map_loaded.emit()
+
+
+@rpc("any_peer", "call_local", "reliable")
+func change_player_position():
 	player = get_node_or_null(str(multiplayer.get_unique_id()))
 	
 	if player != null:
 		player.position = current_map.pick_random_spawn().position
 	
-	for ragdoll in ragdoll_node.get_children():
-		if ragdoll:
-			ragdoll.queue_free()
+	players_loaded.emit()
 
 
-@rpc("any_peer", "call_local")
-func spawn_player_ragdoll(given_position, given_rotation, given_force, ragdoll_colour):
+@rpc("any_peer", "call_local", "reliable")
+func spawn_player_ragdoll(given_position, given_rotation, given_force, ragdoll_colour, given_hat):
 	var player_ragdoll = player_ragdoll_scene.instantiate()
 	
 	player_ragdoll.name = "Ragdoll"
 	
+	print (given_hat)
 	#if given_hat.get_child(0) != null:
 	#	var ragdoll_hat
 	#	if given_hat.get_child(0).is_in_group("Cowboy"):

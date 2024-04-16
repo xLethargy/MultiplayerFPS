@@ -6,6 +6,9 @@ var can_shoot = true
 
 
 func _unhandled_input(event):
+	if !player.is_multiplayer_authority():
+		return
+	
 	if event.is_action_pressed("reload") and animation_player.current_animation != "reload" and current_ammo != max_ammo:
 		reload_weapon.rpc()
 

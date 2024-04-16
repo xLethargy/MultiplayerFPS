@@ -207,7 +207,8 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_foak2"]
 resource_name = "reload"
-length = 2.0
+length = 2.5
+step = 1.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -215,8 +216,8 @@ tracks/0/path = NodePath("WeaponSway/AllMesh/Gun:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1, 1.8),
-"transitions": PackedFloat32Array(0.25, 0.25, 1),
+"times": PackedFloat32Array(0, 1.25, 2.4),
+"transitions": PackedFloat32Array(0.25, 0.25, 0.5),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(-0.05, 0, 0), Vector3(0, 0, 0)]
 }
@@ -227,15 +228,15 @@ tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 1, 1.8, 2),
-"transitions": PackedFloat32Array(0.25, 0.25, 1, 1),
+"times": PackedFloat32Array(0, 1.25, 2.4, 2.5),
+"transitions": PackedFloat32Array(0.25, 0.25, 0.5, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(-0.610865, 0, 0), Vector3(0.261799, 0, 0), Vector3(0, 0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
-length = 0.6
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -243,7 +244,7 @@ tracks/0/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(1.39626, 0, 0), Vector3(0, 0, 0)]
@@ -255,7 +256,7 @@ tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.6),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0, 0.03, 0), Vector3(0, 0, 0)]
@@ -271,15 +272,14 @@ _data = {
 }
 
 [node name="Pistol" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoCounter", "Ranged"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, 0.108, -0.356)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, -0.447, -0.356)
 script = ExtResource("1_lrfq1")
 muzzle_flash = NodePath("WeaponSway/AllMesh/Gun/MuzzleFlash")
 gun_audio = NodePath("DeagleAudio")
 local_gun_audio = NodePath("LocalDeagleAudio")
 weapon_sway_node = NodePath("WeaponSway")
-default_damage = 25
 max_ammo = 7
-default_player_speed = 6.0
+default_player_speed = 5.5
 current_ammo = 7
 mag_type = "Single"
 weapon_rotation_amount = 0.25
@@ -289,7 +289,6 @@ default_ragdoll_force = 10.0
 [node name="WeaponSway" type="Node3D" parent="."]
 
 [node name="AllMesh" type="Node3D" parent="WeaponSway"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05208, -0.0336, 0)
 
 [node name="Gun" type="Node3D" parent="WeaponSway/AllMesh"]
 

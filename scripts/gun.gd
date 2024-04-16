@@ -9,12 +9,12 @@ extends Node3D
 @export var gun_audio : AudioStreamPlayer3D
 @export var local_gun_audio : AudioStreamPlayer
 
-@onready var raycast = $"../Camera3D/RayCast3D"
+@onready var raycast = $"../RayCast3D"
 
 @export var weapon_sway_node : Node3D
 
 @onready var level_scene = get_tree().current_scene
-@onready var player = get_parent().get_parent()
+@onready var player = get_parent().get_parent().get_parent()
 @onready var view = get_parent()
 
 @onready var ammo_counter = get_tree().current_scene.get_node("MultiplayerMenu/HUD/Ammo")
@@ -58,6 +58,8 @@ var charging = false
 @export var hat : String
 
 func _ready():
+	player.weapon = self
+	
 	await get_tree().create_timer(0.1).timeout
 	if player.is_multiplayer_authority():
 		
@@ -74,7 +76,7 @@ func _ready():
 		raycast.target_position = Vector3(0, 0, -50)
 		
 		player.default_speed = default_player_speed
-		player.change_speed_and_jump(default_player_speed)
+		player.change_speed_and_jump.rpc(default_player_speed)
 		current_ammo = max_ammo
 		player.weapon_rotation_amount = weapon_rotation_amount
 		
@@ -115,16 +117,16 @@ func _physics_process(delta):
 	if !player.is_multiplayer_authority():
 		return
 	
-	if player.input_dir != Vector2.ZERO and player.is_on_floor() and !aiming and !charging:
+	if player.input_dir != Vector2.ZERO and player.is_on_floor() and !charging:
 		_play_animation.rpc("move", animation_player_2.get_path())
 	elif (player.input_dir == Vector2.ZERO or !player.is_on_floor()) and !aiming:
 		_play_animation.rpc("idle", animation_player_2.get_path())
 	
 	if recoil:
-		var recoil_adjustment = view.rotation.x + recoil_amount * delta
+		var recoil_adjustment = player.camera.rotation.x + recoil_amount * delta
 		if recoil_adjustment > deg_to_rad(90):
 			recoil_adjustment = deg_to_rad(90)
-		view.rotation.x = recoil_adjustment
+		player.camera.rotation.x = recoil_adjustment
 
 
 @rpc ("call_local", "any_peer", "reliable")
@@ -164,6 +166,7 @@ func _play_animation(animation_string, given_player_path = animation_player.get_
 @rpc ("any_peer", "reliable")
 func _play_ads_animation(animation_string):
 	animation_player.play(animation_string)
+
 
 @rpc ("any_peer", "reliable")
 func play_spatial_audio(given_pitch_scale = 1):
@@ -206,16 +209,19 @@ func _on_animation_player_animation_finished(anim_name):
 	elif current_ammo == 0 and !queued_reload:
 		_play_animation.rpc("reload")
 
+
 func reset_stat_gun_rpc():
 	call_deferred("reset_stat_gun")
+
 
 @rpc ("any_peer", "call_local", "reliable")
 func reset_stat_gun(reset_ammo = true):
 	animation_player.stop()
 	animation_player_2.stop()
 	
-	player.change_speed_and_jump()
+	player.change_speed_and_jump.rpc(default_player_speed)
 	current_animation_speed = default_animation_speed
+	
 	animation_player.speed_scale = default_animation_speed
 	animation_player_2.speed_scale = default_animation_speed
 	current_damage = default_damage
@@ -233,13 +239,15 @@ func reset_stat_gun(reset_ammo = true):
 	hud.sniper_ads.hide()
 	hud.healthbar.show()
 	
+	charging = false
+	
 	if reset_ammo:
 		current_ammo = max_ammo
 		ammo_counter.text = str(current_ammo)
 		ammo_bar.value = ammo_bar.max_value
 
 
-@rpc("any_peer", "call_local")
+@rpc("any_peer", "call_local", "reliable")
 func make_coin_invisible(coin_path):
 	var coin = get_node(coin_path)
 	coin.mesh.visible = false
@@ -254,10 +262,8 @@ func handle_collision(collider, given_damage = current_damage):
 				collider.handle_damage_collision(given_damage)
 				
 				if collider.health_component.current_health - given_damage <= 0:
-					var test_boost = get_global_transform().basis.z * current_ragdoll_force
-					
-					#print (collider.owner.hat)
-					get_tree().current_scene.spawn_player_ragdoll.rpc(collider.global_position, collider.global_rotation, -test_boost, collider.owner.current_colour)
+					var boost = get_global_transform().basis.z * current_ragdoll_force
+					get_tree().current_scene.spawn_player_ragdoll.rpc(collider.global_position, collider.global_rotation, -boost, collider.owner.current_colour, collider.owner.hat)
 		elif collider.has_method("handle_coin_collision"):
 			on_hit_effect(false)
 			collider.handle_coin_collision()
