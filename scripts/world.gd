@@ -297,12 +297,11 @@ func change_player_position():
 
 
 @rpc("any_peer", "call_local", "reliable")
-func spawn_player_ragdoll(given_position, given_rotation, given_force, ragdoll_colour, given_hat):
+func spawn_player_ragdoll(given_position, given_rotation, given_force, ragdoll_colour, _given_hat):
 	var player_ragdoll = player_ragdoll_scene.instantiate()
 	
 	player_ragdoll.name = "Ragdoll"
 	
-	print (given_hat)
 	#if given_hat.get_child(0) != null:
 	#	var ragdoll_hat
 	#	if given_hat.get_child(0).is_in_group("Cowboy"):
@@ -323,6 +322,8 @@ func spawn_player_ragdoll(given_position, given_rotation, given_force, ragdoll_c
 	player_ragdoll.global_position.y += 1
 	player_ragdoll.global_rotation = given_rotation
 	
-	player_ragdoll.mesh.set_surface_override_material(0, load(ragdoll_colour).duplicate())
+	var duplicate_ragdoll_colour = load(ragdoll_colour).duplicate()
+	for player_mesh in player_ragdoll.player_meshes:
+		player_mesh.set_surface_override_material(0, duplicate_ragdoll_colour)
 	
 	player_ragdoll.add_force_to_test(given_force)

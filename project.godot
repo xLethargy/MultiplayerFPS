@@ -14,8 +14,9 @@ config/name="Multiplayer FPS"
 run/main_scene="res://ui/loading_screen.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 run/max_fps=244
-boot_splash/image="res://images/loading.png"
 config/icon="res://icon.png"
+boot_splash/main_scene="res://models/levels/world.tscn"
+boot_splash/layer_5="ragdoll"
 
 [autoload]
 

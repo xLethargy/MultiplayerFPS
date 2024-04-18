@@ -3,13 +3,11 @@ extends CharacterBody3D
 @onready var health_component = $HealthComponent
 @onready var camera = $View/Camera3D
 @onready var hat_node = $Meshes/Hat
-@onready var mesh = $Meshes/MeshInstance3D
-@onready var mesh_outline = $Meshes/MeshInstance3D/Outline
 @onready var hurtbox = $HurtboxComponent
-@onready var mesh_eyes = $Meshes/Eyes
 @onready var footstep_audio = $FootstepAudio
 @onready var in_air_timer = $InAirTimer
 @onready var slow_timer = $SlowTimer
+@onready var animation_player = $AnimationPlayer
 
 @onready var spawn_audio = $SpawnAudio
 
@@ -23,6 +21,8 @@ preload("res://sounds/footsteps/footstep4.wav"),
 preload("res://sounds/footsteps/footstep5.wav")
 ]
 
+@onready var meshes = [$"Meshes/frog/RightLeg/right leg", $"Meshes/frog/RightLeg/right foot lets stomp_001", $"Meshes/frog/LeftLeg/left foot lets stomp", $"Meshes/frog/LeftLeg/left leg", $"Meshes/frog/nerd head", $"Meshes/frog/strong body"]
+@onready var outlines = [$"Meshes/frog/strong body/BodyOutline", $"Meshes/frog/nerd head/HeadOutline", $"Meshes/frog/LeftLeg/left leg/LeftLegOutline", $"Meshes/frog/LeftLeg/left foot lets stomp/LeftFootOutline", $"Meshes/frog/RightLeg/right foot lets stomp_001/RightFootOutline", $"Meshes/frog/RightLeg/right leg/RightLegOutline"]
 var default_speed = 15
 var current_speed = default_speed
 var old_speed = current_speed
@@ -66,6 +66,8 @@ var hat : Node3D = null
 var count = 0
 var charge_amount = 2.5
 
+var movement_reduction : float = 1.5
+
 signal remove_freeze_count
 
 func _ready():
@@ -102,6 +104,7 @@ func _begin_flinch(damage):
 	await get_tree().create_timer(0.1).timeout
 	flinch = false
 
+
 func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
 
@@ -132,14 +135,14 @@ func _physics_process(delta):
 		if (Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("move_right")) and !speed_cut and !frozen:
 			speed_cut = true
 			old_speed = current_speed
-			current_speed /= 1.25
+			current_speed /= movement_reduction
 	
 	if Input.is_action_just_pressed("jump") and is_on_floor() and !charging_dash:
 		velocity.y = current_jump_velocity
 		if (Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right")) and !speed_cut and !frozen:
 			speed_cut = true
 			old_speed = current_speed
-			current_speed /= 1.25
+			current_speed /= movement_reduction
 	
 	
 	input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -192,10 +195,11 @@ func _physics_process(delta):
 		if flinch_adjustment > deg_to_rad(90):
 			flinch_adjustment = deg_to_rad(90)
 		camera.rotation.x = flinch_adjustment
-
-
-func change_hud_health(health_value):
-	$HUD/Healthbar.value = health_value
+	
+	if input_dir != Vector2.ZERO and is_on_floor() and !charging_dash:
+		_play_animation.rpc("move", animation_player.get_path())
+	elif (input_dir == Vector2.ZERO or !is_on_floor()) and !weapon.aiming:
+		_play_animation.rpc("idle", animation_player.get_path())
 
 
 @rpc ("any_peer", "call_local", "reliable")
@@ -241,58 +245,72 @@ func change_material(material, want_timer = true):
 	if want_timer:
 		await get_tree().create_timer(0.1).timeout
 	
-	if material == Global.BLUE:
-		var blue = load(Global.BLUE)
-		mesh.set_surface_override_material(0, blue)
-		if weapon != null:
-			weapon.arm.set_surface_override_material(0, blue)
-			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, blue)
-		current_colour = Global.BLUE
-		
-	elif material == Global.RED:
-		var red = load(Global.RED)
-		mesh.set_surface_override_material(0, red)
-		if weapon != null:
-			weapon.arm.set_surface_override_material(0, red)
-			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, red)
-		current_colour = Global.RED
-	elif material == Global.GREEN:
-		var green = load(Global.GREEN)
-		mesh.set_surface_override_material(0, green)
-		if weapon != null:
-			weapon.arm.set_surface_override_material(0, green)
-			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, green)
-		current_colour = Global.GREEN
-	elif material == Global.YELLOW:
-		var yellow = load(Global.YELLOW)
-		mesh.set_surface_override_material(0, yellow)
-		if weapon != null:
-			weapon.arm.set_surface_override_material(0, yellow)
-			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, yellow)
-		current_colour = Global.YELLOW
-	else:
-		var pink = load(Global.PINK)
-		mesh.set_surface_override_material(0, pink)
-		if weapon != null:
-			weapon.arm.set_surface_override_material(0, pink)
-			if weapon.arm_two != null:
-				weapon.arm_two.set_surface_override_material(0, pink)
-		current_colour = Global.PINK
+	for mesh in meshes:
+		if material == Global.BLUE:
+			var blue = load(Global.BLUE)
+			mesh.set_surface_override_material(0, blue)
+			if weapon != null:
+				for arm_mesh in weapon.arm.get_children():
+					arm_mesh.set_surface_override_material(0, blue)
+					for arm_mesh_two in weapon.arm_two.get_children():
+						arm_mesh_two.set_surface_override_material(0, blue)
+			current_colour = Global.BLUE
+			
+		elif material == Global.RED:
+			var red = load(Global.RED)
+			mesh.set_surface_override_material(0, red)
+			if weapon != null:
+				for arm_mesh in weapon.arm.get_children():
+					arm_mesh.set_surface_override_material(0, red)
+					for arm_mesh_two in weapon.arm_two.get_children():
+						arm_mesh_two.set_surface_override_material(0, red)
+			current_colour = Global.RED
+		elif material == Global.GREEN:
+			var green = load(Global.GREEN)
+			mesh.set_surface_override_material(0, green)
+			if weapon != null:
+				for arm_mesh in weapon.arm.get_children():
+					arm_mesh.set_surface_override_material(0, green)
+					for arm_mesh_two in weapon.arm_two.get_children():
+						arm_mesh_two.set_surface_override_material(0, green)
+			current_colour = Global.GREEN
+		elif material == Global.YELLOW:
+			var yellow = load(Global.YELLOW)
+			mesh.set_surface_override_material(0, yellow)
+			if weapon != null:
+				for arm_mesh in weapon.arm.get_children():
+					arm_mesh.set_surface_override_material(0, yellow)
+					for arm_mesh_two in weapon.arm_two.get_children():
+						arm_mesh_two.set_surface_override_material(0, yellow)
+			current_colour = Global.YELLOW
+		else:
+			var pink = load(Global.PINK)
+			mesh.set_surface_override_material(0, pink)
+			if weapon != null:
+				for arm_mesh in weapon.arm.get_children():
+					arm_mesh.set_surface_override_material(0, pink)
+					for arm_mesh_two in weapon.arm_two.get_children():
+						arm_mesh_two.set_surface_override_material(0, pink)
+			current_colour = Global.PINK
 
 
 @rpc ("call_local", "any_peer", "reliable")
 func change_layers():
 	if is_multiplayer_authority():
-		mesh.cast_shadow = 3
-		mesh_outline.cast_shadow = 3
-		hurtbox.get_child(0).disabled = true
+		for child in $Meshes/frog.get_children():
+			if child is MeshInstance3D:
+				child.cast_shadow = 3
+			elif child is Node3D:
+				for child_two in child.get_children():
+					if child_two is MeshInstance3D:
+						child_two.cast_shadow = 3
 		
-		for eye in mesh_eyes.get_children():
-			eye.cast_shadow = 3
+		for outline in outlines:
+			outline.visible = false
+		
+		for collider in hurtbox.get_children():
+			if collider is CollisionShape3D:
+				collider.disabled = true
 		
 		if hat != null:
 			hat.get_child(0).cast_shadow = 3
@@ -362,8 +380,10 @@ func _on_slow_timer_timeout():
 func _on_freeze_count_timer_timeout():
 	remove_freeze_count.emit()
 
+
 func _play_positional_audio_rpc(audio_stream_path):
 	_play_positional_audio.rpc(audio_stream_path)
+
 
 @rpc ("any_peer", "call_local", "reliable")
 func _play_positional_audio(audio_stream_path):
@@ -371,3 +391,11 @@ func _play_positional_audio(audio_stream_path):
 	
 	if audio_stream != null:
 		audio_stream.play()
+
+
+@rpc ("call_local", "any_peer", "reliable")
+func _play_animation(animation_string, given_player_path = animation_player.get_path()):
+	var given_player = get_node_or_null(given_player_path)
+	
+	if given_player != null:
+		given_player.play(animation_string)

@@ -142,6 +142,7 @@ func send_player_information(given_name, id, team = team_setter, weapon_class = 
 func _update_global_teams(value):
 	Global.teams = value
 
+
 func upnp_setup():
 	upnp = UPNP.new()
 	

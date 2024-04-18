@@ -84,22 +84,29 @@ func _on_hitbox_area_entered(area):
 			return
 		
 		await get_tree().create_timer(0.01).timeout
-		if area.owner.is_in_group("Enemy"):
-			if !collider_in_way:
+		
+		if area.owner.is_in_group("Enemy") or area.owner.player.is_in_group("Enemy"):
+			var collider_player
+			if area.owner.is_in_group("Enemy"):
+				collider_player = area.owner
+			elif area.owner.player.is_in_group("Enemy"):
+				collider_player = area.owner.player
+			
+			if !collider_in_way and !collider_player.hurtbox.invulnerable:
 				on_hit_effect()
 				_play_spatial_for_all.rpc(hit_audio.get_path(), stab_dir_path, 0.8, 1.2)
 				
 				var damage_given = current_damage
 				if player.in_dash and player.velocity.y < 0:
-					damage_given = area.health_component.max_health
-					area.handle_damage_collision(damage_given)
-				else:
-					area.handle_damage_collision(damage_given)
+					damage_given = collider_player.health_component.max_health
+				
+				collider_player.hurtbox.handle_damage_collision(damage_given)
 				
 				
-				if area.health_component.current_health - damage_given <= 0:
+				if collider_player.health_component.current_health - damage_given <= 0:
 					var boost = raycast.get_global_transform().basis.z * current_ragdoll_force
-					get_tree().current_scene.spawn_player_ragdoll.rpc(area.global_position, area.global_rotation, -boost, area.owner.current_colour, area.owner.hat)
+					boost.y *= 2
+					get_tree().current_scene.spawn_player_ragdoll.rpc(collider_player.global_position, collider_player.global_rotation, -boost, collider_player.current_colour, collider_player.hat)
 
 
 func _on_enable_hitbox_timer_timeout():

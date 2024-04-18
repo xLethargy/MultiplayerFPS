@@ -8,6 +8,7 @@ extends Node3D
 @onready var arm_two = %Arm2
 @export var gun_audio : AudioStreamPlayer3D
 @export var local_gun_audio : AudioStreamPlayer
+@export var hurtbox_arms : Area3D
 
 @onready var raycast = $"../RayCast3D"
 
@@ -155,7 +156,7 @@ func play_shoot_effects():
 		ammo_counter.text = str(current_ammo)
 
 
-@rpc ("call_local", "any_peer", "unreliable")
+@rpc ("call_local", "any_peer", "reliable")
 func _play_animation(animation_string, given_player_path = animation_player.get_path()):
 	var given_player = get_node_or_null(given_player_path)
 	
@@ -256,18 +257,24 @@ func make_coin_invisible(coin_path):
 
 func handle_collision(collider, given_damage = current_damage):
 	if collider.is_in_group("Hurtbox"):
-		if collider.owner.is_in_group("Enemy"):
-			if collider.has_method("handle_damage_collision"):
-				on_hit_effect()
-				collider.handle_damage_collision(given_damage)
-				
-				if collider.health_component.current_health - given_damage <= 0:
-					var boost = get_global_transform().basis.z * current_ragdoll_force
-					get_tree().current_scene.spawn_player_ragdoll.rpc(collider.global_position, collider.global_rotation, -boost, collider.owner.current_colour, collider.owner.hat)
-		elif collider.has_method("handle_coin_collision"):
+		if collider.has_method("handle_coin_collision"):
 			on_hit_effect(false)
 			collider.handle_coin_collision()
 			make_coin_invisible.rpc(collider.owner.get_path())
+		elif collider.owner.is_in_group("Enemy") or collider.owner.player.is_in_group("Enemy"):
+			var collider_player
+			if collider.owner.is_in_group("Enemy"):
+				collider_player = collider.owner
+			elif collider.owner.player.is_in_group("Enemy"):
+				collider_player = collider.owner.player
+			if collider_player.hurtbox.has_method("handle_damage_collision"):
+				on_hit_effect()
+				collider_player.hurtbox.handle_damage_collision(given_damage)
+				
+				if collider_player.health_component.current_health - given_damage <= 0:
+					var boost = get_global_transform().basis.z * current_ragdoll_force
+					boost.y *= 2
+					get_tree().current_scene.spawn_player_ragdoll.rpc(collider_player.global_position, collider_player.global_rotation, -boost, collider_player.current_colour, collider_player.hat)
 
 
 func play_footstep():

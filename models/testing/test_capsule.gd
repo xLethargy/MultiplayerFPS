@@ -11,6 +11,8 @@ extends RigidBody3D
 
 @onready var death_sounds = ["res://sounds/hurt/death1.wav", "res://sounds/hurt/death2.wav"]
 
+@onready var player_meshes = [$"Meshes/frog/RightLeg/right leg", $"Meshes/frog/RightLeg/right foot lets stomp_001", $"Meshes/frog/LeftLeg/left foot lets stomp", $"Meshes/frog/LeftLeg/left leg", $"Meshes/frog/nerd head", $"Meshes/frog/strong body"]
+
 var tween
 
 var base_mesh_material
