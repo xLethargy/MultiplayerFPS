@@ -567,7 +567,35 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
+<<<<<<< HEAD
 "values": [Vector3(0, 0, 0), Vector3(6.28319, 0, 0)]
+=======
+"values": [Vector3(0, 0.127152, 0.115371), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(-6.28319, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WeaponSway/AllMesh/Pivot:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0.349066, 0, 0), Vector3(0, 0, 0)]
+>>>>>>> parent of e101728 (Heavy bug fixing, gun reworks, and more)
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cthlp"]
@@ -590,8 +618,13 @@ data = PackedByteArray(24, 0, 5, 0, 252, 255, 0, 0, 226, 255, 242, 255, 208, 255
 format = 1
 stereo = true
 
+<<<<<<< HEAD
 [node name="CoinGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "hurtbox_arms", "weapon_sway_node") groups=["Ability", "AmmoCounter", "Ranged"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, -0.447, -0.539116)
+=======
+[node name="CoinGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["Ability", "AmmoCounter", "Ranged"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, 0.108, -0.356)
+>>>>>>> parent of e101728 (Heavy bug fixing, gun reworks, and more)
 script = ExtResource("1_cqrq7")
 muzzle_flash = NodePath("WeaponSway/AllMesh/Elements/Gun/MuzzleFlash")
 gun_audio = NodePath("RevolverAudio")

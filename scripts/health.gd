@@ -36,8 +36,7 @@ func receive_damage(damage):
 	if current_health <= 0:
 		current_health = max_health
 		player.position = get_tree().current_scene.current_map.pick_random_spawn().position
-		player.change_speed_and_jump.rpc()
-		player.frozen = false
+		player.change_speed_and_jump()
 		heal_timer.stop()
 		heartbeat_audio.stop()
 		death.emit()

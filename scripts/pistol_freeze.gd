@@ -3,7 +3,7 @@ extends Weapon
 @onready var freeze_regen_timer = $FreezeRegenTimer
 @onready var ice_shatter_audio = $IceShatterLocal
 
-var freeze_damage = 15
+var freeze_damage = 20
 
 var hit_player = {}
 var hits = 0
@@ -16,6 +16,8 @@ var player_died = false
 var current_health
 
 var freeze_regen = false
+
+var frozen = false
 
 var old_collider_speed
 var frozen_collider
@@ -48,17 +50,14 @@ func _unhandled_input(event):
 					if !hit_player.has(collider):
 						hit_player[collider] = {
 							"ID": collider.multiplayer.get_unique_id(),
-							"HitsTaken": 0,
+							"HitsTaken": 0
 						}
-						collider.owner.connect("remove_freeze_count", _remove_freeze_count.bind(hit_player[collider]))
 					
-					collider.owner.freeze_count_timer.stop()
-					
-					if current_health > 0:
-						collider.owner.freeze_count_timer.start()
+					if current_health > 0 and !frozen:
 						store_freeze_information(collider)
-					elif current_health <= 0:
+					else:
 						collider.owner.slow_timer.stop()
+						frozen = false
 						hit_player[collider].HitsTaken = 0
 		
 		recoil = true
@@ -81,6 +80,7 @@ func store_freeze_information(collider):
 		hit_player[collider].HitsTaken = 0
 		
 		frozen_collider = collider
+		frozen = true
 		
 		old_collider_speed = collider.player.current_speed
 		collider.player.old_speed = old_collider_speed
@@ -89,18 +89,12 @@ func store_freeze_information(collider):
 		current_health = collider.owner.health_component.current_health - freeze_damage
 		
 		if current_health - current_damage > 0:
-			collider.owner.change_speed_and_jump.rpc(slow_speed, jump_height, "frozen")
+			collider.handle_speed_collision(slow_speed, jump_height)
 			collider.owner.slow_timer.start()
 		else:
 			collider.owner.slow_timer.stop()
-			var boost = get_global_transform().basis.z * 1
-			get_tree().current_scene.spawn_player_ragdoll.rpc(collider.owner.global_position, collider.owner.global_rotation, -boost, collider.owner.current_colour, collider.owner.hat)
-			
+			frozen = false
 
 
 func _on_freeze_regen_timer_timeout():
 	freeze_regen = true
-
-
-func _remove_freeze_count(player_no_count):
-	player_no_count.HitsTaken = 0

@@ -19,7 +19,7 @@ func _unhandled_input(event):
 		tracer_spawn.position = Vector3(-0.435, 0.162, -0.394)
 		player.camera.fov = 20
 		
-		player.change_speed_and_jump.rpc(default_player_speed / 2)
+		player.change_speed_and_jump(2)
 		
 		
 	if (event.is_action_released("right_click") or current_ammo == 0) and aiming:
@@ -34,7 +34,7 @@ func _unhandled_input(event):
 		_play_ads_animation.rpc("RESET")
 		player.camera.fov = 90
 		
-		player.change_speed_and_jump.rpc()
+		player.change_speed_and_jump()
 	
 	
 	if event.is_action_pressed("shoot") and animation_player.current_animation != "shoot" and current_ammo >= 1:

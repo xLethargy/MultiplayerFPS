@@ -531,13 +531,25 @@ tracks/1/keys = {
 resource_name = "move"
 loop_mode = 1
 step = 0.15
-tracks/0/type = "method"
+tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".")
+tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 2),
+"update": 0,
+"values": [Vector3(0.525, 0.108, -0.356), Vector3(0.463, 0.068, -0.356), Vector3(0.525, 0.108, -0.356), Vector3(0.615, 0.068, -0.356)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0.15, 0.65),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
@@ -547,18 +559,6 @@ tracks/0/keys = {
 "args": [],
 "method": &"play_footstep"
 }]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("WeaponSway/AllMesh:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
-"transitions": PackedFloat32Array(0.5, 2, 0.5, 2),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(-0.062, -0.04, 0), Vector3(0, 0, 0), Vector3(0.09, -0.04, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
@@ -621,15 +621,20 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
+<<<<<<< HEAD
 [node name="FreezeGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "hurtbox_arms", "weapon_sway_node") groups=["AmmoBar"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, -0.447, -0.539116)
+=======
+[node name="FreezeGun" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoBar"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.47292, 0.0744, -0.356)
+>>>>>>> parent of e101728 (Heavy bug fixing, gun reworks, and more)
 script = ExtResource("1_ikep0")
 muzzle_flash = NodePath("WeaponSway/AllMesh/Elements/Gun/MuzzleFlash")
 gun_audio = NodePath("WeaponAudio")
 local_gun_audio = NodePath("LocalWeaponAudio")
 hurtbox_arms = NodePath("WeaponSway/AllMesh/Elements/HurtboxArms")
 weapon_sway_node = NodePath("WeaponSway")
-default_damage = 10
+default_damage = 15
 max_ammo = 10
 default_player_speed = 5.0
 current_ammo = 10

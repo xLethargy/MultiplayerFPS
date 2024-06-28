@@ -1,8 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://b11hvk4bi65yt"]
+[gd_scene load_steps=3 format=3 uid="uid://b11hvk4bi65yt"]
 
 [ext_resource type="Script" path="res://scripts/hurtbox.gd" id="1_c6hjc"]
 
-[node name="HurtboxComponent" type="Area3D" groups=["Hurtbox"]]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tgsde"]
+
+[node name="HurtboxComponent" type="Area3D" node_paths=PackedStringArray("health_component") groups=["Hurtbox"]]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_c6hjc")
+health_component = NodePath("")
+
+[node name="HurtboxCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_tgsde")

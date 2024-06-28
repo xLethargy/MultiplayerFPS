@@ -396,8 +396,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_foak2"]
 resource_name = "reload"
-length = 2.5
-step = 1.25
+length = 2.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -405,8 +404,25 @@ tracks/0/path = NodePath("WeaponSway/AllMesh/Elements/Gun:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
+<<<<<<< HEAD
 "times": PackedFloat32Array(0, 1.25, 2.4, 2.5),
 "transitions": PackedFloat32Array(0.25, 0.25, 0.5, 1),
+=======
+"times": PackedFloat32Array(0, 1, 1.8),
+"transitions": PackedFloat32Array(0.25, 0.25, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.05, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 1.8, 2),
+"transitions": PackedFloat32Array(0.25, 0.25, 1, 1),
+>>>>>>> parent of e101728 (Heavy bug fixing, gun reworks, and more)
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(-0.610865, 0, 0), Vector3(0.261799, 0, 0), Vector3(0, 0, 0)]
 }
@@ -449,7 +465,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_lwtdn"]
 resource_name = "shoot"
-length = 0.4
+length = 0.6
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -457,11 +473,26 @@ tracks/0/path = NodePath("WeaponSway/AllMesh/Elements:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.6),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(1.39626, 0, 0), Vector3(0, 0, 0)]
 }
+<<<<<<< HEAD
+=======
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSway/AllMesh/Gun:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0, 0.03, 0), Vector3(0, 0, 0)]
+}
+>>>>>>> parent of e101728 (Heavy bug fixing, gun reworks, and more)
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cthlp"]
 _data = {
@@ -472,16 +503,22 @@ _data = {
 "shoot": SubResource("Animation_lwtdn")
 }
 
+<<<<<<< HEAD
 [node name="Pistol" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "hurtbox_arms", "weapon_sway_node") groups=["AmmoCounter", "Ranged"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, -0.447, -0.539116)
+=======
+[node name="Pistol" type="Node3D" node_paths=PackedStringArray("muzzle_flash", "gun_audio", "local_gun_audio", "weapon_sway_node") groups=["AmmoCounter", "Ranged"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, 0.108, -0.356)
+>>>>>>> parent of e101728 (Heavy bug fixing, gun reworks, and more)
 script = ExtResource("1_lrfq1")
 muzzle_flash = NodePath("WeaponSway/AllMesh/Elements/Gun/MuzzleFlash")
 gun_audio = NodePath("DeagleAudio")
 local_gun_audio = NodePath("LocalDeagleAudio")
 hurtbox_arms = NodePath("WeaponSway/AllMesh/Elements/HurtboxArms")
 weapon_sway_node = NodePath("WeaponSway")
+default_damage = 25
 max_ammo = 7
-default_player_speed = 5.5
+default_player_speed = 6.0
 current_ammo = 7
 mag_type = "Single"
 weapon_rotation_amount = 0.25
@@ -491,6 +528,7 @@ default_ragdoll_force = 15.0
 [node name="WeaponSway" type="Node3D" parent="."]
 
 [node name="AllMesh" type="Node3D" parent="WeaponSway"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05208, -0.0336, 0)
 
 [node name="Elements" type="Node3D" parent="WeaponSway/AllMesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.26628, 0.281756, 0.670016)

@@ -2,16 +2,13 @@ extends CharacterBody3D
 
 @onready var health_component = $HealthComponent
 @onready var camera = $View/Camera3D
+@onready var view = $View
 @onready var hat_node = $Meshes/Hat
 @onready var hurtbox = $HurtboxComponent
 @onready var footstep_audio = $FootstepAudio
 @onready var in_air_timer = $InAirTimer
 @onready var slow_timer = $SlowTimer
 @onready var animation_player = $AnimationPlayer
-
-@onready var spawn_audio = $SpawnAudio
-
-@onready var freeze_count_timer = $FreezeCountTimer
 
 @onready var footsteps = [
 	preload("res://sounds/footsteps/footstep1.wav"), 
@@ -21,13 +18,15 @@ preload("res://sounds/footsteps/footstep4.wav"),
 preload("res://sounds/footsteps/footstep5.wav")
 ]
 
+<<<<<<< HEAD
 @onready var meshes = [$"Meshes/frog/RightLeg/right leg", $"Meshes/frog/RightLeg/right foot lets stomp_001", $"Meshes/frog/LeftLeg/left foot lets stomp", $"Meshes/frog/LeftLeg/left leg", $"Meshes/frog/nerd head", $"Meshes/frog/strong body"]
 @onready var outlines = [$"Meshes/frog/strong body/BodyOutline", $"Meshes/frog/nerd head/HeadOutline", $"Meshes/frog/LeftLeg/left leg/LeftLegOutline", $"Meshes/frog/LeftLeg/left foot lets stomp/LeftFootOutline", $"Meshes/frog/RightLeg/right foot lets stomp_001/RightFootOutline", $"Meshes/frog/RightLeg/right leg/RightLegOutline"]
 var default_speed = 15
+=======
+var default_speed = 6.5
+>>>>>>> parent of e101728 (Heavy bug fixing, gun reworks, and more)
 var current_speed = default_speed
 var old_speed = current_speed
-var speed_cut = false
-
 var default_jump_velocity = 6.5
 var current_jump_velocity = default_jump_velocity
 
@@ -63,6 +62,7 @@ var collided = false
 
 var hat : Node3D = null
 
+<<<<<<< HEAD
 var count = 0
 var charge_amount = 2.5
 
@@ -70,6 +70,8 @@ var movement_reduction : float = 1.5
 
 signal remove_freeze_count
 
+=======
+>>>>>>> parent of e101728 (Heavy bug fixing, gun reworks, and more)
 func _ready():
 	if !is_multiplayer_authority():
 		return
@@ -81,10 +83,8 @@ func _ready():
 		sensitivity = Global.players[id].Sensitivity
 	
 	health_component.connect("flinch", _begin_flinch)
-	health_component.connect("death", _play_positional_audio_rpc.bind(spawn_audio.get_path()))
 	
 	change_layers.rpc()
-	_play_positional_audio.rpc(spawn_audio.get_path())
 
 
 func _begin_flinch(damage):
@@ -114,14 +114,9 @@ func _unhandled_input(event):
 		return
 	
 	if event is InputEventMouseMotion:
-		var sensitivity_ratio : float = 1
-		
-		if camera.fov < 90:
-			sensitivity_ratio = tan(90 / 2.0) / tan(camera.fov / 2.0)
-		
-		rotate_y(-event.relative.x * (sensitivity / sensitivity_ratio) / 10000)
-		camera.rotate_x(-event.relative.y * (sensitivity / sensitivity_ratio) / 10000)
-		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
+		rotate_y(-event.relative.x * sensitivity / 10000)
+		view.rotate_x(-event.relative.y * sensitivity / 10000)
+		view.rotation.x = clamp(view.rotation.x, -PI/2, PI/2)
 		mouse_input = event.relative
 
 
@@ -132,6 +127,7 @@ func _physics_process(delta):
 	if !is_on_floor():
 		velocity.y -= current_gravity * delta
 		in_air = true
+<<<<<<< HEAD
 		if (Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("move_right")) and !speed_cut and !frozen:
 			speed_cut = true
 			old_speed = current_speed
@@ -143,6 +139,12 @@ func _physics_process(delta):
 			speed_cut = true
 			old_speed = current_speed
 			current_speed /= movement_reduction
+=======
+	
+	if Input.is_action_just_pressed("jump") and is_on_floor() and !charging_dash:
+		velocity.y = current_jump_velocity
+		in_air_timer.start()
+>>>>>>> parent of e101728 (Heavy bug fixing, gun reworks, and more)
 	
 	
 	input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -152,9 +154,6 @@ func _physics_process(delta):
 		in_air = false
 		current_gravity = default_gravity
 		play_footstep_audio.rpc()
-		if !frozen:
-			current_speed = old_speed
-			speed_cut = false
 	
 	
 	if !in_dash:
@@ -164,67 +163,48 @@ func _physics_process(delta):
 		else:
 			velocity.x = move_toward(velocity.x, 0, current_speed)
 			velocity.z = move_toward(velocity.z, 0, current_speed)
-	
-	if in_dash:
-		if !charging_dash:
-			var boost = -get_global_transform().basis.z * charge_amount
-			boost.y = 3
-			count += 0.1
-			boost.y -= count
-			velocity =  boost * current_speed
-	
-	
-	if in_dash and in_air and is_on_floor():
-		count = 0
+	elif in_dash and in_air and is_on_floor():
 		in_dash = false
 		in_air = false
 		current_gravity = default_gravity
 		play_footstep_audio.rpc()
-		if !frozen:
-			current_speed = old_speed
-			speed_cut = false
 	
 	
-	move_and_slide()
-	camera_tilt.rpc(input_dir.x, delta)
-	weapon_tilt.rpc(input_dir.x, delta)
-	weapon_sway.rpc(delta)
+	if !frozen:
+		move_and_slide()
+		camera_tilt.rpc(input_dir.x, delta)
+		weapon_tilt.rpc(input_dir.x, delta)
+		weapon_sway.rpc(delta)
 	
 	if flinch:
-		var flinch_adjustment = camera.rotation.x + flinch_amount * delta
+		var flinch_adjustment = view.rotation.x + flinch_amount * delta
 		if flinch_adjustment > deg_to_rad(90):
 			flinch_adjustment = deg_to_rad(90)
+<<<<<<< HEAD
 		camera.rotation.x = flinch_adjustment
 	
 	if input_dir != Vector2.ZERO and is_on_floor() and !charging_dash:
 		_play_animation.rpc("move", animation_player.get_path())
 	elif (input_dir == Vector2.ZERO or !is_on_floor()) and !weapon.aiming:
 		_play_animation.rpc("idle", animation_player.get_path())
+=======
+		view.rotation.x = flinch_adjustment
+
+
+func change_hud_health(health_value):
+	$HUD/Healthbar.value = health_value
+>>>>>>> parent of e101728 (Heavy bug fixing, gun reworks, and more)
 
 
 @rpc ("any_peer", "call_local", "reliable")
-func change_speed_and_jump(speed_effect = default_speed, jump_height = default_jump_velocity, effect = null):
-	if effect == null:
-		old_speed = speed_effect
-	
-	if !frozen:
-		current_speed = speed_effect
-		current_jump_velocity = jump_height
-		
-	if effect != null:
-		match effect:
-			"frozen":
-				frozen = true
-			"unfreeze":
-				frozen = false
-				current_speed = speed_effect
-				current_jump_velocity = jump_height
+func change_speed_and_jump(speed_effect = default_speed, jump_height = default_jump_velocity):
+	current_speed = speed_effect
+	current_jump_velocity = jump_height
 
 
-@rpc ("any_peer", "call_local", "reliable")
+@rpc ("call_local", "reliable")
 func increase_speed(speed_effect):
 	current_speed += speed_effect
-	old_speed += speed_effect
 
 
 func update_current_class(new_weapon):
@@ -233,10 +213,10 @@ func update_current_class(new_weapon):
 		sensitivity = Global.players[id].Sensitivity
 		if Global.players.has(id):
 			if Global.players[id].Class != "" and weapon != null:
-				camera.remove_child(weapon)
+				view.remove_child(weapon)
 			
 			weapon = new_weapon
-			camera.add_child(new_weapon)
+			view.add_child(new_weapon)
 			
 			change_material.rpc(current_colour, false)
 
@@ -244,6 +224,7 @@ func update_current_class(new_weapon):
 func change_material(material, want_timer = true):
 	if want_timer:
 		await get_tree().create_timer(0.1).timeout
+	weapon = view.get_child(1)
 	
 	for mesh in meshes:
 		if material == Global.BLUE:
@@ -353,7 +334,7 @@ func play_footstep_audio():
 
 @rpc ("any_peer", "call_local", "reliable")
 func add_hat(given_given_hat):
-	add_hat_for_all.rpc(given_given_hat)
+	add_hat_for_all(given_given_hat)
 	
 	hat_node.add_child(hat, true)
 	change_layers.rpc()
@@ -373,7 +354,10 @@ func remove_hat():
 
 
 func _on_slow_timer_timeout():
+	print ("be normal")
+	hurtbox.handle_speed_collision(old_speed, default_jump_velocity)
 	frozen = false
+<<<<<<< HEAD
 	change_speed_and_jump.rpc(old_speed, default_jump_velocity, "unfreeze")
 
 
@@ -399,3 +383,5 @@ func _play_animation(animation_string, given_player_path = animation_player.get_
 	
 	if given_player != null:
 		given_player.play(animation_string)
+=======
+>>>>>>> parent of e101728 (Heavy bug fixing, gun reworks, and more)
