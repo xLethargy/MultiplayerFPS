@@ -634,7 +634,7 @@ draw_pass_1 = SubResource("PlaneMesh_ry3rx")
 
 [node name="Arm" type="Node3D" parent="WeaponSway/AllMesh/Elements"]
 unique_name_in_owner = true
-transform = Transform3D(0.214361, 0.0494892, -1.53714e-09, -0.0209152, 0.0905937, -0.199388, -0.0448523, 0.194277, 0.0929769, -0.26628, 0.281756, 0.670016)
+transform = Transform3D(0.214361, 0.0494892, -1.53714e-09, -0.0209152, 0.0905938, -0.199388, -0.0448523, 0.194277, 0.0929771, -0.26628, 0.281756, 0.670016)
 
 [node name="right slap" type="MeshInstance3D" parent="WeaponSway/AllMesh/Elements/Arm"]
 transform = Transform3D(1, -1.49012e-08, 0, 1.49012e-08, 1, 0, 0, 0, 1, 2.09926, -1.62397, -0.475919)
